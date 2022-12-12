@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Classroom.unity
-    guid: ba14e7cfc4e435440b49ecaa5b868964
+    path: Assets/Scenes/School.unity
+    guid: bee2e8754bb53e2459e68274852f9b50
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 94853b5e64b20ad4ea201d84aa95b8d9, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 6ed61042c7521c8469439103af6e0403, type: 2}
