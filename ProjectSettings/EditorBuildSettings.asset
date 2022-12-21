@@ -9,25 +9,24 @@ EditorBuildSettings:
     path: Assets/Scenes/Start.unity
     guid: 9c1f10edcf8d7ce4bb87c091c0b5e14b
   - enabled: 1
+    path: Assets/Scenes/SchoolHetero.unity
+    guid: 7b45dce55ec5209448fab0df99333e8e
+  - enabled: 1
     path: Assets/Scenes/SchoolDistribution.unity
     guid: bee2e8754bb53e2459e68274852f9b50
   - enabled: 1
-    path: Assets/Scenes/SchoolHetero.unity
-    guid: 7b45dce55ec5209448fab0df99333e8e
+    path: Assets/Scenes/SchreiberAmbiguitaet.unity
+    guid: f9840505583d06b44b88ba9ac3f156e1
   - enabled: 1
     path: Assets/Scenes/SocialDilemma.unity
     guid: 5ac08bd6db1071d4a81667adb0381f40
   - enabled: 1
-    path: Assets/Scenes/OrganisationDistribution.unity
-    guid: a77b22d7ae085436bb77f1ac109c4758
-  - enabled: 1
     path: Assets/Scenes/OrganisationEducation.unity
     guid: 17ee69ce791e20b489417adb4fb69c5a
+  - enabled: 1
+    path: Assets/Scenes/OrganisationDistribution.unity
+    guid: a77b22d7ae085436bb77f1ac109c4758
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 94853b5e64b20ad4ea201d84aa95b8d9, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 6ed61042c7521c8469439103af6e0403, type: 2}
-<<<<<<< HEAD
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 46f76886d6f959d408b7738dc6ea7724, type: 2}
-=======
-    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: b9156636f5cb5984a83f07e96bc8bb76, type: 2}
->>>>>>> f98a16988b9e550b52391cd4cea35b711c22c346
