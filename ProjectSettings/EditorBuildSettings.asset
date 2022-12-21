@@ -20,7 +20,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OrganisationDistribution.unity
     guid: a77b22d7ae085436bb77f1ac109c4758
+  - enabled: 1
+    path: Assets/Scenes/OrganisationEducation.unity
+    guid: 17ee69ce791e20b489417adb4fb69c5a
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 94853b5e64b20ad4ea201d84aa95b8d9, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 6ed61042c7521c8469439103af6e0403, type: 2}
-    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 8d185ced1c3348c4cbd0162caa31c17d, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 46f76886d6f959d408b7738dc6ea7724, type: 2}
