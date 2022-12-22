@@ -15,10 +15,10 @@ EditorBuildSettings:
     path: Assets/Scenes/SchoolDistribution.unity
     guid: bee2e8754bb53e2459e68274852f9b50
   - enabled: 1
-    path: Assets/Scenes/SchreiberAmbiguitaet.unity
+    path: Assets/Scenes/SocialAmbiguity.unity
     guid: f9840505583d06b44b88ba9ac3f156e1
   - enabled: 1
-    path: Assets/Scenes/SocialDilemma.unity
+    path: Assets/Scenes/SocialDistribution.unity
     guid: 5ac08bd6db1071d4a81667adb0381f40
   - enabled: 1
     path: Assets/Scenes/OrganisationEducation.unity
@@ -29,4 +29,4 @@ EditorBuildSettings:
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 94853b5e64b20ad4ea201d84aa95b8d9, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 6ed61042c7521c8469439103af6e0403, type: 2}
-    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: b9156636f5cb5984a83f07e96bc8bb76, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 46f76886d6f959d408b7738dc6ea7724, type: 2}
