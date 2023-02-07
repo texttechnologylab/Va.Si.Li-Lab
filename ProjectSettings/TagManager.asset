@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Teleport
   - teleport
+  - NonTPCollide
   layers:
   - Default
   - TransparentFX
@@ -13,7 +14,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - NonTPCollide
   - 
   - 
   - 
