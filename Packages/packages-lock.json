@@ -7,6 +7,15 @@
       "dependencies": {},
       "url": "https://upm-pkgs.voltstro.dev"
     },
+    "com.ucl.ubiq": {
+      "version": "https://github.com/texttechnologylab/ubiq.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.xr.management": "3.2.16"
+      },
+      "hash": "3a66785ebc3e3a2aa4c28df0d411da9eed263d73"
+    },
     "com.unity.collab-proxy": {
       "version": "2.0.0",
       "depth": 0,
