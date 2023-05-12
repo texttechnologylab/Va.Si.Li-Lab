@@ -1717,7 +1717,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 377732222773033651}
   linkList: []
   titleTransform: {fileID: 377732223603244184}
-  textTransform: {fileID: 7130058056687839479}
+  textTransform: {fileID: 4430236410289053445}
 --- !u!1 &430568460903309272
 GameObject:
   m_ObjectHideFlags: 0
@@ -15811,7 +15811,6 @@ GameObject:
   - component: {fileID: 7130058058021863300}
   - component: {fileID: 7130058058021863302}
   - component: {fileID: 7130058058021863303}
-  - component: {fileID: 7190547656192590906}
   - component: {fileID: 4430236410289053445}
   m_Layer: 0
   m_Name: Text Input Area
@@ -15879,22 +15878,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7190547656192590906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7130058058021863301}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58a8e767c8ede6d4a85f4fd6351f0a86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  keyboard: {fileID: 1940669952304660682}
-  m_TextComponent: {fileID: 7130058056687839479}
-  m_CaretSprite: {fileID: 0}
-  m_CaretBlinkRate: 2
 --- !u!114 &4430236410289053445
 MonoBehaviour:
   m_ObjectHideFlags: 0
