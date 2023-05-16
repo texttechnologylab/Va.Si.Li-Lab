@@ -1,5 +1,15 @@
 {
   "dependencies": {
+    "com.digitell.metaavatar": {
+      "version": "https://github.com/texttechnologylab/UbiqMetaAvatar.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.xr.management": "3.2.16",
+        "com.ucl.ubiq": "https://github.com/texttechnologylab/ubiq.git#upm"
+      },
+      "hash": "d07ef5db0a93f9f0320373a7b936e56e76854121"
+    },
     "com.ucl.ubiq": {
       "version": "https://github.com/texttechnologylab/ubiq.git#upm",
       "depth": 0,
@@ -7,7 +17,7 @@
       "dependencies": {
         "com.unity.xr.management": "3.2.16"
       },
-      "hash": "3a66785ebc3e3a2aa4c28df0d411da9eed263d73"
+      "hash": "7856858b3f7faa506391bbe18e797342b7f31bb6"
     },
     "com.unity.collab-proxy": {
       "version": "2.0.0",
