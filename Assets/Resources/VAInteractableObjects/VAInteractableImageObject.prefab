@@ -213,10 +213,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 377732224303669725}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 3780867239498991630}
+        m_TargetAssemblyTypeName: VaSiLi.VAnnotator.VAInteractableObject, Va.Si.Li
+        m_MethodName: Delete
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -828,6 +828,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 377732222773033651}
+  linkList: []
   titleTransform: {fileID: 377732223603244184}
   imageTransform: {fileID: 5322059943903216081}
 --- !u!1 &1485366912377219354
