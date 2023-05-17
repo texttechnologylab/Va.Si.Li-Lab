@@ -1718,6 +1718,8 @@ MonoBehaviour:
   linkList: []
   titleTransform: {fileID: 377732223603244184}
   textTransform: {fileID: 4430236410289053445}
+  editButton: {fileID: 8593227450276426372}
+  keyboard: {fileID: 1691184433739163821}
 --- !u!1 &430568460903309272
 GameObject:
   m_ObjectHideFlags: 0
@@ -9140,8 +9142,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TextEditorInputField, Va.Si.Li
+      - m_Target: {fileID: 5699978537818527504}
+        m_TargetAssemblyTypeName: VaSiLi.VAnnotator.VAInteractableTextObject, Va.Si.Li
         m_MethodName: SwitchMode
         m_Mode: 1
         m_Arguments:
@@ -18983,7 +18985,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: d233156b35457ee4c9ed3c1807d5fd91, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
