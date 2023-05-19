@@ -179,6 +179,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "org.nuget.newtonsoft.json": {
+      "version": "13.0.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://upm-pkgs.voltstro.dev"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
