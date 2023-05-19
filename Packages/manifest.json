@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.digitell.metaavatar": "https://github.com/texttechnologylab/UbiqMetaAvatar.git#upm",
     "com.ucl.ubiq": "https://github.com/texttechnologylab/ubiq.git#upm",
     "com.unity.collab-proxy": "2.0.0",
     "com.unity.ide.rider": "3.0.18",
@@ -11,8 +12,9 @@
     "com.unity.timeline": "1.6.4",
     "com.unity.ugui": "1.0.0",
     "com.unity.xr.management": "4.2.1",
-    "com.unity.xr.oculus": "3.2.2",
+    "com.unity.xr.oculus": "3.2.3",
     "com.unity.xr.openxr": "1.6.0",
+    "org.nuget.newtonsoft.json": "13.0.3",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",

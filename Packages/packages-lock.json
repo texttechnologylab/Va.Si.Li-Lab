@@ -1,5 +1,16 @@
 {
   "dependencies": {
+    "com.digitell.metaavatar": {
+      "version": "https://github.com/texttechnologylab/UbiqMetaAvatar.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.xr.management": "3.2.16",
+        "com.ucl.ubiq": "https://github.com/texttechnologylab/ubiq.git#upm",
+        "com.unity.xr.oculus": "3.3.0"
+      },
+      "hash": "5c56c39e1af32117f61b28b822e58a942f9ea920"
+    },
     "com.ucl.ubiq": {
       "version": "https://github.com/texttechnologylab/ubiq.git#upm",
       "depth": 0,
@@ -7,7 +18,7 @@
       "dependencies": {
         "com.unity.xr.management": "3.2.16"
       },
-      "hash": "7856858b3f7faa506391bbe18e797342b7f31bb6"
+      "hash": "5547261c6428ca51f13b8c4d6c840c742a738cf4"
     },
     "com.unity.collab-proxy": {
       "version": "2.0.0",
@@ -149,8 +160,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.oculus": {
-      "version": "3.2.2",
-      "depth": 0,
+      "version": "3.3.0",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.xr.management": "4.2.0"
@@ -167,6 +178,13 @@
         "com.unity.inputsystem": "1.4.4"
       },
       "url": "https://packages.unity.com"
+    },
+    "org.nuget.newtonsoft.json": {
+      "version": "13.0.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
