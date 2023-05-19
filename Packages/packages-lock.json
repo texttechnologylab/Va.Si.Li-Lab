@@ -8,7 +8,7 @@
         "com.unity.xr.management": "3.2.16",
         "com.ucl.ubiq": "https://github.com/texttechnologylab/ubiq.git#upm"
       },
-      "hash": "d07ef5db0a93f9f0320373a7b936e56e76854121"
+      "hash": "12699e7c738a76a6a2972a13af01c17fbddc09fc"
     },
     "com.ucl.ubiq": {
       "version": "https://github.com/texttechnologylab/ubiq.git#upm",
@@ -17,7 +17,7 @@
       "dependencies": {
         "com.unity.xr.management": "3.2.16"
       },
-      "hash": "9937ab16f991aca7ce4fa292622415d5d9390cc0"
+      "hash": "66ceed68f4df6c0ccfe9c4f7d5fd642b162ab443"
     },
     "com.unity.collab-proxy": {
       "version": "2.0.0",
