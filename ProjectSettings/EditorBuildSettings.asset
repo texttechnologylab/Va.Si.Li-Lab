@@ -5,9 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Local/Scenes/Start.unity
-    guid: 9c1f10edcf8d7ce4bb87c091c0b5e14b
+    path: Assets/Local/Scenes/MetaStart.unity
+    guid: e6d9483601d135240bca91bb89b1b894
+  - enabled: 1
+    path: Assets/Local/Scenes/MetaReturn.unity
+    guid: a20c8cfd9870a3942b37f0eaa4077803
   - enabled: 1
     path: Assets/Local/Scenes/SchoolHetero.unity
     guid: 7b45dce55ec5209448fab0df99333e8e
