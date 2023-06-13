@@ -20,6 +20,12 @@
       },
       "hash": "5547261c6428ca51f13b8c4d6c840c742a738cf4"
     },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "2.0.3",
       "depth": 0,
@@ -135,6 +141,25 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "com.unity.vectorgraphics": {
+      "version": "2.0.0-preview.21",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.2d.sprite": "1.0.0",
+        "com.unity.ugui": "1.0.0",
+        "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.physics2d": "1.0.0",
+        "com.unity.modules.ui": "1.0.0",
+        "com.unity.modules.uielements": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequesttexture": "1.0.0",
+        "com.unity.modules.unitywebrequestwww": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.xr.legacyinputhelpers": {
       "version": "2.1.10",
