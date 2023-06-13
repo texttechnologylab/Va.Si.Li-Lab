@@ -20,7 +20,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Local/Scenes/SchoolHetero.unity
     guid: 7b45dce55ec5209448fab0df99333e8e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Local/Scenes/SchoolDistribution.unity
     guid: bee2e8754bb53e2459e68274852f9b50
   - enabled: 0
