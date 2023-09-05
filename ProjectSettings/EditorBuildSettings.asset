@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Local/Scenes/MetaStart.unity
     guid: e6d9483601d135240bca91bb89b1b894
-  - enabled: 1
+  - enabled: 0
     path: Assets/Local/Scenes/MetaReturn.unity
     guid: a20c8cfd9870a3942b37f0eaa4077803
   - enabled: 1
@@ -41,6 +41,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Local/Scenes/SchoolTest.unity
     guid: c0e63c7da37cb8a49a8611fb0db158b3
+  - enabled: 0
+    path: Assets/Local/Scenes/Rom.unity
+    guid: 35f03697c92f32942bdca4518e68b296
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 473ba7ca385448746a82f9a78ec69b04, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2b99fdbb7ec3d5b4090012eca387cfb0, type: 2}
