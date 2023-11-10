@@ -1,5 +1,16 @@
 {
   "dependencies": {
+    "com.digitell.metaavatar": {
+      "version": "https://github.com/texttechnologylab/UbiqMetaAvatar.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.xr.management": "3.2.16",
+        "com.ucl.ubiq": "https://github.com/texttechnologylab/ubiq.git#upm",
+        "com.unity.xr.oculus": "3.3.0"
+      },
+      "hash": "5c56c39e1af32117f61b28b822e58a942f9ea920"
+    },
     "com.ucl.ubiq": {
       "version": "https://github.com/texttechnologylab/ubiq.git#upm",
       "depth": 0,
@@ -7,10 +18,16 @@
       "dependencies": {
         "com.unity.xr.management": "3.2.16"
       },
-      "hash": "3a66785ebc3e3a2aa4c28df0d411da9eed263d73"
+      "hash": "5547261c6428ca51f13b8c4d6c840c742a738cf4"
+    },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {}
     },
     "com.unity.collab-proxy": {
-      "version": "2.0.0",
+      "version": "2.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -49,7 +66,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.4.4",
+      "version": "1.5.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -125,6 +142,25 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.unity.vectorgraphics": {
+      "version": "2.0.0-preview.21",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.2d.sprite": "1.0.0",
+        "com.unity.ugui": "1.0.0",
+        "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.physics2d": "1.0.0",
+        "com.unity.modules.ui": "1.0.0",
+        "com.unity.modules.uielements": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequesttexture": "1.0.0",
+        "com.unity.modules.unitywebrequestwww": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.xr.legacyinputhelpers": {
       "version": "2.1.10",
       "depth": 1,
@@ -149,7 +185,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.oculus": {
-      "version": "3.2.2",
+      "version": "3.3.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -167,6 +203,13 @@
         "com.unity.inputsystem": "1.4.4"
       },
       "url": "https://packages.unity.com"
+    },
+    "org.nuget.newtonsoft.json": {
+      "version": "13.0.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

@@ -15,9 +15,9 @@ TagManager:
   - Water
   - UI
   - NonTPCollide
-  - 
-  - 
-  - 
+  - whatIsGround
+  - GraspedObject
+  - Player
   - 
   - 
   - 
