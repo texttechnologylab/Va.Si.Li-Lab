@@ -29,7 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Local/Scenes/PraktikumScenario03.unity
     guid: ec18b166d43b26a4faaa34f9fdd3f6b6
-  - enabled: 0
+  - enabled: 1
     path: Assets/Local/Scenes/Rom.unity
     guid: 35f03697c92f32942bdca4518e68b296
   - enabled: 0
