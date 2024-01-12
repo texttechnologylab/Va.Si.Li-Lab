@@ -7,6 +7,8 @@ TagManager:
   - Teleport
   - teleport
   - NonTPCollide
+  - LeftEye
+  - RightEye
   layers:
   - Default
   - TransparentFX
