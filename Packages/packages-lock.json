@@ -18,7 +18,7 @@
       "dependencies": {
         "com.unity.xr.management": "3.2.16"
       },
-      "hash": "5547261c6428ca51f13b8c4d6c840c742a738cf4"
+      "hash": "652f4e098b40d9c140a79d6a17ab32853ad6b56c"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
