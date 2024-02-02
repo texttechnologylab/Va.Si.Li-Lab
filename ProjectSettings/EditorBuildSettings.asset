@@ -17,7 +17,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Local/Scenes/ICIDS.unity
     guid: b456c2d8702c3954ea94fe19813979a2
-  - enabled: 1
+  - enabled: 0
     path: Assets/Local/Scenes/Tutorial.unity
     guid: 375743d76ee0b4f449fb3de7f67e9be7
   - enabled: 1
