@@ -1,24 +1,11 @@
 {
   "dependencies": {
-    "com.digitell.metaavatar": {
-      "version": "https://github.com/texttechnologylab/UbiqMetaAvatar.git#upm",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.xr.management": "3.2.16",
-        "com.ucl.ubiq": "https://github.com/texttechnologylab/ubiq.git#upm",
-        "com.unity.xr.oculus": "3.3.0"
-      },
-      "hash": "5c56c39e1af32117f61b28b822e58a942f9ea920"
-    },
     "com.ucl.ubiq": {
-      "version": "https://github.com/texttechnologylab/ubiq.git#upm",
+      "version": "https://github.com/UCL-VR/ubiq.git#upm",
       "depth": 0,
       "source": "git",
-      "dependencies": {
-        "com.unity.xr.management": "3.2.16"
-      },
-      "hash": "652f4e098b40d9c140a79d6a17ab32853ad6b56c"
+      "dependencies": {},
+      "hash": "774d3abec29a9faf670a3a02f41ef985f7327f21"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -38,6 +25,13 @@
     "com.unity.collab-proxy": {
       "version": "2.2.0",
       "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.editorcoroutines": {
+      "version": "1.0.0",
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -81,6 +75,13 @@
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.mathematics": {
+      "version": "1.2.6",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.probuilder": {
@@ -161,12 +162,39 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.webrtc-no-vulkan-hook": {
+      "version": "https://github.com/UCL-VR/unity-webrtc-no-vulkan-hook.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.editorcoroutines": "1.0.0",
+        "com.unity.modules.audio": "1.0.0"
+      },
+      "hash": "7f4d3e9ab14b772e8c57b8bd846f2435f689aaae"
+    },
     "com.unity.xr.core-utils": {
       "version": "2.3.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.xr": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.xr.interaction.toolkit": {
+      "version": "2.5.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.inputsystem": "1.7.0",
+        "com.unity.mathematics": "1.2.6",
+        "com.unity.ugui": "1.0.0",
+        "com.unity.xr.core-utils": "2.2.3",
+        "com.unity.xr.legacyinputhelpers": "2.1.10",
+        "com.unity.modules.audio": "1.0.0",
+        "com.unity.modules.imgui": "1.0.0",
+        "com.unity.modules.physics": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -181,7 +209,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.management": {
-      "version": "4.4.0",
+      "version": "4.4.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
