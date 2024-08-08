@@ -21,8 +21,6 @@ Va.Si.Li-Lab was established as part of the project "Digital Teaching and Learni
 * Christian Spiekermann
 
 # Installation
-## Server
-TODO
 
 ## Open in unity
 * https://assetstore.unity.com/packages/tools/integration/oculus-integration-82022
