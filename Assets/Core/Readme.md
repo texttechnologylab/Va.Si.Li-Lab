@@ -1,0 +1,1 @@
+This folder contains the core components that make Va.Si.Li-Lab work. No implementations no assets.

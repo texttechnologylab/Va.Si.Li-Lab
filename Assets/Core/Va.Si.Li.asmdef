@@ -1,0 +1,23 @@
+{
+    "name": "Va.Si.Li",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ab979a98ba0be4546bceb48f770b11c8",
+        "GUID:3996e3f11065e65419d8b25b062ecd37",
+        "GUID:71d013d189dbe2149987f416c8a83f5a",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:f64c9ebcd7899c3448a08dc9f9ddbe30",
+        "GUID:2a230cb87a1d3ba4a98bdc0ddae76e6c",
+        "GUID:a92702ab18a2c37469cf92d0212e2d5a",
+        "GUID:10ccfe6c35e29e14798a0c711aa976a0"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

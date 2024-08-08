@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Local/Scenes/MetaStart.unity
+    guid: e6d9483601d135240bca91bb89b1b894
+  - enabled: 1
+    path: Assets/Local/Scenes/MetaReturn.unity
+    guid: a20c8cfd9870a3942b37f0eaa4077803
+  - enabled: 0
+    path: Assets/Local/Scenes/ICIDS.unity
+    guid: b456c2d8702c3954ea94fe19813979a2
+  - enabled: 0
+    path: Assets/Local/Scenes/Tutorial.unity
+    guid: 375743d76ee0b4f449fb3de7f67e9be7
+  - enabled: 0
+    path: Assets/Local/Scenes/Meetingpoint.unity
+    guid: f0b1cc0a242001f46a5907e59063341e
+  - enabled: 0
+    path: Assets/Local/Scenes/PraktikumScenario01.unity
+    guid: 83a9056d09792194cbfdfd8aa0d6ce93
+  - enabled: 0
+    path: Assets/Local/Scenes/PraktikumScenario02.unity
+    guid: 79dcd8d34419ad543b3793b089b1c9e3
+  - enabled: 0
+    path: Assets/Local/Scenes/PraktikumScenario03.unity
+    guid: ec18b166d43b26a4faaa34f9fdd3f6b6
+  - enabled: 0
+    path: Assets/Local/Scenes/Rom.unity
+    guid: 35f03697c92f32942bdca4518e68b296
+  - enabled: 0
+    path: Assets/Local/Scenes/SchoolHetero.unity
+    guid: 7b45dce55ec5209448fab0df99333e8e
+  - enabled: 0
+    path: Assets/Local/Scenes/SchoolDistribution.unity
+    guid: bee2e8754bb53e2459e68274852f9b50
+  - enabled: 0
+    path: Assets/Local/Scenes/SocialAmbiguity.unity
+    guid: f9840505583d06b44b88ba9ac3f156e1
+  - enabled: 0
+    path: Assets/Local/Scenes/SocialDistribution.unity
+    guid: 5ac08bd6db1071d4a81667adb0381f40
+  - enabled: 0
+    path: Assets/Local/Scenes/OrganisationEducation.unity
+    guid: 17ee69ce791e20b489417adb4fb69c5a
+  - enabled: 0
+    path: Assets/Local/Scenes/OrganisationDistribution.unity
+    guid: a77b22d7ae085436bb77f1ac109c4758
+  - enabled: 0
+    path: Assets/Local/Scenes/SchoolTest.unity
+    guid: c0e63c7da37cb8a49a8611fb0db158b3
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 473ba7ca385448746a82f9a78ec69b04, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2b99fdbb7ec3d5b4090012eca387cfb0, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 46f76886d6f959d408b7738dc6ea7724, type: 2}

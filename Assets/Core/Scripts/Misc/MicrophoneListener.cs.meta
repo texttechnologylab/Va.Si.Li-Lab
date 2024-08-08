@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Core/Scripts/Misc/MicrophoneListener.cs.meta
+guid: ad5338c2627733f49a0a3568992b63f4
+========
+guid: 1500943592e3ea3428e4584bbd9f2db9
+>>>>>>>> meta:Assets/Oculus/Avatar2/Editor/Scripts/EnumMaskDrawer.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

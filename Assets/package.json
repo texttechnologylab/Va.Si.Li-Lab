@@ -1,0 +1,25 @@
+{
+    "name": "com.digitell.vasili",
+    "version": "0.1.1",
+    "displayName": "Va.Si.Li-Lab",
+    "description": "Create networked VR scenarios with Va.Si.Li-Lab",
+    "unity": "2021.3",
+    "dependencies": {
+      "com.unity.xr.management": "3.2.16",
+	  "com.unity.nuget.newtonsoft-json": "13.0.3",
+      "com.ucl.ubiq": "https://github.com/texttechnologylab/ubiq.git#upm"
+   },
+   "keywords": [ ],
+    "author": {
+      "name": "Digital Teaching and Learning Lab Goethe University Frankfurt",
+      "email": "digitell@uni-frankfurt.de",
+      "url": "https://www.uni-frankfurt.de/digitell"
+    },
+    "samples": [
+      {
+        "displayName": "Samples",
+        "description": "A set of samples to more easily get started with Va.Si.Li-Lab",
+        "path": "Samples~"
+      }
+    ]
+  }

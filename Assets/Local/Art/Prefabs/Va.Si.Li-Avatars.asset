@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4467f6c3b47040840ab7f7665d8bddbe, type: 3}
+  m_Name: Va.Si.Li-Avatars
+  m_EditorClassIdentifier: 
+  prefabs:
+  - {fileID: 3172939939781028348, guid: 59bce046eba3bb14a80855d4c1810e99, type: 3}
+  - {fileID: 3172939939781028348, guid: cffbf6e359aee52478deed4773ed34d7, type: 3}
+  - {fileID: 6524994122164895703, guid: dad5ea0e92a9d8b4fb875deeb86e3505, type: 3}
+  - {fileID: 8861760200755905291, guid: 71daf3095d63df048a2b0d3fc24fabf0, type: 3}
+  - {fileID: 2151917633586360994, guid: cbec2e3c6327bb349bf8b6108bd20430, type: 3}

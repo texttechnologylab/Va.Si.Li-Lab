@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Core/Scripts/Misc/ChatLogPanel.cs.meta
+guid: 3c5d263b9eea6db4d96f4da8f18b4d95
+========
+guid: c4b9eddc59e855a499f6421f5a41d9d7
+>>>>>>>> meta:Assets/Oculus/Avatar2/Editor/Scripts/AvatarResourcesWindow.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

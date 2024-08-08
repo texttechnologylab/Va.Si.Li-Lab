@@ -1,0 +1,156 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Va.Si.Li-Lab - a VR-Lab for Simulation-based Learning
+message: 'If you use this software, please cite it as below.'
+type: software
+authors:
+  - family-names: Mehler
+    given-names: Alexander
+    orcid: 'https://orcid.org/0000-0003-2567-7539'
+    email: mehler@em.uni-frankfurt.de
+    affiliation: Goethe University Frankfurt
+  - given-names: Giuseppe
+    family-names: Abrami
+    email: abrami@em.uni-frankfurt.de
+    affiliation: Goethe University Frankfurt
+    orcid: 'https://orcid.org/0000-0002-7084-4909'
+  - family-names: Bagci
+    given-names: Mevlüt
+    email: bagci@em.uni-frankfurt.de
+    affiliation: Goethe University Frankfurt
+    orcid: 'https://orcid.org/0009-0007-6160-5571'
+  - given-names: Alexander
+    family-names: Henlein
+    email: henlein@em.uni-frankfurt.de
+    affiliation: Goethe University Frankfurt
+    orcid: 'https://orcid.org/0000-0002-2611-1417'
+  - family-names: Schrottenbacher
+    given-names: Patrick
+    orcid: 'https://orcid.org/0009-0003-7644-0037'
+    affiliation: Goethe University Frankfurt
+  - family-names: Spiekermann
+    given-names: Christian
+    orcid: 'https://orcid.org/0009-0005-7905-4654'
+identifiers:
+  - type: url
+    value: 'https://github.com/texttechnologylab/Va.Si.Li-Lab'
+    description: GitHub-Repository
+repository-code: 'https://github.com/texttechnologylab/Va.Si.Li-Lab'
+abstract: >-
+  Simulation-based learning is a method in which learners
+  learn to master real-life scenarios and tasks from
+  simulated application contexts. It is particularly
+  suitable for the use of VR technologies, as these allow
+  immersive experiences of the targeted scenarios. VR
+  methods are also relevant for studies on online learning,
+  especially in groups, as they provide access to a variety
+  of multimodal learning and interaction data. However, VR
+  leads to a trade-off between technological conditions of
+  the observability of such data and the openness of learner
+  behavior. We present Va.Si.Li-Lab, a VR-Lab for
+  Simulation-based Learning developed to address this
+  trade-off. Va.Si.Li-Lab uses a graph-theoretical model
+  based on hypergraphs to represent the data diversity of
+  multimodal learning and interaction. We develop this data
+  model in relation to mono- and multimodal, intra- and
+  interpersonal data and interleave it with ISO-Space to
+  describe distributed multiple documents from the
+  perspective of their interactive generation. The paper
+  adds three use cases to motivate the broad applicability
+  of Va.Si.Li-Lab and its data model.
+license: AGPL-3.0-or-later
+version: '1.0'
+date-released: '2023-07-23'
+preferred-citation:
+  authors:
+   - family-names: "Mehler"
+     given-names: "Alexander"
+     orcid: "https://orcid.org/0000-0003-2567-7539"
+   - family-names: "Bagci"
+     given-names: "Mevlüt"
+     orcid: "https://orcid.org/0009-0007-6160-5571"
+   - family-names: "Henlein"
+     given-names: "Alexander"
+     orcid: "https://orcid.org/0000-0002-2611-1417"
+   - family-names: "Abrami"
+     given-names: "Giuseppe"
+     orcid: "https://orcid.org/0000-0002-7084-4909"
+   - family-names: "Spiekermann"
+     given-names: "Christian"
+     orcid: "https://orcid.org/0009-0005-7905-4654"
+   - family-names: "Schrottenbacher"
+     given-names: "Patrick"
+     orcid: "https://orcid.org/0009-0003-7644-0037"
+   - family-names: "Konca"
+     given-names: "Maxim"
+     orcid: "https://orcid.org/0009-0002-5956-9595"
+   - family-names: "Lücking"
+     given-names: "Andy"
+     orcid: "https://orcid.org/0000-0002-5070-2233"
+   - family-names: "Engel"
+     given-names: "Juliane"
+     orcid: "https://orcid.org/0000-0003-3700-0680"
+   - family-names: "Quintino"
+     given-names: "Marc"
+     orcid: "https://orcid.org/0009-0007-8885-1844"
+   - family-names: "Schreiber"
+     given-names: "Jakob"
+     orcid: "https://orcid.org/0009-0004-9823-4354"
+   - family-names: "Saukel"
+     given-names: "Kevin"
+     orcid: "https://orcid.org/0000-0001-6358-7759"
+   - family-names: "Zlatkin-Troitschanskaia"
+     given-names: "Olga"
+     orcid: "https://orcid.org/0000-0002-7431-9538"
+  title: "A Multimodal Data Model for Simulation-Based Learning with Va.Si.Li-Lab"
+  year: 2023
+  doi: 10.1007/978-3-031-35741-1_39
+  collection-title: 'Digital Human Modeling and Applications in Health, Safety, Ergonomics and Risk Management'
+  publisher:
+    name: "Springer Nature Switzerland"
+  pages: "539--565"
+  collection-type: proceedings
+  conference:
+     name: 'HCII'
+  type: conference-paper
+  isbn: "9783031357411"
+  editors:
+    - family-names: "Duffy"
+      given-names: "Vincent G."
+references:
+ - authors:
+   - family-names: "Abrami"
+     given-names: "Giuseppe"
+     orcid: "https://orcid.org/0000-0002-7084-4909"
+   - family-names: "Mehler"
+     given-names: "Alexander"
+     orcid: "https://orcid.org/0000-0003-2567-7539"
+   - family-names: "Bagci"
+     given-names: "Mevlüt"
+     orcid: "https://orcid.org/0009-0007-6160-5571"
+   - family-names: "Schrottenbacher"
+     given-names: "Patrick"
+     orcid: "https://orcid.org/0009-0003-7644-0037"
+   - family-names: "Henlein"
+     given-names: "Alexander"
+     orcid: "https://orcid.org/0000-0002-2611-1417"
+   - family-names: "Spiekermann"
+     given-names: "Christian"
+     orcid: "https://orcid.org/0009-0005-7905-4654"
+   - family-names: "Engel"
+     given-names: "Juliane"
+     orcid: "https://orcid.org/0000-0003-3700-0680"
+   title: "Va.Si.Li-Lab as a Collaborative Multi-User Annotation Tool in Virtual Reality and Its Potential Fields of Application"
+   year: 2023
+   doi: 10.1145/3603163.3609076
+   type: conference-paper
+   collection-title: "Proceedings of the 34th ACM Conference on Hypertext and Social Media"
+   publisher:
+     name: "Association for Computing Machinery"
+   pages: "9"
+   collection-type: proceedings
+   conference:
+       name: "ACM Conference on Hypertext and Social Media"
+   isbn: "9798400702327"
