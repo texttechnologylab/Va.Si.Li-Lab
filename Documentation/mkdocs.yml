@@ -16,4 +16,4 @@ nav:
         - Digitell: digitell.md
         - ViCom: vicom.md
 theme:
-    name: readthedocs
+    name: material
