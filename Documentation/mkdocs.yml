@@ -5,15 +5,15 @@ nav:
         - Setting Up Va.Si.Li-Lab: setting_up.md
         
     - Advanced:
-        - Meta Avatars: work_in_progress.md
+        - Meta Avatars: meta_avatars.md
         - Server Structure: 
-            - Ubiq Server: work_in_progress.md
-            - Python Data Logger: work_in_progress.md
-            - Java Service: work_in_progress.md
-            - MongoDB: work_in_progress.md
+            - Ubiq Server: ubiq_server.md
+            - Python Data Logger: python_data_loggert.md
+            - Java Service: java_service.md
+            - MongoDB: mongodb.md
     
     - Projects:
-        - Digitell: work_in_progress.md
-        - ViCom: work_in_progress.md
+        - Digitell: digitell.md
+        - ViCom: vicom.md
 theme:
     name: readthedocs
