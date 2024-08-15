@@ -1,6 +1,19 @@
 site_name: Va.Si.Li-Labs Docs
 nav:
     - Home: index.md
-
+    - Getting Started:
+        - Setting Up Va.Si.Li-Lab: setting_up.md
+        
+    - Advanced:
+        - Meta Avatars: work_in_progress.md
+        - Server Structure: 
+            - Ubiq Server: work_in_progress.md
+            - Python Data Logger: work_in_progress.md
+            - Java Service: work_in_progress.md
+            - MongoDB: work_in_progress.md
+    
+    - Projects:
+        - Digitell: work_in_progress.md
+        - ViCom: work_in_progress.md
 theme:
     name: readthedocs
