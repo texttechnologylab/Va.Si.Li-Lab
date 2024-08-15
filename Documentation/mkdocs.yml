@@ -1,0 +1,10 @@
+site_name: Va.Si.Li-Labs Docs
+nav:
+    - Home: index.md
+    - Getting Started:
+        - Getting Ubiq: index.md
+        - Setting Up VR: index.md
+    - Meta: mkdocs.md
+
+theme:
+    name: readthedocs
