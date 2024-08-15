@@ -4,9 +4,9 @@ name: Build Documentation using MkDocs
 # https://medium.com/dev-genius/continuous-deployment-for-mkdocs-with-github-actions-7dceec87f0ea
 on: 
   push: 
-    branches: [master] 
+    branches: [master,main] 
   pull_request: 
-    branches: [master] 
+    branches: [master,main] 
 jobs: 
   build: 
     name: Build and Deploy Documentation 
