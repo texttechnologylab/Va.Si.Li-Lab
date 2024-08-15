@@ -1,6 +1,5 @@
 # Welcome to Ubiq
 
-![Picture of Avatars Waving](images/0f1c2fc3-2615-4f15-93c4-7533af6697eb.png)
 
 Ubiq is a Unity networking library, for research, teaching and development.
 
