@@ -20,6 +20,7 @@ nav:
 
     - Other Functions:
         - Replay Experiment: replay.md
+        - Bots: bots.md
 
     - Server Structure: 
         - Ubiq Server: ./server/ubiq_server.md
