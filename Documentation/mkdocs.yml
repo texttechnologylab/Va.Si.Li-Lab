@@ -15,18 +15,17 @@ nav:
     - Home: index.md
     - Getting Started:
         - Setting Up Va.Si.Li-Lab: setting_up.md
-        
-    - Avatar & Player Controller:
         - Meta Avatars: meta_avatars.md
+        - Player Controller: player_controller.md
 
     - Other Functions:
         - Replay Experiment: replay.md
 
     - Server Structure: 
-        - Ubiq Server: ubiq_server.md
-        - Python Data Logger: python_data_loggert.md
-        - Java Service: java_service.md
-        - MongoDB: mongodb.md
+        - Ubiq Server: ./server/ubiq_server.md
+        - Python Data Logger: ./server/python_data_logger.md
+        - Java Service: ./server/java_service.md
+        - MongoDB: ./server/mongodb.md
 
     - Projects:
         - Digitell: ./projects/digitell.md
@@ -64,8 +63,9 @@ theme:
         name: Switch to system preference
 
     features:
-        - content.code.annotate
+        # - content.code.annotate
         - content.code.copy
+        - content.code.annotate
         - navigation.instant
         - navigation.instant.prefetch
         - navigation.instant.progress
@@ -79,7 +79,7 @@ theme:
 
 # Additional configuration
 extra:
-    homepage: https://www.texttechnologylab.org/
+    homepage: https://texttechnologylab.github.io/Va.Si.Li-Lab/
     status:
         new: Recently added
         deprecated: Deprecated
@@ -90,6 +90,10 @@ extra:
           link: https://github.com/texttechnologylab
         - icon: fontawesome/brands/x-twitter
           link: https://twitter.com/ttlab_ffm
+        - icon: fontawesome/brands/researchgate
+          link: https://www.researchgate.net/lab/Text-Technology-Lab-TTLab-Alexander-Mehler
+        - icon: fontawesome/brands/youtube
+          link: https://www.youtube.com/channel/UCST6Bz8tydqR-VOnihevKtg
 
 plugins:
     - git-revision-date-localized:
@@ -99,3 +103,13 @@ plugins:
     #- git-committers:
     #    repository: texttechnologylab/Va.Si.Li-Lab
     #    branch: main
+
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

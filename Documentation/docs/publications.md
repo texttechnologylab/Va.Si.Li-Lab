@@ -1,4 +1,4 @@
-```
+``` bibtex
 @inproceedings{Mehler:et:al:2023:a,
   author    = {Mehler, Alexander and Bagci, Mevl{\"u}t and Henlein, Alexander
                and Abrami, Giuseppe and Spiekermann, Christian and Schrottenbacher, Patrick
@@ -17,7 +17,7 @@
 ```
 
 
-```
+``` bibtex
 @inproceedings{Abrami:et:al:2023,
   author    = {Abrami, Giuseppe and Mehler, Alexander and Bagci, Mevl\"{u}t and Schrottenbacher, Patrick
                and Henlein, Alexander and Spiekermann, Christian and Engel, Juliane
@@ -36,5 +36,4 @@
   location  = {Rome, Italy},
   series    = {HT '23}
 }
-
 ```
