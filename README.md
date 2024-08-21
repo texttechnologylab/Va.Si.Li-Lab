@@ -3,6 +3,7 @@
 [![Conference](http://img.shields.io/badge/conference-HCII--2023-4b44ce.svg)](https://2023.hci.international/)
 [![version](https://img.shields.io/github/license/texttechnologylab/Va.Si.Li-Lab)]()
 ![GitHub release (with filter)](https://img.shields.io/github/v/release/texttechnologylab/Va.Si.Li-Lab)
+[![Documentation](https://img.shields.io/badge/Material_for_MkDocs-526CFE?style=for-the-badge&logo=MaterialForMkDocs&logoColor=white)](https://texttechnologylab.github.io/Va.Si.Li-Lab/#citation)
 
 # Va.Si.Li-Lab
 a **V**R-L**a**b for **Si**mulation-based **L**earn**i**ng

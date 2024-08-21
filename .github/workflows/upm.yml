@@ -1,0 +1,54 @@
+name: Update upm branch on release
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    name: Build and commit to upm branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: Fetch branch
+        run: git fetch origin upm:upm || true
+      - name: Create upm branch if it does not yet exist
+        run: git branch upm || true
+      - name: Move to upm branch without changing working copy P0
+        run: git checkout --detach
+      - name: Move to upm branch without changing working copy P1
+        run: git reset --soft upm
+      - name: Move to upm branch without changing working copy P2
+        run: git checkout upm
+      - name: Create upm package
+        run: |
+          git rm -rf rest
+          git rm -rf rest_python
+          git rm -rf aiohttp_mjpeg
+          git rm -rf .github
+          git rm -rf Packages
+          git rm -rf ProjectSettings
+          git rm -f README.md
+          git rm -f LICENSE
+          git rm -rf ./Assets/Local
+          git rm -rf ./Assets/Local.meta
+          git mv ./Assets/* .
+          rm -rf Assets
+          git mv Samples Samples~
+          git rm -f Samples.meta
+          git rm -f .gitignore
+          git rm -f Unity.gitignore
+          ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//  /g' -e 's/^/   /'
+      - name: Config user name
+        run: git config --global user.name "github-actions[bot]"
+      - name: Config user email
+        run: git config --global user.email "41898281+github-actions[bot]@users.noreply.github.com"
+      - name: Add
+        run: git add *
+      - name: Commit
+        run: git commit -m "Add upm package for ${GITHUB_REF#refs/*/}"
+      - name: Tag
+        run: git tag -a ${GITHUB_REF#refs/*/}-upm -m ""
+      - name: Push
+        run: git push --follow-tags --set-upstream origin upm

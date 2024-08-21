@@ -94,6 +94,8 @@ extra:
 plugins:
     - git-revision-date-localized:
           enable_creation_date: true
-    - git-committers:
-        repository: texttechnologylab/Va.Si.Li-Lab
-        branch: main
+    - search
+    #- git-authors
+    #- git-committers:
+    #    repository: texttechnologylab/Va.Si.Li-Lab
+    #    branch: main

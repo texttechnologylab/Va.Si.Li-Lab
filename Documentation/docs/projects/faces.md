@@ -5,5 +5,5 @@
 
 ## FACES
 
-[FACES](https://gepris.dfg.de/gepris/projekt/539621548?language=en) (Feasibility, acceptance, and data quality of new multimodal surveys) is this SPP.
+[FACES](https://gepris.dfg.de/gepris/projekt/539621548?language=en) (Feasibility, acceptance, and data quality of new multimodal surveys) is part of this SPP.
 
