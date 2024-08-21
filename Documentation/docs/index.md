@@ -1,7 +1,9 @@
 # Va.Si.Li-Lab
 
 ## Description
-a **V**R-L**a**b for **Si**mulation-based **L**earn**i**ng
+a **V**R-L**a**b for **Si**mulation-based **L**earn**i**ng.
+
+
 
 ## Disclaimer
 This documentation is work in progress.

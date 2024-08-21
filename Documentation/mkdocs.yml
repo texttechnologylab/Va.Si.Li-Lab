@@ -15,6 +15,7 @@ nav:
     - Home: index.md
     - Getting Started:
         - Setting Up Va.Si.Li-Lab: ./getting_started/setting_up.md
+        - Special Scenes: ./getting_started/special_scenes.md
         - Adding Scenes: ./getting_started/adding_scenes.md
         - Meta Avatars: ./getting_started/meta_avatar.md
         - Player Controller: ./getting_started/player_controller.md
