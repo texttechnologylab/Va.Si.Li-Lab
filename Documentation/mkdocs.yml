@@ -1,19 +1,99 @@
-site_name: Va.Si.Li-Labs Docs
+# Project information
+site_name: Va.Si.Li-Lab Docs
+site_url: https://texttechnologylab.github.io/Va.Si.Li-Lab/
+site_description: >-
+  Documentation for Va.Si.Li-Lab
+
+
+# Repository
+repo_url: https://github.com/texttechnologylab/Va.Si.Li-Lab
+repo_name: texttechnologylab/Va.Si.Li-Lab
+
+
+# Page tree
 nav:
     - Home: index.md
     - Getting Started:
         - Setting Up Va.Si.Li-Lab: setting_up.md
         
-    - Advanced:
+    - Avatar & Player Controller:
         - Meta Avatars: meta_avatars.md
-        - Server Structure: 
-            - Ubiq Server: ubiq_server.md
-            - Python Data Logger: python_data_loggert.md
-            - Java Service: java_service.md
-            - MongoDB: mongodb.md
-    
+
+    - Other Functions:
+        - Replay Experiment: replay.md
+
+    - Server Structure: 
+        - Ubiq Server: ubiq_server.md
+        - Python Data Logger: python_data_loggert.md
+        - Java Service: java_service.md
+        - MongoDB: mongodb.md
+
     - Projects:
-        - Digitell: digitell.md
-        - ViCom: vicom.md
+        - Digitell: ./projects/digitell.md
+        - ViCom: ./projects/vicom.md
+        - New Data Spaces: ./projects/faces.md
+
+    - Publications: publications.md
+
+
+# Configuration
 theme:
     name: material
+    logo: images/logo/29729890.png
+    icon:
+        repo: fontawesome/brands/github
+    # Light/Darkmode
+    palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/link
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off
+        name: Switch to system preference
+
+    features:
+        - content.code.annotate
+        - content.code.copy
+        - navigation.instant
+        - navigation.instant.prefetch
+        - navigation.instant.progress
+        # - navigation.sections
+        - navigation.expand
+        - navigation.tracking
+        - search.highlight
+        # - search.share
+        - search.suggest
+
+
+# Additional configuration
+extra:
+    homepage: https://www.texttechnologylab.org/
+    status:
+        new: Recently added
+        deprecated: Deprecated
+    social:
+        - icon: fontawesome/solid/house
+          link: https://www.texttechnologylab.org/
+        - icon: fontawesome/brands/github
+          link: https://github.com/texttechnologylab
+        - icon: fontawesome/brands/x-twitter
+          link: https://twitter.com/ttlab_ffm
+
+plugins:
+    - git-revision-date-localized:
+          enable_creation_date: true
+    - git-committers:
+        repository: texttechnologylab/Va.Si.Li-Lab
+        branch: main
