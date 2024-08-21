@@ -1,2 +1,2 @@
-# Work in progress
+# Bots
 This documentation is work in progress.

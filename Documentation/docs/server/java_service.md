@@ -1,2 +1,2 @@
-# Work in progress
+# Java Room Service
 This documentation is work in progress.

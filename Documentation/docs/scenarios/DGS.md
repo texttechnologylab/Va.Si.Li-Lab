@@ -1,2 +1,2 @@
-# Work in progress
+# DGS
 This documentation is work in progress.

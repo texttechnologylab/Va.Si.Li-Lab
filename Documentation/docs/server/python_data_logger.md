@@ -1,2 +1,2 @@
-# Work in progress
+# Python Data Logger
 This documentation is work in progress.
