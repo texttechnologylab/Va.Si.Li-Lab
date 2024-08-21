@@ -14,13 +14,28 @@ repo_name: texttechnologylab/Va.Si.Li-Lab
 nav:
     - Home: index.md
     - Getting Started:
-        - Setting Up Va.Si.Li-Lab: setting_up.md
-        - Meta Avatars: meta_avatars.md
-        - Player Controller: player_controller.md
+        - Setting Up Va.Si.Li-Lab: ./getting_started/setting_up.md
+        - Adding Scenes: ./getting_started/adding_scenes.md
+        - Meta Avatars: ./getting_started/meta_avatars.md
+        - Player Controller: ./getting_started/player_controller.md
+
 
     - Other Functions:
-        - Replay Experiment: replay.md
-        - Bots: bots.md
+        - Replay Experiment: ./other/replay.md
+        - Bots: ./other/bots.md
+
+    - Scenarios:
+        - ICIDS: ./scenarios/ICIDS.md
+        - PraktikumScenario1: ./scenarios/PraktikumScenario1.md
+        - PraktikumScenario2: ./scenarios/PraktikumScenario2.md
+        - PraktikumScenario3: ./scenarios/PraktikumScenario3.md
+        - DGS: ./scenarios/DGS.md
+        - Meetingpoint: ./scenarios/Meetingpoint.md
+        - OrganisationDistribution: ./scenarios/OrganisationDistribution.md
+        - OrganisationEducation: ./scenarios/OrganisationEducation.md
+        - SchoolDistribution: ./scenarios/SchoolDistribution.md
+        - SchoolHetero: ./scenarios/SchoolHetero.md
+
 
     - Server Structure: 
         - Ubiq Server: ./server/ubiq_server.md
