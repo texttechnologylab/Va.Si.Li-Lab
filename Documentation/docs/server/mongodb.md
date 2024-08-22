@@ -18,13 +18,13 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root #(1)
       MONGO_INITDB_ROOT_PASSWORD: root
     ports:
-      - 27017:27017
+      - "27017:27017"
     volumes:
       - /vol/mongoVaSiLiLab/data/:/data/db/ #(2)
       - /vol/mongoVaSiLiLab/mongod.conf:/etc/mongod.conf
       - /vol/mongoVaSiLiLab/log/:/var/log/mongodb/
       - /vol/mongoVaSiLiLab/mongohome/:/home/mongodb/
-    command: ["-f", "/etc/mongod.conf"]
+    command: [ "-f", "/etc/mongod.conf" ]
 
 volumes:
   mongodb_data_container:

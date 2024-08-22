@@ -82,19 +82,16 @@ theme:
         name: Switch to system preference
 
   features:
-    # - content.code.annotate
     - content.code.copy
     - content.code.annotate
     - navigation.instant
     - navigation.instant.prefetch
     - navigation.instant.progress
     - navigation.tabs
-    # - navigation.sections
     - navigation.expand
     - navigation.tracking
     - navigation.path
     - search.highlight
-    # - search.share
     - search.suggest
 
 

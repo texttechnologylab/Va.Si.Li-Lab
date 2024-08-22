@@ -19,7 +19,7 @@
   doi       = {10.1007/978-3-031-35741-1_39}
 }
 ```
-[[Link]](https://link.springer.com/chapter/10.1007/978-3-031-35741-1_39)
+[[Link]](https://link.springer.com/chapter/10.1007/978-3-031-35741-1_39) [[RG]](https://www.researchgate.net/publication/372298766_A_Multimodal_Data_Model_for_Simulation-Based_Learning_with_VaSiLi-Lab)
 
 
 ---
@@ -45,7 +45,7 @@
   series    = {HT '23}
 }
 ```
-[[Link]](https://dl.acm.org/doi/10.1145/3603163.3609076) [[pdf]](https://dl.acm.org/doi/pdf/10.1145/3603163.3609076)
+[[Link]](https://dl.acm.org/doi/10.1145/3603163.3609076) [[pdf]](https://dl.acm.org/doi/pdf/10.1145/3603163.3609076)  [[RG]](https://www.researchgate.net/publication/371303212_VaSiLi-Lab_as_a_collaborative_multi-user_annotation_tool_in_virtual_reality_and_its_potential_fields_of_application)
 
 ---
 
