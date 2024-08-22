@@ -12,57 +12,56 @@ repo_name: texttechnologylab/Va.Si.Li-Lab
 
 # Page tree
 nav:
-    - Home: index.md
-    - Getting Started:
-        - Setting Up Va.Si.Li-Lab: ./getting_started/setting_up.md
-        - Special Scenes: ./getting_started/special_scenes.md
-        - Adding Scenes: ./getting_started/adding_scenes.md
-        - Meta Avatars: ./getting_started/meta_avatar.md
-        - Player Controller: ./getting_started/player_controller.md
+  - Home: index.md
+  - Getting Started:
+      - Setting Up Va.Si.Li-Lab: ./getting_started/setting_up.md
+      - Special Scenes: ./getting_started/special_scenes.md
+      - Adding Scenes: ./getting_started/adding_scenes.md
+      - Meta Avatars: ./getting_started/meta_avatar.md
+      - Player Controller: ./getting_started/player_controller.md
 
 
-    - Other Functions:
-        - Replay Experiment: ./other/replay.md
-        - Bots: ./other/bots.md
+  - Other Functions:
+      - Replay Experiment: ./other/replay.md
+      - Bots: ./other/bots.md
 
-    - Scenarios:
-        - ICIDS: ./scenarios/ICIDS.md
-        - PraktikumScenario1: ./scenarios/PraktikumScenario1.md
-        - PraktikumScenario2: ./scenarios/PraktikumScenario2.md
-        - PraktikumScenario3: ./scenarios/PraktikumScenario3.md
-        - DGS: ./scenarios/DGS.md
-        - Meetingpoint: ./scenarios/Meetingpoint.md
-        - OrganisationDistribution: ./scenarios/OrganisationDistribution.md
-        - OrganisationEducation: ./scenarios/OrganisationEducation.md
-        - SchoolDistribution: ./scenarios/SchoolDistribution.md
-        - SchoolHetero: ./scenarios/SchoolHetero.md
+  - Scenarios:
+      - ICIDS: ./scenarios/ICIDS.md
+      - PraktikumScenario1: ./scenarios/PraktikumScenario1.md
+      - PraktikumScenario2: ./scenarios/PraktikumScenario2.md
+      - PraktikumScenario3: ./scenarios/PraktikumScenario3.md
+      - DGS: ./scenarios/DGS.md
+      - Meetingpoint: ./scenarios/Meetingpoint.md
+      - OrganisationDistribution: ./scenarios/OrganisationDistribution.md
+      - OrganisationEducation: ./scenarios/OrganisationEducation.md
+      - SchoolDistribution: ./scenarios/SchoolDistribution.md
+      - SchoolHetero: ./scenarios/SchoolHetero.md
 
+  - Server Structure:
+      - General: ./server/server_structure.md
+      - Ubiq Server: ./server/ubiq_server.md
+      - Python Data Logger: ./server/python_data_logger.md
+      - Java Service: ./server/java_service.md
+      - MongoDB: ./server/mongodb.md
 
-    - Server Structure:
-        - General: ./server/server_structure.md
-        - Ubiq Server: ./server/ubiq_server.md
-        - Python Data Logger: ./server/python_data_logger.md
-        - Java Service: ./server/java_service.md
-        - MongoDB: ./server/mongodb.md
+  - Projects:
+      - Digitell: ./projects/digitell.md
+      - ViCom: ./projects/vicom.md
+      - New Data Spaces: ./projects/faces.md
 
-    - Projects:
-        - Digitell: ./projects/digitell.md
-        - ViCom: ./projects/vicom.md
-        - New Data Spaces: ./projects/faces.md
-
-    - Publications: publications.md
+  - Publications: publications.md
 
 
 # Configuration
 theme:
-    name: material
-    logo: images/logo/cropped-favicon-2.png
-    favicon: images/logo/cropped-favicon-2.png
+  name: material
+  logo: images/logo/cropped-favicon-2.png
+  favicon: images/logo/cropped-favicon-2.png
 
-    icon:
-        repo: fontawesome/brands/github
-    # Light/Darkmode
-    palette:
+  icon:
+    repo: fontawesome/brands/github
+  # Light/Darkmode
+  palette:
     - media: "(prefers-color-scheme)"
       toggle:
         icon: material/link
@@ -82,51 +81,51 @@ theme:
         icon: material/toggle-switch-off
         name: Switch to system preference
 
-    features:
-        # - content.code.annotate
-        - content.code.copy
-        - content.code.annotate
-        - navigation.instant
-        - navigation.instant.prefetch
-        - navigation.instant.progress
-        - navigation.tabs
-      # - navigation.sections
-        - navigation.expand
-        - navigation.tracking
-        - navigation.path
-        - search.highlight
-        # - search.share
-        - search.suggest
+  features:
+    # - content.code.annotate
+    - content.code.copy
+    - content.code.annotate
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.tabs
+    # - navigation.sections
+    - navigation.expand
+    - navigation.tracking
+    - navigation.path
+    - search.highlight
+    # - search.share
+    - search.suggest
 
 
 # Additional configuration
 extra:
-    homepage: https://texttechnologylab.github.io/Va.Si.Li-Lab/
-    status:
-        new: Recently added
-        deprecated: Deprecated
-    social:
-        - icon: fontawesome/solid/house
-          link: https://www.texttechnologylab.org/
-        - icon: fontawesome/brands/github
-          link: https://github.com/texttechnologylab
-        - icon: fontawesome/brands/x-twitter
-          link: https://twitter.com/ttlab_ffm
-        - icon: fontawesome/brands/researchgate
-          link: https://www.researchgate.net/lab/Text-Technology-Lab-TTLab-Alexander-Mehler
-        - icon: fontawesome/brands/youtube
-          link: https://www.youtube.com/channel/UCST6Bz8tydqR-VOnihevKtg
+  homepage: https://texttechnologylab.github.io/Va.Si.Li-Lab/
+  status:
+    new: Recently added
+    deprecated: Deprecated
+  social:
+    - icon: fontawesome/solid/house
+      link: https://www.texttechnologylab.org/
+    - icon: fontawesome/brands/github
+      link: https://github.com/texttechnologylab
+    - icon: fontawesome/brands/x-twitter
+      link: https://twitter.com/ttlab_ffm
+    - icon: fontawesome/brands/researchgate
+      link: https://www.researchgate.net/lab/Text-Technology-Lab-TTLab-Alexander-Mehler
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/channel/UCST6Bz8tydqR-VOnihevKtg
 
 plugins:
-    - git-revision-date-localized:
-          enable_creation_date: true
-    - search
-    - glightbox
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - search
+  - glightbox
 
   #- git-authors
-    #- git-committers:
-    #    repository: texttechnologylab/Va.Si.Li-Lab
-    #    branch: main
+  #- git-committers:
+  #    repository: texttechnologylab/Va.Si.Li-Lab
+  #    branch: main
 
 
 markdown_extensions:

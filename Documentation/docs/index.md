@@ -33,6 +33,6 @@ Please see the [publications](publications.md) for further details.
       * [ ] Replay Experiment
       * [ ] Bots
     * [ ] Scenarios
-    * [ ] Server Sctructure
+    * [ ] Server Structure
     * [x] Projects
     * [x] Publications
