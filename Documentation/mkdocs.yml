@@ -86,9 +86,11 @@ theme:
         - navigation.instant
         - navigation.instant.prefetch
         - navigation.instant.progress
-        # - navigation.sections
+        - navigation.tabs
+      # - navigation.sections
         - navigation.expand
         - navigation.tracking
+        - navigation.path
         - search.highlight
         # - search.share
         - search.suggest
