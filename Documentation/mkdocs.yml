@@ -38,7 +38,8 @@ nav:
         - SchoolHetero: ./scenarios/SchoolHetero.md
 
 
-    - Server Structure: 
+    - Server Structure:
+        - General: ./server/server_structure.md
         - Ubiq Server: ./server/ubiq_server.md
         - Python Data Logger: ./server/python_data_logger.md
         - Java Service: ./server/java_service.md
@@ -139,3 +140,11 @@ markdown_extensions:
 
   - attr_list
   - md_in_html
+
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg

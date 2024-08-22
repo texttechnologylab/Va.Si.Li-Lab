@@ -1,3 +1,7 @@
+## Publications
+
+#### A Multimodal Data Model for Simulation-Based Learning with Va.Si.Li-Lab
+
 ``` bibtex
 @inproceedings{Mehler:et:al:2023:a,
   author    = {Mehler, Alexander and Bagci, Mevl{\"u}t and Henlein, Alexander
@@ -15,7 +19,11 @@
   doi       = {10.1007/978-3-031-35741-1_39}
 }
 ```
+[[Link]](https://link.springer.com/chapter/10.1007/978-3-031-35741-1_39)
 
+
+---
+#### Va.Si.Li-Lab as a Collaborative Multi-User Annotation Tool in Virtual Reality and Its Potential Fields of Application
 
 ``` bibtex
 @inproceedings{Abrami:et:al:2023,
@@ -37,3 +45,26 @@
   series    = {HT '23}
 }
 ```
+[[Link]](https://dl.acm.org/doi/10.1145/3603163.3609076) [[pdf]](https://dl.acm.org/doi/pdf/10.1145/3603163.3609076)
+
+---
+
+
+## Presentations / Posters
+
+#### Towards grounding multimodal semantics in interaction data with Va.Si.Li-Lab
+
+``` bibtex
+@inproceedings{Henlein:et:al:2023c,
+  title     = {Towards grounding multimodal semantics in interaction data with Va.Si.Li-Lab},
+  author    = {Henlein, Alexander and Lücking, Andy and Bagci, Mevlüt and Mehler, Alexander},
+  booktitle = {Proceedings of the 8th Conference on Gesture and Speech in Interaction (GESPIN)},
+  location  = {Nijmegen, Netherlands},
+  year      = {2023},
+  keywords  = {vasililab},
+  pdf       = {https://www.gespin2023.nl/documents/talks_and_posters/GeSpIn_2023_papers/GeSpIn_2023_paper_1692.pdf}
+}
+```
+[[pdf]](https://www.gespin2023.nl/documents/talks_and_posters/GeSpIn_2023_papers/GeSpIn_2023_paper_1692.pdf)
+
+---
