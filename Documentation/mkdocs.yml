@@ -55,7 +55,9 @@ nav:
 # Configuration
 theme:
     name: material
-    logo: images/logo/29729890.png
+    logo: images/logo/cropped-favicon-2.png
+    favicon: images/logo/cropped-favicon-2.png
+
     icon:
         repo: fontawesome/brands/github
     # Light/Darkmode
@@ -118,7 +120,9 @@ plugins:
     - git-revision-date-localized:
           enable_creation_date: true
     - search
-    #- git-authors
+    - glightbox
+
+  #- git-authors
     #- git-committers:
     #    repository: texttechnologylab/Va.Si.Li-Lab
     #    branch: main
@@ -132,3 +136,6 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+
+  - attr_list
+  - md_in_html

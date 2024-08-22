@@ -2,6 +2,7 @@
 
 [New Data Spaces](https://www.new-data-spaces.de/en-us/) - DFG SPP 2431
 
+![ViCom](../images/projects/NewDataSpaces.png){loading=lazy}
 
 ## FACES
 
