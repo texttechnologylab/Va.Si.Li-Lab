@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Local/Scenes/MetaReturn.unity
     guid: a20c8cfd9870a3942b37f0eaa4077803
   - enabled: 1
+    path: Assets/Local/Scenes/MetaStartHandPlayer.unity
+    guid: 3468851dfa4a41b4bb863b607a88f401
+  - enabled: 0
     path: Assets/Local/Scenes/Start.unity
     guid: de320c37b2073d746b012d96191e77a8
   - enabled: 0
