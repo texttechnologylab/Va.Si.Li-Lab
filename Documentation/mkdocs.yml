@@ -24,6 +24,8 @@ nav:
   - Other Functions:
       - Replay Experiment: ./other/replay.md
       - Bots: ./other/bots.md
+      - Experiment Visualization Audio: ./other/experiment_visualizer_audio.md
+
 
   - Scenarios:
       - ICIDS: ./scenarios/ICIDS.md
