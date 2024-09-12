@@ -46,12 +46,17 @@ nav:
       - Java Service: ./server/java_service.md
       - MongoDB: ./server/mongodb.md
 
+  - For Students:
+      - Documentation: ./students/documentation.md
+
   - Projects:
       - Digitell: ./projects/digitell.md
       - ViCom: ./projects/vicom.md
       - New Data Spaces: ./projects/faces.md
 
   - Publications: publications.md
+
+
 
 
 # Configuration
