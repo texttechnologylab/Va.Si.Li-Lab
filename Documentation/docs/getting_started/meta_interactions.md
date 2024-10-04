@@ -40,8 +40,7 @@ It may be necessary to adjust the Y-axis of HotspotVoidFloor to ensure the floor
 
 Alternatively, for more complex environments, you can use the "Add Teleport Quick Action" from the Oculus SDK. You can also bake a NavMesh and add a teleport interactable to it. However, this is not recommended.
 
-### In this Project
-To avoid having Multiple Cameras Active at once, this setup also required us to keep the OVRCameraRigInteraction as "DONTDESTROYONLOAD", so that it can transfer between scenes and keep all the interactions aswell as the MetaAvatarSkeleton. Also this required us to use a Rigidbody and Capsule Collider on the OVRCameraRig, as to avoid being ablo to phase through objects that also have physics, such as doors.
+
 
 ### References
 [MetaInteractionSDK](https://developer.oculus.com/documentation/unity/unity-isdk-interaction-sdk-overview/)
