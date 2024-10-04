@@ -25,13 +25,13 @@ If your object doesn’t have a Collider or Rigidbody yet, a window will pop up 
 It is recommended NOT to attach every type of interactor to a single GameObject. If you have a large object but only want a small part of it to be interactable, the same rule applies.
 
 There are multiple types of interactions that you can add to a GameObject:
+* Hand Grab
+* Distance Grab
+* Poke
+* Ray Grab
+* etc.
 
-*Hand Grab
-*Distance Grab
-*Poke
-*Ray Grab
-etc.
-For more, check out this link
+[For more check out this link](https://developers.meta.com/horizon/documentation/unity/unity-isdk-interaction-sdk-overview/)
 
 ## Locomotion
 
