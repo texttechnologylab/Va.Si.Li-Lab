@@ -3,6 +3,7 @@ Instead of the XRInteraction that unity provides, this Camera uses the [META INT
 
 ## OVRCameraRigInteraction
 
+If you have the CoreSDK/InteractionSDK Assets installed, delete the Default Camera in your scene and just add this prefab into your scene. This Camera works both with Controllers and Handtracking by default.
 
 
 
