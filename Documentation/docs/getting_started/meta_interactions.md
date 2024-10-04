@@ -15,25 +15,24 @@ The (hand) interactions made possible with this setup include:
 * Locomotion
 * Teleportation
 
-## How to add Interactions
+## How to Add Interactions
+To add interactions to your OVRCameraRig, all that is required is to modify the state of the object you want to make interactable.
 
-If you want to add interactions to your OVRCameraRig, all that is required is to alter the state of the Object you want to be interactable.
+For each type of grab interaction, follow these steps:
 
-For each different Grab type, all you need to do is:
-Highlight your GameObject, right-click, search for INTERACTION SDK and then Choose which grab type you want to have on your GameObject. If your Object doesnt have a Coliider or Rigidbody yet, there will be a window that pops up, click on "Create". This will add a child-GameObject, called "ISDK_..." this means the Object can now be Interacted with. (This only works because of the OVRCameraRigInteraction having all of the interactors already.)
+Highlight your GameObject, right-click, search for INTERACTION SDK, and choose the type of grab interaction you want to apply to your GameObject.
+If your object doesn’t have a Collider or Rigidbody yet, a window will pop up prompting you to click "Create." This will add a child GameObject named "ISDK_...", allowing the object to be interacted with. (This only works because the OVRCameraRigInteraction already has all of the necessary interactors.)
+It is recommended NOT to attach every type of interactor to a single GameObject. If you have a large object but only want a small part of it to be interactable, the same rule applies.
 
-It is recommended to NOT put every single Interactor type onto a single GameObject.
-If you have a Large Object but only want a small part of it to be interactable, the same rule applies here.
+There are multiple types of interactions that you can add to a GameObject:
 
-There are Multiple type of Interactions that you can add to a GameObject:
-* Hand Grabs
-* Distance Grabs
-* Palm Grabs
-* Pinch Grabs
-* Poke
-* etc.
+*Hand Grab
+*Distance Grab
+*Poke
+*Ray Grab
+etc.
+For more, check out this link
 
-[For more Check out this link](https://developers.meta.com/horizon/documentation/unity/unity-isdk-interaction-sdk-overview/)
 ## Locomotion
 
 The OVRCameraRigInteractable prefab already comes with the necessary setup to implement teleporting and turning via hand tracking.
