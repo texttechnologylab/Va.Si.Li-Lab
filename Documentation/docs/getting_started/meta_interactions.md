@@ -1,6 +1,3 @@
-# Player Controller
-Instead of the XRInteraction that unity provides, this Camera uses the [META INTERACTION SDK](https://developer.oculus.com/documentation/unity/unity-before-you-begin/).
-
 ## OVRCameraRigInteraction
 
 If you have the CoreSDK/InteractionSDK Assets installed, delete the Default Camera in your scene and just add this prefab into your scene. This Camera works both with Controllers and Handtracking by default.
