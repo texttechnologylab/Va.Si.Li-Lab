@@ -44,5 +44,5 @@ Alternatively, for more complex environments, you can use the "Add Teleport Quic
 To avoid having Multiple Cameras Active at once, this setup also required us to keep the OVRCameraRigInteraction as "DONTDESTROYONLOAD", so that it can transfer between scenes and keep all the interactions aswell as the MetaAvatarSkeleton. Also this required us to use a Rigidbody and Capsule Collider on the OVRCameraRig, as to avoid being ablo to phase through objects that also have physics, such as doors.
 
 ### References
-[MetaInteractionSDK] (https://developer.oculus.com/documentation/unity/unity-isdk-interaction-sdk-overview/)
-[HandTracking] (https://developer.oculus.com/documentation/unity/unity-handtracking-overview/)
+[MetaInteractionSDK](https://developer.oculus.com/documentation/unity/unity-isdk-interaction-sdk-overview/)
+[HandTracking](https://developer.oculus.com/documentation/unity/unity-handtracking-overview/)
