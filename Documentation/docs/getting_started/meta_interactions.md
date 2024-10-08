@@ -31,6 +31,10 @@ There are multiple types of interactions that you can add to a GameObject:
 
 [For more check out this link](https://developers.meta.com/horizon/documentation/unity/unity-isdk-interaction-sdk-overview/)
 
+## Custom Interactions
+
+To add custom interactions for hand controllers, you will need to reference the OVRHand class or the appropriate controller class for the controllers you’re using. You can also directly read button inputs using the OVRInput class. For an example of both methods, refer to the MetaPen.cs script, or check the official documentation for [more information](https://developers.meta.com/horizon/documentation/unity/unity-inputactions).
+
 ## Locomotion
 
 The OVRCameraRigInteractable prefab already comes with the necessary setup to implement teleporting and turning via hand tracking.
