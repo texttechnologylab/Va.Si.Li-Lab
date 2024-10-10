@@ -45,7 +45,7 @@ It may be necessary to adjust the Y-axis of HotspotVoidFloor to ensure the floor
 Alternatively, for more complex environments, you can use the "Add Teleport Quick Action" from the Oculus SDK. You can also bake a NavMesh and add a teleport interactable to it. However, this is not recommended.
 
 ## Scirpts
-###FireworkSpawn.cs
+### FireworkSpawn.cs
 Added the Firework Spawn script that takes Spawn Object, Spawn Point, Height Offset, Upward Force.
 It spawns an object with upward force (firework) when interacted with via a RayInteractor (Hand and Controller).
 
