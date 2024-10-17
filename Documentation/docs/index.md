@@ -30,7 +30,7 @@ Please see the [publications](publications.md) for further details.
     * [x] Home
     * [ ] Getting Started
     * [ ] Other Functions
-      * [ ] Replay Experiment
+      * [X] Replay Experiment
       * [ ] Bots
     * [ ] Scenarios
     * [ ] Server Structure
