@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: TTLab
-  productName: Digitell
+  productName: Vasili-Lab
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -140,7 +140,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 0.3.0
+  bundleVersion: 1.0.0-pre1
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 0}
@@ -227,8 +227,6 @@ PlayerSettings:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 11400000, guid: a0d41a029a050d04991c66d59895757e, type: 2}
-  - {fileID: 2383830477694751613, guid: 46f76886d6f959d408b7738dc6ea7724, type: 2}
-  - {fileID: 3545681455263419408, guid: 2b99fdbb7ec3d5b4090012eca387cfb0, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -249,8 +247,8 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.TTLab.Digitell
-    Standalone: com.TTLab.Digitell
+    Android: com.TTLab.VasiliLab
+    Standalone: com.TTLab.Vasili-Lab
   buildNumber:
     Standalone: 0
     VisionOS: 0
