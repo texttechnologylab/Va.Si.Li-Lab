@@ -3,7 +3,7 @@
     "com.meta.xr.sdk.all": "71.0.0",
     "com.meta.xr.sdk.avatars": "24.1.1",
     "com.meta.xr.sdk.avatars.sample.assets": "24.1.1",
-    "com.ucl.ubiq": "https://github.com/UCL-VR/ubiq.git#upm",
+    "com.ucl.ubiq": "https://github.com/UCL-VR/ubiq.git#upm-unity-v1.0.0-pre.3",
     "com.unity.ai.navigation": "1.1.5",
     "com.unity.collab-proxy": "2.5.2",
     "com.unity.ide.rider": "3.0.31",
