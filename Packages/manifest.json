@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.meta.xr.sdk.all": "71.0.0",
+    "com.meta.xr.sdk.all": "69.0.1",
     "com.meta.xr.sdk.avatars": "24.1.1",
     "com.meta.xr.sdk.avatars.sample.assets": "24.1.1",
     "com.ucl.ubiq": "https://github.com/UCL-VR/ubiq.git#upm-unity-v1.0.0-pre.3",
