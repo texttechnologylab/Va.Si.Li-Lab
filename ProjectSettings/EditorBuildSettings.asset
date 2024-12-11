@@ -5,15 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Local/Scenes/MetaStart.unity
     guid: e6d9483601d135240bca91bb89b1b894
   - enabled: 0
     path: Assets/Local/Scenes/MetaReturn.unity
     guid: a20c8cfd9870a3942b37f0eaa4077803
-  - enabled: 0
+  - enabled: 1
     path: Assets/Local/Scenes/Start.unity
     guid: de320c37b2073d746b012d96191e77a8
+  - enabled: 1
+    path: Assets/Local/Scenes/FACES.unity
+    guid: 24072eeafa23d954abcf8ab5bbff90aa
   - enabled: 0
     path: Assets/Local/Scenes/ICIDS.unity
     guid: b456c2d8702c3954ea94fe19813979a2
@@ -29,4 +32,5 @@ EditorBuildSettings:
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 473ba7ca385448746a82f9a78ec69b04, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2b99fdbb7ec3d5b4090012eca387cfb0, type: 2}
-    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 70520ac1bbc336d4fa20538e6cdfa93a, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 930343fcbf66e2d4cba10cfe8640789e, type: 2}
+  m_UseUCBPForAssetBundles: 0
