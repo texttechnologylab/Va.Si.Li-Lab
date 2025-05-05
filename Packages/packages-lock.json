@@ -117,7 +117,7 @@
       "url": "https://packages.unity.com"
     },
     "com.ucl.ubiq": {
-      "version": "https://github.com/UCL-VR/ubiq.git#upm-unity-v1.0.0-pre.11",
+      "version": "https://github.com/UCL-VR/ubiq.git#upm-unity-v1.0.0-pre.14",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -125,7 +125,7 @@
         "com.unity.burst": "1.8.18",
         "com.unity.editorcoroutines": "1.0.0"
       },
-      "hash": "708a532ddc8b3f50b07d4a27b4ad76ad0f9b669f"
+      "hash": "999ef32325c52a4f5503954aee509f14da94a576"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -396,7 +396,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.hands": {
-      "version": "1.5.0",
+      "version": "1.5.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
