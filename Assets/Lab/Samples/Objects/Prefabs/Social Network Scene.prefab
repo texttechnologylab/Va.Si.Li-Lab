@@ -102,14 +102,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 312528976127297744}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c865b24e5478f3a44940d68fbc554c0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: http://api.vasililab.texttechnologylab.org/logging
+  url: http://127.0.0.1:5000/logging
   client: {fileID: 8464618586410479142}
-  voipPeer: {fileID: 0}
+  voipPeer: {fileID: 4454358343223064516}
   player: {fileID: 0}
   playerCamera: {fileID: 0}
   leftHand: {fileID: 0}
@@ -135,6 +135,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9058047332997049755}
+  - component: {fileID: 4454358343223064516}
   - component: {fileID: 2670915992716547225}
   - component: {fileID: 2784430733366360059}
   m_Layer: 0
@@ -159,6 +160,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5299692073896250732}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4454358343223064516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957078693821354899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4708009e9e24c524f8984e043e151651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2670915992716547225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -723,7 +736,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1811166868284687854
 Transform:
   m_ObjectHideFlags: 0
@@ -1857,9 +1870,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3998109612765624163}
   - component: {fileID: 7474766533603757802}
-  - component: {fileID: 3588553605288613398}
-  - component: {fileID: 5116130769403298474}
-  - component: {fileID: 6340276569070854013}
   m_Layer: 0
   m_Name: Avatar Manager
   m_TagString: Untagged
@@ -1895,73 +1905,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   avatarCatalogue: {fileID: 11400000, guid: 79934d4a9d6cbc44a98f481b55aef421, type: 2}
-  avatarPrefab: {fileID: 3172939939781028348, guid: 59bce046eba3bb14a80855d4c1810e99, type: 3}
-  hints:
-    serializedProviders:
-      instructions:
-      - _node: HeadPosition
-        _provider:
-          _type: 0
-          _provider: {fileID: 3588553605288613398}
-      - _node: HeadRotation
-        _provider:
-          _type: 1
-          _provider: {fileID: 3588553605288613398}
-      - _node: LeftHandPosition
-        _provider:
-          _type: 0
-          _provider: {fileID: 5116130769403298474}
-      - _node: LeftHandRotation
-        _provider:
-          _type: 1
-          _provider: {fileID: 5116130769403298474}
-      - _node: RightHandPosition
-        _provider:
-          _type: 0
-          _provider: {fileID: 6340276569070854013}
-      - _node: RightHandRotation
-        _provider:
-          _type: 1
-          _provider: {fileID: 6340276569070854013}
---- !u!114 &3588553605288613398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5775953322726800723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48821abc6a7ccc049b804ef58f229199, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hintTransform: {fileID: 0}
---- !u!114 &5116130769403298474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5775953322726800723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48821abc6a7ccc049b804ef58f229199, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hintTransform: {fileID: 0}
---- !u!114 &6340276569070854013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5775953322726800723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48821abc6a7ccc049b804ef58f229199, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hintTransform: {fileID: 0}
+  avatarPrefab: {fileID: 8861760200755905291, guid: 71daf3095d63df048a2b0d3fc24fabf0, type: 3}
 --- !u!1 &6194011976576870578
 GameObject:
   m_ObjectHideFlags: 0
@@ -2192,7 +2136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   servers:
   - {fileID: 11400000, guid: 0c382475b4b85b74382e57bbf28c83b4, type: 2}
-  reconnectBehaviour: 0
+  timeoutBehaviour: 2
 --- !u!114 &8464618587302163545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2340,7 +2284,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6475394069468491851}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d2fd56637254474fa5a0290a032ddc9, type: 3}
   m_Name: 
@@ -2714,7 +2658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomClient: {fileID: 8464618586410479142}
-  apiURL: http://api.vasililab.texttechnologylab.org
+  apiURL: http://127.0.0.1:5000
 --- !u!114 &5905404317811269386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2727,7 +2671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38246c1de2604547b700b5f10e86366, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSceneName: Start
+  defaultSceneName: MetaReturn
   client: {fileID: 8464618586410479142}
   spawnManager: {fileID: 2570624613026541447}
 --- !u!1 &9082160051945920971
