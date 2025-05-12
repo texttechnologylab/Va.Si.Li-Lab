@@ -1,0 +1,27 @@
+{
+    "name": "org.texttechnologylab.vasili",
+    "version": "1.0.0-pre.1",
+    "displayName": "Va.Si.Li-Lab",
+    "description": "Create networked VR scenarios with Va.Si.Li-Lab",
+    "unity": "6000.1",
+    "dependencies": {
+      "com.unity.xr.management": "3.2.16",
+      "com.unity.nuget.newtonsoft-json": "13.0.3",
+      "com.ucl.ubiq": "https://github.com/UCL-VR/ubiq.git#upm-unity-v1.0.0-pre.14",
+      "com.unity.webrtc-ubiq-fork": "https://github.com/UCL-VR/unity-webrtc-ubiq-fork.git#v3.0.1-pre.7",
+      "com.meta.xr.sdk.all": "76.0.0"
+   },
+   "keywords": [ ],
+    "author": {
+      "name": "TTLab Goethe University Frankfurt",
+      "email": "digitell@uni-frankfurt.de",
+      "url": "https://www.texttechnologylab.org/"
+    },
+    "samples": [
+      {
+        "displayName": "Samples",
+        "description": "A set of samples to more easily get started with Va.Si.Li-Lab",
+        "path": "Samples~"
+      }
+    ]
+  }
