@@ -11,13 +11,21 @@ namespace VaSiLi.MetaAvatar
 
         MetaAvatar avatar;
 
+
         protected override IEnumerator Start()
         {
+            _creationInfo.features = CAPI.ovrAvatar2EntityFeatures.Preset_Remote;
+            _creationInfo.features &= ~CAPI.ovrAvatar2EntityFeatures.UseDefaultAnimHierarchy;
             //transform.rotation = new Quaternion(0f, 1f, 0f, 180f);
             SetInputManager(null);
             SetFacePoseProvider(null);
             SetEyePoseProvider(null);
             SetIsLocal(false);
+            var animationBehavior = GetComponent("OvrAvatarAnimationBehavior");
+            if (animationBehavior != null)
+            {
+                Destroy(animationBehavior);
+            }
 
             avatar = GetComponentInParent<MetaAvatar>();
             if (avatar)

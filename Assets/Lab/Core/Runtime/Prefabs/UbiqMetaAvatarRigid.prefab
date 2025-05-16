@@ -181,7 +181,7 @@ MonoBehaviour:
   MotionSmoothingSettings: 0
   _hidden: 0
   useRenderLods: 1
-  _isLocal: 1
+  _isLocal: 0
   _loadUserFromCdn: 0
   _cdnUserID: 0
   _style2DropdownIndex: 0
@@ -273,7 +273,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8861760200755905291}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f94fa4e4a5fd644f81f7216101b7777, type: 3}
   m_Name: 

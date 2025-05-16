@@ -102,12 +102,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 312528976127297744}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c865b24e5478f3a44940d68fbc554c0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: http://127.0.0.1:5000/logging
+  server: {fileID: 11400000, guid: 8190d1caea586df4a9f654635d368eae, type: 2}
   client: {fileID: 8464618586410479142}
   voipPeer: {fileID: 4454358343223064516}
   player: {fileID: 0}
@@ -1904,7 +1904,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78043eb8bdd2f6b44a1cfd44c3b8fa5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avatarCatalogue: {fileID: 11400000, guid: 79934d4a9d6cbc44a98f481b55aef421, type: 2}
+  avatarCatalogue: {fileID: 11400000, guid: d7954fc960d65d94ca8d09e0f026597e, type: 2}
   avatarPrefab: {fileID: 8861760200755905291, guid: 71daf3095d63df048a2b0d3fc24fabf0, type: 3}
 --- !u!1 &6194011976576870578
 GameObject:
@@ -2135,7 +2135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   servers:
-  - {fileID: 11400000, guid: 0c382475b4b85b74382e57bbf28c83b4, type: 2}
+  - {fileID: 11400000, guid: d4e1f2a1ab0e3e2468c8ea06469fa2a1, type: 2}
   timeoutBehaviour: 2
 --- !u!114 &8464618587302163545
 MonoBehaviour:
@@ -2658,7 +2658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomClient: {fileID: 8464618586410479142}
-  apiURL: http://127.0.0.1:5000
+  apiRoute: {fileID: 11400000, guid: 8190d1caea586df4a9f654635d368eae, type: 2}
 --- !u!114 &5905404317811269386
 MonoBehaviour:
   m_ObjectHideFlags: 0

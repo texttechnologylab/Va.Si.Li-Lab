@@ -32,8 +32,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   listenOnIp: 
   listenOnPort: 
-  sendToIp: 127.0.0.1
-  sendToPort: 8009
+  sendToIp: vasililab.texttechnologylab.org
+  sendToPort: 8099
   type: 0
   platforms:
   - platform: 17
