@@ -17,7 +17,6 @@ And not all functions discribed here are implemented yet.
 * Dr. Alexander Henlein [:fontawesome-brands-github:](https://github.com/henlein) [:fontawesome-brands-researchgate:](https://www.researchgate.net/profile/Alexander-Henlein)
 * Patrick Schrottenbacher [:fontawesome-brands-github:](https://github.com/TheBv) [:fontawesome-brands-researchgate:](https://www.researchgate.net/profile/Patrick-Schrottenbacher)
 * Atef Ezziddin [:fontawesome-brands-github:](https://github.com/AtefEzziddin) 
-* Christian Spiekermann [:fontawesome-brands-github:](https://github.com/chrisspi) [:fontawesome-brands-researchgate:](https://www.researchgate.net/profile/Christian-Spiekermann)
 
 ## Citation
 Please see the [publications](publications.md) for further details.

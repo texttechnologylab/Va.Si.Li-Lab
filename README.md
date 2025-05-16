@@ -10,7 +10,7 @@ a **V**R-L**a**b for **Si**mulation-based **L**earn**i**ng
 
 # Abstract
 Va.Si.Li-Lab was established as part of the project "Digital Teaching and Learning Lab" (DigiTeLL) at the Goethe University Frankfurt. 
-
+It has since evolved into a highly capable and flexible VR framework for enabling simultaneous, multi-user engagements.
 
 
 # Va.Si.Li-Lab - Team
@@ -19,7 +19,6 @@ Va.Si.Li-Lab was established as part of the project "Digital Teaching and Learni
 * Mevlüt Bagci
 * Dr. Alexander Henlein
 * Patrick Schrottenbacher
-* Christian Spiekermann
 
 # Documentation
 https://texttechnologylab.github.io/Va.Si.Li-Lab/
