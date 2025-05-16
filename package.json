@@ -6,10 +6,12 @@
     "unity": "6000.1",
     "dependencies": {
       "com.unity.xr.management": "3.2.16",
-      "com.unity.nuget.newtonsoft-json": "13.0.3",
-      "com.ucl.ubiq": "https://github.com/UCL-VR/ubiq.git#upm-unity-v1.0.0-pre.14",
-      "com.unity.webrtc-ubiq-fork": "https://github.com/UCL-VR/unity-webrtc-ubiq-fork.git#v3.0.1-pre.7",
-      "com.meta.xr.sdk.all": "76.0.0"
+      "com.ucl.ubiq": "1.0.0-pre.14",
+      "com.unity.webrtc-ubiq-fork": "3.0.1-pre.7",
+      "com.meta.xr.sdk.avatars": "35.2.0",
+      "com.meta.xr.sdk.all": "76.0.0",
+      "com.unity.xr.interaction.toolkit": "3.1.2",
+      "com.unity.xr.hands": "1.5.1"
    },
    "keywords": [ ],
     "author": {
