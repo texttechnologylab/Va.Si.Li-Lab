@@ -27,7 +27,13 @@ namespace VaSiLi.Logging
     /// </summary>
     public class MetaDataLogger : MonoBehaviour
     {
-        public string url;
+        /// <summary>
+        /// A list of default servers to connect to on start-up. The network must only have one RoomServer or
+        /// undefined behaviour will result.
+        /// </summary>
+        [SerializeField]
+        private ApiRouteDefinition server;
+
         public RoomClient client;
         public VoipPeerConnectionManager voipPeer;
         public Transform player;
@@ -80,6 +86,7 @@ namespace VaSiLi.Logging
         private bool shouldTrack = true;
         void Start()
         {
+            Debug.Log(server.ToString());
             client.OnJoinedRoom.AddListener(JoinedRoom);
             // TODO: Support WebGL
             NetworkSpawnManager.Find(this).OnSpawned.AddListener(OnObjectSpawn);
@@ -175,7 +182,7 @@ namespace VaSiLi.Logging
                     role = RoleManager.CurrentRole?.id,
                     messageId = messageCount,
                 };
-                var result = JsonRequest.PostRequest(url + "/playerRoleLogIn", message).ContinueWith(a =>
+                var result = JsonRequest.PostRequest(server.ToString() + "/logging" + "/playerRoleLogIn", message).ContinueWith(a =>
                 {
                     if (a.Result.StatusCode != System.Net.HttpStatusCode.Created)
                     {
@@ -202,7 +209,7 @@ namespace VaSiLi.Logging
                 levelStatus = status.ToString(),
             };
 
-            var result = JsonRequest.PostRequest(url + "/levelChange", message).ContinueWith(a =>
+            var result = JsonRequest.PostRequest(server.ToString() + "/logging" + "/levelChange", message).ContinueWith(a =>
             {
                 if (a.Result.StatusCode != System.Net.HttpStatusCode.Created)
                 {
@@ -313,7 +320,7 @@ namespace VaSiLi.Logging
                 messageId = messageCount,
             };
             Debug.Log(currentRoom.Name);
-            var result = JsonRequest.PostRequest(url + "/playerLogIn", message).ContinueWith(a =>
+            var result = JsonRequest.PostRequest(server.ToString() + "/logging" + "/playerLogIn", message).ContinueWith(a =>
             {
                 if (a.Result.StatusCode != System.Net.HttpStatusCode.Created)
                 {
@@ -431,26 +438,26 @@ namespace VaSiLi.Logging
                 // TODO: TransmitMessages should return status code to more easily judge what to do with the message that didn't go through
                 while (playerMessages.Count > 0)
                 {
-                    _ = TransmitMessage(url + "/player", playerMessages.Dequeue(), tmpPlayerMessages);
+                    _ = TransmitMessage(server.ToString() + "/logging" + "/player", playerMessages.Dequeue(), tmpPlayerMessages);
                 }
                 while (objectMessages.Count > 0)
                 {
-                    _ = TransmitMessage(url + "/object", objectMessages.Dequeue(), tmpObjectMessages);
+                    _ = TransmitMessage(server.ToString() + "/logging" + "/object", objectMessages.Dequeue(), tmpObjectMessages);
                 }
                 while (buttonMessages.Count > 0)
                 {
-                    _ = TransmitMessage(url + "/special", buttonMessages.Dequeue(), tmpButtonMessages);
+                    _ = TransmitMessage(server.ToString() + "/logging" + "/special", buttonMessages.Dequeue(), tmpButtonMessages);
                 }
                 while (spawnMessages.Count > 0)
                 {
-                    _ = TransmitMessage(url + "/special", spawnMessages.Dequeue(), tmpSpawnMessages);
+                    _ = TransmitMessage(server.ToString() + "/logging" + "/special", spawnMessages.Dequeue(), tmpSpawnMessages);
                 }
                 while (miscMessages.Count > 0)
                 {
                     MiscLogMessage msg = miscMessages.Dequeue();
                     msg.playerId = playerId;
                     //Debug.Log("!!!Misc:" + JsonConvert.SerializeObject(msg));
-                    _ = TransmitMessage(url + "/logMisc", msg, tmpMiscMessages);
+                    _ = TransmitMessage(server.ToString() + "/logging" + "/logMisc", msg, tmpMiscMessages);
                 }
                 //TODO: Disabled for now since logging can cause infinite loops
                 /*while (logMessages.Count > 0)
