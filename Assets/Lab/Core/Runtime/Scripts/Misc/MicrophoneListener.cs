@@ -135,6 +135,7 @@ namespace VaSiLi.Misc
             {
                 ChatLogPanel.setText(SceneManagement.RoleManager.CurrentRole?.id ?? "Player", data.text_in);
             }
+            Debug.Log(data.text_in);
         }
 
         private Byte[] FloatPcmToWav(float[] samples)

@@ -114,12 +114,12 @@ namespace VaSiLi.SceneManagement
             if (go == null)
                 go = GameObject.Find("DefaultSpawn");
                 
-            if (go != null)
+            /*if (go != null)
             {
                 var trans = go.GetComponent<Transform>();
                 _player.transform.position = trans.position;
                 _menu.Request();
-            }
+            }*/
             // Set the current role in the RoleManager
             RoleManager.CurrentRole = role;
             // Init the start panel

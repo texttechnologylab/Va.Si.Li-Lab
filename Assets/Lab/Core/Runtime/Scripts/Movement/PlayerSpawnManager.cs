@@ -35,10 +35,13 @@ namespace VaSiLi.Movement
 
         void TeleportPlayer(GameObject target)
         {
+            Debug.Log($"Teleporting player to {target?.name}");
             if (target != null)
             {
                 var trans = target.GetComponent<Transform>();
                 player.transform.position = trans.position;
+                player.transform.rotation = trans.rotation;
+                Debug.Log("Trans position: " + trans.position);
                 playerTeleported.Invoke();
             }
         }

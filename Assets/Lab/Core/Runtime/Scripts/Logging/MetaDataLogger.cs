@@ -172,7 +172,8 @@ namespace VaSiLi.Logging
         void ChangedRole(ApiRole? role)
         {
             if (RoleManager.CurrentRole?.mode != Mode.Player)
-                shouldTrack = false;
+            //FIXME:
+                shouldTrack = true;
             else
             {
                 PlayerRoleLogin message = new PlayerRoleLogin()
