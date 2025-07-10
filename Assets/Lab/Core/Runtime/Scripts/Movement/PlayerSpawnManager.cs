@@ -1,3 +1,4 @@
+using Oculus.Interaction.Locomotion;
 using UnityEngine;
 using UnityEngine.Events;
 using VaSiLi.SceneManagement;
@@ -10,6 +11,7 @@ namespace VaSiLi.Movement
     public class PlayerSpawnManager : MonoBehaviour
     {
         public GameObject player;
+        public PlayerLocomotor playerLocomotor;
         public static UnityAction playerTeleported = delegate { };
 
         void Start()
@@ -38,12 +40,26 @@ namespace VaSiLi.Movement
             Debug.Log($"Teleporting player to {target?.name}");
             if (target != null)
             {
+                Pose targetPose = new Pose(target.transform.position, target.transform.rotation);
+                LocomotionEvent teleportEvent = new LocomotionEvent(1, targetPose, LocomotionEvent.TranslationType.Absolute, LocomotionEvent.RotationType.Absolute);
+                playerLocomotor.HandleLocomotionEvent(teleportEvent);
+                Debug.Log(playerLocomotor.isActiveAndEnabled);
                 var trans = target.GetComponent<Transform>();
                 player.transform.position = trans.position;
                 player.transform.rotation = trans.rotation;
                 Debug.Log("Trans position: " + trans.position);
-                playerTeleported.Invoke();
+                playerLocomotor.WhenLocomotionEventHandled += OnTeleportLocomotionEventHandled;
+
             }
+        }
+
+        void OnTeleportLocomotionEventHandled(LocomotionEvent ev, Pose pose)
+        {
+            if (ev.Identifier != 1)
+                return;
+            Debug.Log($"Player teleported to {pose.position}");
+            playerTeleported.Invoke();
+            playerLocomotor.WhenLocomotionEventHandled -= OnTeleportLocomotionEventHandled;
         }
     }
 }

@@ -63,12 +63,12 @@ namespace VaSiLi.SceneManagement
         /// <returns></returns>
         public static async Task<ApiInfos[]> UpdateInfos()
         {
-            var response = await JsonRequest.GetRequest($"{APIURL}/info");
+            /*var response = await JsonRequest.GetRequest($"{APIURL}/info");
             var content = await response.Content.ReadAsStringAsync();
             var data = JsonUtility.FromJson<ApiHeader<ApiInfos>>(content);
             infos = data.result;
-            infosUpdated.Invoke(infos);
-            return infos;
+            infosUpdated.Invoke(infos);*/
+            return null;
         }
 
     }
