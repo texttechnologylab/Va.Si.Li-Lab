@@ -116,6 +116,20 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.tlabaltoh.vkeyborad": {
+      "version": "https://github.com/TLabAltoh/TLabVKeyborad.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "2b2755158be4a28d13384f22415782d57b9efab4"
+    },
+    "com.tlabaltoh.webview": {
+      "version": "https://github.com/TLabAltoh/TLabWebView.git#appstore-compatible-upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "05a21e5a99035f9c1038a1e798aa1be219cc3530"
+    },
     "com.ucl.ubiq": {
       "version": "https://github.com/UCL-VR/ubiq.git#upm-unity-v1.0.0-pre.14",
       "depth": 0,
