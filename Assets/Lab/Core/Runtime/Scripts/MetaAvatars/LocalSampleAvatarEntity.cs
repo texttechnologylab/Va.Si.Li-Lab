@@ -58,31 +58,7 @@ namespace VaSiLi.MetaAvatar
         private IEnumerator SetMetaID()
         {
             Debug.Log("Wait for Loading");
-            //roomClient.Me["ubiq.avatar.meta.userid"] = "0";
-            try
-            {
-                Oculus.Platform.Core.Initialize();
-                OvrPlatformInit.InitializeOvrPlatform();
-                Users.GetLoggedInUser().OnComplete(callback: (Message<User> msg) =>
-                {
-                    if (msg.IsError)
-                    {
-                        Debug.LogError("Failed to get logged in user: " + msg.GetError().Message);
-                        roomClient.Me["ubiq.avatar.meta.userid"] = "0";
-                    }
-                    else
-                    {
-                        roomClient.Me["ubiq.avatar.meta.userid"] = msg.Data.ID.ToString();
-                        Debug.Log("UserId:  " + roomClient.Me["ubiq.avatar.meta.userid"]);
-                    }
-                });
-
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError("Failed to initialize Oculus Platform: " + e.Message);
-                roomClient.Me["ubiq.avatar.meta.userid"] = "0";
-            }
+            roomClient.Me["ubiq.avatar.meta.userid"] = "0";
             roomClient.Me["ubiq.avatar.meta.platform"] = UnityEngine.Application.platform.ToString();
             while (CurrentState < AvatarState.UserAvatar)
             {
@@ -90,7 +66,7 @@ namespace VaSiLi.MetaAvatar
                 yield return new WaitForSeconds(1.0f);
             }
             //For now ....
-            //roomClient.Me["ubiq.avatar.meta.userid"] = _userId.ToString();
+            roomClient.Me["ubiq.avatar.meta.userid"] = _userId.ToString();
 
             // FIXME: Current workaround for OPENXR tracking issues
 #if UNITY_EDITOR
@@ -110,19 +86,15 @@ namespace VaSiLi.MetaAvatar
 
         public void UpdateTexture(int id)
         {
-            /*tracker.dataBuffer.Dispose(); // Not needed anymore
+            tracker.dataBuffer.Dispose(); // Not needed anymore
             tracker.dataBuffer = default;
 
             id = Mathf.Max(id, 0);
-            if (roomClient.Me["ubiq.avatar.meta.userid"] != "0")
-            {
-
-            }
             if (id <= 64)
             {
                 roomClient.Me["ubiq.avatar.meta.userid"] = id.ToString();
                 Teardown();
-                //CreateEntity();
+                CreateEntity();
                 LoadPreset(id);
             }
             else
@@ -131,8 +103,8 @@ namespace VaSiLi.MetaAvatar
                 Teardown();
                 CreateEntity();
                 LoadPreset(0);
-                LoadUser();
-            }*/
+                //LoadUser();
+            }
 
         }
     }

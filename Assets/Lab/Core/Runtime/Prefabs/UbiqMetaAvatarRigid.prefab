@@ -102,7 +102,7 @@ MonoBehaviour:
   _hidden: 0
   useRenderLods: 1
   _isLocal: 1
-  _loadUserFromCdn: 1
+  _loadUserFromCdn: 0
   _cdnUserID: 0
   _style2DropdownIndex: 0
   _deferLoading: 0
