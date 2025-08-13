@@ -22647,7 +22647,7 @@ MonoBehaviour:
   RotateAroundGuardianCenter: 0
   FixedSpeedSteps: 0
   HmdResetsY: 0
-  HmdRotatesY: 0
+  HmdRotatesY: 1
   GravityModifier: 0.379
   useProfileData: 1
   EnableLinearMovement: 1

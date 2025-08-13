@@ -20,7 +20,10 @@ namespace VaSiLi.MetaAvatar
 
         [Serializable]
         public class PoseUpdateEvent : UnityEvent<InputVar<Pose>> { }
+        [Serializable]
+        public class PosePoseUpdateEvent : UnityEvent<InputVar<Pose>, InputVar<Pose>> { }
         public PoseUpdateEvent OnAvatarUpdate;
+        public PosePoseUpdateEvent OnAvatarHeadUpdate;
         public PoseUpdateEvent OnHeadUpdate;
         public PoseUpdateEvent OnLeftHandUpdate;
         public PoseUpdateEvent OnRightHandUpdate;
@@ -100,13 +103,6 @@ namespace VaSiLi.MetaAvatar
                 rightGrip = ToNetwork(InputVar<float>.invalid)
             };
 
-            if (!IsInvalid(state[0].avatar))
-            {
-                // Make sure the avatar is in the same positon as the HMD
-                this.transform.position = state[0].avatar.position;
-                this.transform.rotation = state[0].avatar.rotation;
-            }
-
             // The avatars themselves are solved via this.
             dataByteCount = avatar.GetActiveAvatarScript().RecordStreamData_AutoBuffer(StreamLOD.Full, ref dataBuffer);
 
@@ -185,6 +181,7 @@ namespace VaSiLi.MetaAvatar
         {
             OnAvatarUpdate.Invoke(FromNetwork(state[0].avatar));
             OnHeadUpdate.Invoke(FromNetwork(state[0].head));
+            OnAvatarHeadUpdate.Invoke(FromNetwork(state[0].head), FromNetwork(state[0].avatar));
             OnLeftHandUpdate.Invoke(FromNetwork(state[0].leftHand));
             OnRightHandUpdate.Invoke(FromNetwork(state[0].rightHand));
             OnLeftGripUpdate.Invoke(FromNetwork(state[0].leftGrip));

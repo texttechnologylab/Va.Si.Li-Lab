@@ -32,7 +32,7 @@ namespace VaSiLi.MetaAvatar
 
             if (trackedAvatar)
             {
-                trackedAvatar.OnAvatarUpdate.AddListener(ThreePointTrackedAvatar_OnAvatarUpdate);
+                trackedAvatar.OnAvatarHeadUpdate.AddListener(ThreePointTrackedAvatar_OnAvatarUpdate);
             }
 
         }
@@ -41,16 +41,16 @@ namespace VaSiLi.MetaAvatar
         {
             if (trackedAvatar && trackedAvatar != null)
             {
-                trackedAvatar.OnAvatarUpdate.RemoveListener(ThreePointTrackedAvatar_OnAvatarUpdate);
+                trackedAvatar.OnAvatarHeadUpdate.RemoveListener(ThreePointTrackedAvatar_OnAvatarUpdate);
             }
         }
 
-        private void ThreePointTrackedAvatar_OnAvatarUpdate(Ubiq.InputVar<Pose> pose)
+        private void ThreePointTrackedAvatar_OnAvatarUpdate(Ubiq.InputVar<Pose> headPose, Ubiq.InputVar<Pose> avatarPose)
         {
-            if (!pose.valid)
+            if (!headPose.valid || !avatarPose.valid)
                 return;
-            transform.position = pose.value.position;
-            transform.rotation = pose.value.rotation;
+            transform.position = avatarPose.value.position;
+            transform.rotation = avatarPose.value.rotation * Quaternion.Inverse(Quaternion.Euler(0.0f, headPose.value.rotation.eulerAngles.y, 0.0f));
         }
     }
 }
