@@ -352,7 +352,7 @@ PlayerSettings:
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: ''
-  AndroidKeyaliasName: 
+  AndroidKeyaliasName: default
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidEnableArm64MTE: 0
   AndroidBuildApkPerCpuArchitecture: 0
@@ -361,7 +361,7 @@ PlayerSettings:
   AndroidEnableTango: 0
   androidEnableBanner: 1
   androidUseLowAccuracyLocation: 0
-  androidUseCustomKeystore: 0
+  androidUseCustomKeystore: 1
   m_AndroidBanners:
   - width: 320
     height: 180
@@ -823,7 +823,7 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: USE_INPUT_SYSTEM_POSE_CONTROL;PROBUILDER_EXPERIMENTAL_FEATURES;OVRAVATAR_LOG_ENABLE_CONDITIONAL;UBIQ_SKIPCHECK_WEBRTCCOMPATIBILITY;ISDK_OPENXR_HAND;UBIQ_SILENCEWARNING_XRIVERSION
+    Android: USE_INPUT_SYSTEM_POSE_CONTROL;PROBUILDER_EXPERIMENTAL_FEATURES;OVRAVATAR_LOG_ENABLE_CONDITIONAL;UBIQ_SKIPCHECK_WEBRTCCOMPATIBILITY;ISDK_OPENXR_HAND;UBIQ_SILENCEWARNING_XRIVERSION;OVRAVATAR_LOG_FORCE_ENABLE
     EmbeddedLinux: PROBUILDER_EXPERIMENTAL_FEATURES
     GameCoreXboxOne: PROBUILDER_EXPERIMENTAL_FEATURES
     Lumin: PROBUILDER_EXPERIMENTAL_FEATURES

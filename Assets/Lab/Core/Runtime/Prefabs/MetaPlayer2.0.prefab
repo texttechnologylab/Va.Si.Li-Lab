@@ -6130,7 +6130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 6312442801784246543}
-  playerLocomotor: {fileID: 0}
+  playerLocomotor: {fileID: 8350361183191098206}
 --- !u!114 &6165512950667736981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22406,8 +22406,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ovrCameraRig: {fileID: 7167691330215680778}
-  _leftHand: {fileID: 0}
-  _rightHand: {fileID: 0}
+  _leftHand: {fileID: 2440592785787034414}
+  _rightHand: {fileID: 7805028442927856994}
   _requireOvrHands: 1
 --- !u!114 &1455634790834818963
 MonoBehaviour:

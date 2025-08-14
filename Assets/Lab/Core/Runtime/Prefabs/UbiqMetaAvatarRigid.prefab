@@ -102,8 +102,8 @@ MonoBehaviour:
   _hidden: 0
   useRenderLods: 1
   _isLocal: 1
-  _loadUserFromCdn: 0
-  _cdnUserID: 0
+  _loadUserFromCdn: 1
+  _cdnUserID: 25114505871472498
   _style2DropdownIndex: 0
   _deferLoading: 0
   _assets:
@@ -182,8 +182,8 @@ MonoBehaviour:
   _hidden: 0
   useRenderLods: 1
   _isLocal: 0
-  _loadUserFromCdn: 0
-  _cdnUserID: 0
+  _loadUserFromCdn: 1
+  _cdnUserID: 25114505871472498
   _style2DropdownIndex: 0
   _deferLoading: 0
   _assets:
@@ -313,6 +313,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avatar: {fileID: 8002895983829199420}
   OnAvatarUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAvatarHeadUpdate:
     m_PersistentCalls:
       m_Calls: []
   OnHeadUpdate:
@@ -679,6 +682,10 @@ PrefabInstance:
     - target: {fileID: 4422958779889287441, guid: 85384dbfffb336d4b96168ccfd27db98, type: 3}
       propertyPath: m_Name
       value: Speech Indicator
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422958779889287441, guid: 85384dbfffb336d4b96168ccfd27db98, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8332843025049073831, guid: 85384dbfffb336d4b96168ccfd27db98, type: 3}
       propertyPath: m_RootOrder

@@ -7,8 +7,6 @@ using Ubiq.Messaging;
 using Oculus.Platform;
 using Oculus.Platform.Models;
 
-
-
 #if ENABLE_VR || ENABLE_AR
 using UnityEngine.XR;
 #endif
@@ -21,11 +19,10 @@ namespace VaSiLi.MetaAvatar
         private RoomClient roomClient;
         //private DesktopPlayerController desktoplayer;
         private TrackedMetaAvatar tracker;
-
         private static List<XRInputSubsystem> tmpSubsystems = new List<XRInputSubsystem>();
+
         protected override IEnumerator Start()
         {
-
             roomClient = NetworkScene.Find(this).GetComponentInChildren<RoomClient>();
 
             tracker = transform.GetComponentInParent<TrackedMetaAvatar>();
@@ -60,6 +57,34 @@ namespace VaSiLi.MetaAvatar
             Debug.Log("Wait for Loading");
             roomClient.Me["ubiq.avatar.meta.userid"] = "0";
             roomClient.Me["ubiq.avatar.meta.platform"] = UnityEngine.Application.platform.ToString();
+            /*try
+            {
+
+
+                //OvrPlatformInit.InitializeOvrPlatform();
+                Users.GetLoggedInUser().OnComplete(callback: (Message<User> msg) =>
+                {
+                    if (msg.IsError)
+                    {
+                        Debug.LogError("Failed to get logged in user: " + msg.GetError().Message);
+                        //roomClient.Me["ubiq.avatar.meta.userid"] = "0";
+                    }
+                    else
+                    {
+                        roomClient.Me["ubiq.avatar.meta.userid"] = msg.Data.ID.ToString();
+                        Debug.Log("User ID: " + msg.Data.ID);
+                        Debug.Log("UserName: " + msg.Data.DisplayName);
+                        Debug.Log("UserImageURL: " + msg.Data.ImageURL);
+                        Debug.Log("UserId:  " + roomClient.Me["ubiq.avatar.meta.userid"]);
+                    }
+                });
+
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Failed to initialize Oculus Platform: " + e.Message);
+                roomClient.Me["ubiq.avatar.meta.userid"] = "0";
+            }*/
             while (CurrentState < AvatarState.UserAvatar)
             {
                 Debug.Log(CurrentState);
@@ -76,13 +101,11 @@ namespace VaSiLi.MetaAvatar
 #endif
         }
 
-
         private bool IsDesktopPlayer()
         {
             SubsystemManager.GetSubsystems<XRInputSubsystem>(tmpSubsystems);
             return tmpSubsystems.Count < 1;
         }
-
 
         public void UpdateTexture(int id)
         {
@@ -102,8 +125,8 @@ namespace VaSiLi.MetaAvatar
 
                 Teardown();
                 CreateEntity();
-                LoadPreset(0);
-                //LoadUser();
+                //LoadPreset(0);
+                LoadUser();
             }
 
         }
