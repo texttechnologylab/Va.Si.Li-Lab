@@ -952,6 +952,14 @@ PrefabInstance:
       value: https://faces.befragung.neps-studie.de/1259000
       objectReference: {fileID: 0}
     - target: {fileID: 5276381352184560912, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_texSize.x
+      value: 768
+      objectReference: {fileID: 0}
+    - target: {fileID: 5276381352184560912, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_texSize.y
+      value: 768
+      objectReference: {fileID: 0}
+    - target: {fileID: 5276381352184560912, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_captureMode
       value: 1
       objectReference: {fileID: 0}
@@ -1018,6 +1026,14 @@ PrefabInstance:
     - target: {fileID: 5877819601335358971, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_url
       value: https://faces.befragung.neps-studie.de/1259000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5877819601335358971, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_texSize.x
+      value: 768
+      objectReference: {fileID: 0}
+    - target: {fileID: 5877819601335358971, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_texSize.y
+      value: 768
       objectReference: {fileID: 0}
     - target: {fileID: 5967736357541409373, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_AnchorMax.y
