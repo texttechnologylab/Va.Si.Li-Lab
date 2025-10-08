@@ -251,6 +251,7 @@ namespace Ubiq.Voip.Implementations.Dotnet
             var pc = new RTCPeerConnection(new RTCConfiguration
             {
                 iceServers = ssIceServers,
+                iceTransportPolicy = RTCIceTransportPolicy.all
             });
 
             pc.OnAudioFormatsNegotiated += (formats) =>
@@ -298,6 +299,7 @@ namespace Ubiq.Voip.Implementations.Dotnet
             pc.onicecandidate += (iceCandidate) =>
             {
                 mainThreadActions.Enqueue(() => Send(iceCandidate));
+                Debug.Log("ICESTUFF Candidate" + iceCandidate.toJSON());
             };
 
             pc.OnRtpPacketReceived += (IPEndPoint rep, SDPMediaTypesEnum media, RTPPacket rtpPkt) =>
@@ -310,14 +312,15 @@ namespace Ubiq.Voip.Implementations.Dotnet
 
             pc.oniceconnectionstatechange += (state) => mainThreadActions.Enqueue(() =>
             {
-                switch(state)
+                Debug.Log("ICESTUFF connection changed" + state);
+                switch (state)
                 {
-                    case RTCIceConnectionState.closed : ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.closed); break;
-                    case RTCIceConnectionState.failed : ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.failed); break;
-                    case RTCIceConnectionState.disconnected : ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.disconnected); break;
-                    case RTCIceConnectionState.@new : ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.@new); break;
-                    case RTCIceConnectionState.checking : ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.checking); break;
-                    case RTCIceConnectionState.connected : ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.connected); break;
+                    case RTCIceConnectionState.closed: ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.closed); break;
+                    case RTCIceConnectionState.failed: ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.failed); break;
+                    case RTCIceConnectionState.disconnected: ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.disconnected); break;
+                    case RTCIceConnectionState.@new: ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.@new); break;
+                    case RTCIceConnectionState.checking: ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.checking); break;
+                    case RTCIceConnectionState.connected: ctx.iceConnectionStateChanged?.Invoke(IceConnectionState.connected); break;
                 }
             });
 
@@ -366,7 +369,7 @@ namespace Ubiq.Voip.Implementations.Dotnet
         {
             // e.type == Signaling message
             var msg = SignalingMessage.FromJson(e.json);
-
+            Debug.Log("ICESTUFF RemoteMessage" + e.json);
             // Id the other implementation as Dotnet requires special treatment
             if (otherPeerImplementation == Implementation.Unknown)
             {
@@ -377,6 +380,7 @@ namespace Ubiq.Voip.Implementations.Dotnet
                 if (otherPeerImplementation == Implementation.Dotnet && !ctx.polite)
                 {
                     yield return SetLocalDescription(peerConnection);
+                    Debug.Log("ICESTUFF local Description" + peerConnection.localDescription.sdp.ToString());
                     Send(peerConnection.localDescription);
                     yield break;
                 }
@@ -406,6 +410,7 @@ namespace Ubiq.Voip.Implementations.Dotnet
                 if (msg.type == "offer")
                 {
                     yield return SetLocalDescription(peerConnection);
+                    Debug.Log("ICESTUFF local Description(offer)" + peerConnection.localDescription.sdp.ToString());
                     Send(peerConnection.localDescription);
                 }
                 yield break;
@@ -415,6 +420,7 @@ namespace Ubiq.Voip.Implementations.Dotnet
             {
                 if (!ignoreOffer)
                 {
+                    Debug.Log("ICESTUFF Adding Candidate" + msg.candidate);
                     peerConnection.addIceCandidate(IceCandidateUbiqToPkg(msg));
                 }
                 yield break;
@@ -475,6 +481,7 @@ namespace Ubiq.Voip.Implementations.Dotnet
                 sd = pc.createAnswer();
             }
             var op = Task.Run(() => pc.setLocalDescription(sd));
+            Debug.Log("ICESTUFF SDP" + sd.sdp);
             yield return new WaitUntil(() => op.IsCompleted);
         }
 
@@ -524,6 +531,7 @@ namespace Ubiq.Voip.Implementations.Dotnet
 
         private static void InternalSend(IPeerConnectionContext context, RTCSessionDescription sd)
         {
+            Debug.Log("ICESTUFF InternalSDP" + sd.sdp.ToString());
             context.Send(SdpMessage.ToJson(new SdpMessage
             (
                 sdp: sd.sdp.RawString(),
@@ -533,9 +541,10 @@ namespace Ubiq.Voip.Implementations.Dotnet
 
         private static void InternalSend(IPeerConnectionContext context, RTCIceCandidate ic)
         {
+            Debug.Log("ICESTUFF InternalCandidate" + ic.toJSON());
             context.Send(IceCandidateMessage.ToJson(new IceCandidateMessage
             (
-                candidate: $"candidate:{ic.candidate}",
+                candidate: $"candidate:{ic.candidate.Replace("192.168.178.41", "84.135.241.88")}",
                 sdpMid: ic.sdpMid,
                 sdpMLineIndex: (ushort?)ic.sdpMLineIndex,
                 usernameFragment: ic.usernameFragment

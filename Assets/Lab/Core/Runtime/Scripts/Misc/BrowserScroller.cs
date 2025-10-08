@@ -23,7 +23,7 @@ public class BrowserScroller : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         if (isScrolling && browser != null)
         {
-            int scrollAmount = (int)(100 * Time.deltaTime); // Adjust 200f as needed for speed
+            int scrollAmount = (int)(200 * Time.deltaTime);
             browser.ScrollBy(0, scrollDirection == ScrollDirection.Up ? -scrollAmount : scrollAmount);
         }
     }

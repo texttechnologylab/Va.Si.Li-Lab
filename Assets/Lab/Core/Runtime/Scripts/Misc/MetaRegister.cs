@@ -11,7 +11,7 @@ public class MetaRegister : MonoBehaviour
         Oculus.Platform.Core.LogMessages = true;
         OvrPlatformInit.InitializeOvrPlatform();
         OvrAvatarLog.logLevel = 0;
-        Debug.Log("Status: " +OvrPlatformInit.status);
+        Debug.Log("Status: " + OvrPlatformInit.status);
         Debug.Log("Valid Token: " + OvrAvatarEntitlement.AccessTokenIsValid());
         Entitlements.IsUserEntitledToApplication().OnComplete(callbackMethod);
         void callbackMethod(Message msg)
@@ -41,6 +41,19 @@ public class MetaRegister : MonoBehaviour
                 // You can store the user information if needed
             }
         });
+        if (OVRManager.eyeTrackedFoveatedRenderingSupported)
+        {
+            Debug.Log("Eye-tracked foveated rendering is supported and enabled.");
+            OVRManager.eyeTrackedFoveatedRenderingEnabled = true;
+
+        }
+        else
+        {
+            Debug.Log("Eye-tracked foveated rendering is not supported.");
+        }
+        OVRPlugin.systemDisplayFrequency = 90.0f;
+        OVRPlugin.foveatedRenderingLevel = OVRPlugin.FoveatedRenderingLevel.High;
+        OVRManager.SetSpaceWarp(true);
     }
 
     // Update is called once per frame

@@ -1,3 +1,4 @@
+using System;
 using Oculus.Interaction.Locomotion;
 using UnityEngine;
 using UnityEngine.Events;
@@ -40,26 +41,17 @@ namespace VaSiLi.Movement
             Debug.Log($"Teleporting player to {target?.name}");
             if (target != null)
             {
-                Pose targetPose = new Pose(target.transform.position, target.transform.rotation);
-                LocomotionEvent teleportEvent = new LocomotionEvent(1, targetPose, LocomotionEvent.TranslationType.Absolute, LocomotionEvent.RotationType.Absolute);
-                playerLocomotor.HandleLocomotionEvent(teleportEvent);
+                // Since we teleport to eyelevel but our teleport targets are on the ground add the players height
+                Vector3 targetPosition = new Vector3(target.transform.position.x, target.transform.position.y, target.transform.position.z);
                 Debug.Log(playerLocomotor.isActiveAndEnabled);
                 var trans = target.GetComponent<Transform>();
-                player.transform.position = trans.position;
+                player.GetComponent<OVRPlayerController>().enabled = false;
+                player.transform.position = targetPosition;
                 player.transform.rotation = trans.rotation;
-                Debug.Log("Trans position: " + trans.position);
-                playerLocomotor.WhenLocomotionEventHandled += OnTeleportLocomotionEventHandled;
-
+                player.GetComponent<OVRPlayerController>().enabled = true;
+                playerTeleported.Invoke();
             }
         }
 
-        void OnTeleportLocomotionEventHandled(LocomotionEvent ev, Pose pose)
-        {
-            if (ev.Identifier != 1)
-                return;
-            Debug.Log($"Player teleported to {pose.position}");
-            playerTeleported.Invoke();
-            playerLocomotor.WhenLocomotionEventHandled -= OnTeleportLocomotionEventHandled;
-        }
     }
 }
