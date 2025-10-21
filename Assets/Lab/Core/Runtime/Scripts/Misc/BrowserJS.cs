@@ -23,7 +23,7 @@ public class BrowserJS : MonoBehaviour
     {
         Debug.Log($"BrowserEvent!!!2: {message}");
         resultId++;
-        StartCoroutine(LogJSResult("resultId" + resultId, $"tlab.unitySendMessage('WebViewReceiver', 'OnJsResult', JSON.stringify(Object.values($(\".answer-text\").not(\".hidden\")).map((e) => e.innerHTML?.trim()))); tlab.postResult(resultId{resultId}, 1);"));
+        StartCoroutine(LogJSResult("resultId" + resultId, $"tlab.unitySendMessage('WebViewReceiver', 'OnJsResult', JSON.stringify(Object.values($('.answer-text').not('.hidden')).map((e) => e.id?.split('-')[1] + ': ' + e.innerHTML?.trim()))); tlab.postResult(resultId{resultId}, 1);"));
     }
 
     private IEnumerator LogJSResult(string varName, string jsCode)

@@ -38,7 +38,11 @@ public class WebViewReceiver : MonoBehaviour
             {
                 continue;
             }
-            if (textEntry.Equals("weiß nicht", System.StringComparison.OrdinalIgnoreCase))
+            if (textEntry.Contains("weiß nicht", System.StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+            if (textEntry.Contains("undefined", System.StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
@@ -46,11 +50,11 @@ public class WebViewReceiver : MonoBehaviour
             
             if (i <= 6)
             {
-                textMesh1.text += i+": " + filteredText + "\n";
+                textMesh1.text += filteredText + "\n";
             }
             else
             {
-                textMesh2.text += i+": " + filteredText + "\n";
+                textMesh2.text += filteredText + "\n";
             }
             i++;
         }
@@ -67,7 +71,7 @@ public class WebViewReceiver : MonoBehaviour
         text = text.Replace("\t", "");
         text = text.Replace("<br>", " ");
         // With the help of regex match all numbers and remove them
-        text = System.Text.RegularExpressions.Regex.Replace(text, @"\d+", "");
+        //text = System.Text.RegularExpressions.Regex.Replace(text, @"\d+", "");
         return text;
     }
     private void Clear()
