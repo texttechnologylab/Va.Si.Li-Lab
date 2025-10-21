@@ -130,6 +130,16 @@ namespace VaSiLi.MetaAvatar
             }
 
         }
+
+        public void UpdateTexture(ulong id)
+        {
+            tracker.dataBuffer.Dispose(); // Not needed anymore
+            tracker.dataBuffer = default;
+
+            roomClient.Me["ubiq.avatar.meta.userid"] = id.ToString();
+            LoadRemoteUserCdnAvatar(id);
+
+        }
     }
 
 }

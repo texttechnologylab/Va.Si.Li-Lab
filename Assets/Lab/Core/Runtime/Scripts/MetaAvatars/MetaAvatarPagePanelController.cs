@@ -22,7 +22,7 @@ namespace VaSiLi.MetaAvatar
 
         private PagePanel pagePanel;
         private NetworkScene networkScene;
-
+        private ulong[] avatarIds = new ulong[] { 25114505871472498, 25076688645296872, 31996848129930621, 25729338716652792 };
         private void Awake()
         {
             pagePanel = GetComponent<PagePanel>();
@@ -100,7 +100,7 @@ namespace VaSiLi.MetaAvatar
             var avatar = networkScene.GetComponentInChildren<AvatarManager>().LocalAvatar;
             string textureIdx = catalogue.Get(texture);
             int textureIdxInt = int.Parse(textureIdx);
-            if(textureIdxInt == catalogue.Count - 1)
+            if (textureIdxInt == catalogue.Count - 1)
             {
                 //TODO!!
                 //AvatarEditorDeeplink.LaunchAvatarEditor();
@@ -112,7 +112,8 @@ namespace VaSiLi.MetaAvatar
             {
                 //I hate this one ....
                 LocalSampleAvatarEntity mAvatar = (LocalSampleAvatarEntity)((MetaAvatar)avatar).GetActiveAvatarScript();
-                mAvatar.UpdateTexture(textureIdxInt);
+                mAvatar.UpdateTexture(avatarIds[textureIdxInt % avatarIds.Length]);
+                //mAvatar.LoadRemoteUserCdnAvatar();
             }
             else
             {
