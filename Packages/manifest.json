@@ -1,11 +1,12 @@
 {
   "dependencies": {
     "com.meta.xr.mrutilitykit": "76.0.0",
-    "com.meta.xr.sdk.all": "77.0.0",
+    "com.meta.xr.sdk.all": "78.0.0",
     "com.meta.xr.sdk.audio": "76.0.0",
-    "com.meta.xr.sdk.avatars": "35.2.0",
+    "com.meta.xr.sdk.avatars": "40.0.1",
     "com.meta.xr.sdk.avatars.sample.assets": "24.1.1",
     "com.meta.xr.sdk.haptics": "76.0.0",
+    "com.meta.xr.sdk.interaction": "74.0.2",
     "com.meta.xr.sdk.interaction.ovr": "76.0.0",
     "com.meta.xr.sdk.movement": "https://github.com/oculus-samples/Unity-Movement.git",
     "com.meta.xr.sdk.platform": "76.0.0",
@@ -13,7 +14,7 @@
     "com.meta.xr.simulator": "76.0.0",
     "com.tlabaltoh.vkeyborad": "https://github.com/TLabAltoh/TLabVKeyborad.git#upm",
     "com.tlabaltoh.webview": "https://github.com/TLabAltoh/TLabWebView.git#appstore-compatible-upm",
-    "com.ucl.ubiq": "https://github.com/UCL-VR/ubiq.git#upm-unity-v1.0.0-pre.14",
+    "com.ucl.ubiq": "https://github.com/UCL-VR/ubiq.git#upm-unity-v1.0.0-pre.16",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.collab-proxy": "2.9.3",
     "com.unity.ide.rider": "3.0.37",

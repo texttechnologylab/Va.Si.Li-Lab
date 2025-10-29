@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using VaSiLi.Helper;
@@ -8,6 +9,8 @@ namespace Ubiq.XR
     /// <summary>
     /// Uses the object under the cursor.
     /// </summary>
+    /// 
+    [Obsolete("Needs to be converted to new input system", false)]
     public class DistanceObjectDesktopUser : MonoBehaviour
     {
         public IDistanceUseable used;
@@ -42,7 +45,8 @@ namespace Ubiq.XR
 
         private void TestDistanceUse()
         {
-            if (Input.GetMouseButton(0))
+            // TODO: Convert to new input system
+            /*if (Input.GetMouseButton(0))
             {
                 if (used == null)
                 {
@@ -84,7 +88,7 @@ namespace Ubiq.XR
                 }
                 used = null;
                 lineRenderer.enabled = false;
-            }
+            }*/
         }
 
         private IDistanceUseable PerformRaycast()
