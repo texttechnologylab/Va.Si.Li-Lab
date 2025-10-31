@@ -1,0 +1,21 @@
+{
+    "name": "Vasili.Lib.Ubiq.Voip.Implementations.Dotnet",
+    "rootNamespace": "",
+    "references": [
+        "GUID:74c55651a37e3ab4abf7c122df2ad2f1"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [
+        "iOS",
+        "LinuxStandalone64",
+        "macOSStandalone",
+        "WebGL"
+    ],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

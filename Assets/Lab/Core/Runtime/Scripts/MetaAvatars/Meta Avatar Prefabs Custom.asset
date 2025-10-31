@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beda9fe37c678d84b94f58ffae294549, type: 3}
+  m_Name: Meta Avatar Prefabs Custom
+  m_EditorClassIdentifier: 
+  Textures:
+  - {fileID: 2800000, guid: 8d0bcbd96e6d1cd4cb353a571fa199ea, type: 3}
+  - {fileID: 2800000, guid: b24d4c3061c112b4990fcf94eb23d7bb, type: 3}
+  - {fileID: 2800000, guid: 638ae78ddb42a2944996941c1311f32c, type: 3}
+  - {fileID: 2800000, guid: e28115f75e4908a4cbd7a13088fc2746, type: 3}

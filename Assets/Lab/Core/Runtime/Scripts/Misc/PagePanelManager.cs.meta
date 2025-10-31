@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Core/Scripts/Misc/PagePanelManager.cs.meta
+guid: 81a712835a9587f4f83f79bbfcfb7f73
+========
+guid: f6550435c3cd0134d93645ae1db8f7ec
+>>>>>>>> meta:Assets/Oculus/Avatar2/Editor/Scripts/HideIfKeywordDrawer.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
