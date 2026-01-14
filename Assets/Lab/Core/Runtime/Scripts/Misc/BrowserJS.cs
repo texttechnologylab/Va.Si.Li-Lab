@@ -1,4 +1,5 @@
 using System.Collections;
+using NUnit.Framework;
 using UnityEngine;
 
 public class BrowserJS : MonoBehaviour
@@ -7,21 +8,32 @@ public class BrowserJS : MonoBehaviour
     private TLab.WebView.WebView browser;
     private int resultId = 0;
 
+    private bool isInitialized = false;
     public void Start()
     {
         browser.eventCallback.onPageFinish.AddListener(OnBrowserEvent);
+        
+    }
+
+    public void Update()
+    {
+        if (browser.IsInitialized() && !isInitialized)
+        {
+            isInitialized = true;
+            browser.ClearCookie();
+            browser.ClearCache(true);
+            browser.SetUserAgent("Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36", true);
+        }
     }
 
     public void ButtonStuff()
     {
-        Debug.Log($"ButtonStuff");
         resultId++;
         StartCoroutine(LogJSResult("resultId" + resultId, $"tlab.unitySendMessage('WebViewReceiver', 'OnJsResult', JSON.stringify(Object.values($(\".answer-text\").not(\".hidden\")).map((e) => e.innerHTML?.trim()))); tlab.postResult(resultId{resultId}, 1);"));
     
     }
     private void OnBrowserEvent(string message)
     {
-        Debug.Log($"BrowserEvent!!!2: {message}");
         resultId++;
         StartCoroutine(LogJSResult("resultId" + resultId, $"tlab.unitySendMessage('WebViewReceiver', 'OnJsResult', JSON.stringify(Object.values($('.answer-text').not('.hidden')).map((e) => e.id?.split('-')[1] + ': ' + e.innerHTML?.trim()))); tlab.postResult(resultId{resultId}, 1);"));
     }
@@ -42,11 +54,6 @@ public class BrowserJS : MonoBehaviour
                 continue;
             }
 
-            // Once we get a real result:
-            Debug.Log("✅ JS evaluation result: " + result.s);
-            Debug.Log("✅ JS evaluation result (int): " + result.i);
-            Debug.Log("✅ JS evaluation result (double): " + result.d);
-            Debug.Log("✅ JS evaluation result (bool): " + result.b);
             //break; // Exit the loop after processing the result
         }
     }

@@ -8,12 +8,13 @@ public class MetaRegister : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Oculus.Platform.Core.LogMessages = true;
+        //Oculus.Platform.Core.LogMessages = true;
         OvrPlatformInit.InitializeOvrPlatform();
-        OvrAvatarLog.logLevel = 0;
+        //OvrAvatarLog.logLevel = 0;
         Debug.Log("Status: " + OvrPlatformInit.status);
         Debug.Log("Valid Token: " + OvrAvatarEntitlement.AccessTokenIsValid());
         Entitlements.IsUserEntitledToApplication().OnComplete(callbackMethod);
+        
         void callbackMethod(Message msg)
         {
             if (!msg.IsError)
