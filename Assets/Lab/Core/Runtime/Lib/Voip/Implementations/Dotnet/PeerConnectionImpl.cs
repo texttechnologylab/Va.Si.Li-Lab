@@ -544,7 +544,7 @@ namespace Ubiq.Voip.Implementations.Dotnet
             Debug.Log("ICESTUFF InternalCandidate" + ic.toJSON());
             context.Send(IceCandidateMessage.ToJson(new IceCandidateMessage
             (
-                candidate: $"candidate:{ic.candidate.Replace("192.168.178.41", "84.135.241.88")}",
+                candidate: $"candidate:{ic.candidate}",
                 sdpMid: ic.sdpMid,
                 sdpMLineIndex: (ushort?)ic.sdpMLineIndex,
                 usernameFragment: ic.usernameFragment
