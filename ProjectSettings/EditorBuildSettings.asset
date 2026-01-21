@@ -5,18 +5,24 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Lab/Core/Runtime/Local/Scenes/MetaStart.unity
     guid: e6d9483601d135240bca91bb89b1b894
-  - enabled: 1
+  - enabled: 0
     path: Assets/Lab/Core/Runtime/Local/Scenes/MetaReturn.unity
     guid: a20c8cfd9870a3942b37f0eaa4077803
   - enabled: 0
     path: Assets/Lab/Core/Runtime/Local/Scenes/Start.unity
     guid: de320c37b2073d746b012d96191e77a8
   - enabled: 1
+    path: Assets/Lab/Core/Runtime/Local/Scenes/FacesStart.unity
+    guid: 2a37fffe7de87b94bb34ee00816eb97a
+  - enabled: 1
+    path: Assets/Lab/Core/Runtime/Local/Scenes/FacesReturn.unity
+    guid: 6b0836815013eda4fba40d57c3459bba
+  - enabled: 1
     path: Assets/Lab/Core/Runtime/Local/Scenes/FACES.unity
-    guid: 397ac48bf37e8e54695079bbc8a9c3bc
+    guid: 912de1c6a9b21a044affe21425816298
   - enabled: 0
     path: Assets/Lab/Core/Runtime/Local/Scenes/ICIDS.unity
     guid: b456c2d8702c3954ea94fe19813979a2

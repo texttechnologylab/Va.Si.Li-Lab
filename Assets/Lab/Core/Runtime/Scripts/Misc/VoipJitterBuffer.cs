@@ -19,7 +19,7 @@ public class VoipJitterBuffer : MonoBehaviour
     private const float RATE_SMOOTHING = 0.02f;     // Rate adjustment smoothing factor
 
     // Audio processing
-    private const float VOLUME_BOOST = 4f;
+    private const float VOLUME_BOOST = 3f;
     private const float POST_FILTER_BOOST = 1.3f;
     private const float LOW_PASS_CUTOFF = 3400f;   // More aggressive cutoff to remove high-freq hiss (voice is ~300-3400 Hz)
     private const float HIGH_PASS_CUTOFF = 200f;   // More aggressive to remove rumble and wind noise
