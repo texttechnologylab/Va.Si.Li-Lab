@@ -27,7 +27,15 @@ public class WebViewReceiver : MonoBehaviour
         context.SendJson(res);
         SetText(res.strings);
     }
-
+    /* 
+    NICHT:
+    - ZP gibt an /nicht
+    - Interviewer avatar, video...
+    - ledig etc
+    Auf jeden fall:
+    - 0-10
+    - 
+    */
     private void SetText(string[] text)
     {
         Clear();

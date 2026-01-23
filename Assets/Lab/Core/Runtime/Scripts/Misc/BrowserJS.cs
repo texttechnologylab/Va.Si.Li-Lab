@@ -32,6 +32,8 @@ public class BrowserJS : MonoBehaviour
         StartCoroutine(LogJSResult("resultId" + resultId, $"tlab.unitySendMessage('WebViewReceiver', 'OnJsResult', JSON.stringify(Object.values($(\".answer-text\").not(\".hidden\")).map((e) => e.innerHTML?.trim()))); tlab.postResult(resultId{resultId}, 1);"));
     
     }
+    //$(".answer-item").not(".hidden").children("label").toArray().map((e, index) => index + ': ' + e.innerHTML?.trim())
+    // [...new Set($(".answer-item").not(".hidden").children("label").toArray().map((e, index) => e.innerHTML?.trim()))]
     private void OnBrowserEvent(string message)
     {
         resultId++;
