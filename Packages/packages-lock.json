@@ -135,11 +135,11 @@
       "hash": "2b2755158be4a28d13384f22415782d57b9efab4"
     },
     "com.tlabaltoh.webview": {
-      "version": "https://github.com/TLabAltoh/TLabWebView.git#appstore-compatible-upm",
+      "version": "https://github.com/TheBv/TLabWebView.git#dev-scrollfix",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "05a21e5a99035f9c1038a1e798aa1be219cc3530"
+      "hash": "f5af0a2f198f12215796588b1bb954c91f635a80"
     },
     "com.ucl.ubiq": {
       "version": "https://github.com/UCL-VR/ubiq.git#upm-unity-v1.0.0-pre.16",
