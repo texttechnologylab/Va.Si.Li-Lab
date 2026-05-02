@@ -26811,6 +26811,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5624912286851719429}
   - component: {fileID: 803846008443586237}
+  - component: {fileID: 5809735540950586781}
   m_Layer: 0
   m_Name: RaycasterCursorVisual
   m_TagString: Untagged
@@ -26850,9 +26851,23 @@ MonoBehaviour:
   _renderer: {fileID: 6997708195331735107}
   _hoverColor: {r: 1, g: 1, b: 1, a: 1}
   _selectColor: {r: 0, g: 0.40784317, b: 0.7803922, a: 1}
-  _outlineColor: {r: 1, g: 0.7076588, b: 0, a: 0.7019608}
+  _outlineColor: {r: 0.12918305, g: 1, b: 0, a: 0.7019608}
   _offsetAlongNormal: 0.005
   _playerHead: {fileID: 0}
+--- !u!114 &5809735540950586781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7487885143676510246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3a893240f30bbf4380ad621150bf827, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Va.Si.Li::RayInteractorCursorVisualOverride
+  _shaderRadialGradientBackgroundOpacityOverride: 0
+  _shaderOutlineWidthOverride: 0.2
 --- !u!1 &7502949910970639531
 GameObject:
   m_ObjectHideFlags: 0

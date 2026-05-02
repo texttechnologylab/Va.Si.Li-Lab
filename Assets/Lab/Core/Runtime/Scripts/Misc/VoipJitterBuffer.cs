@@ -4,8 +4,61 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
+/// Captures the spatialization coefficients from an AudioSource playing all 1s.
+/// Unity's spatializer processes the 1s into per-channel gain values which we cache.
+/// Must be added BEFORE VoipJitterBuffer in the filter chain (lower script execution order).
+/// </summary>
+public class VoipSpatialisationCache : MonoBehaviour
+{
+    /// <summary>
+    /// Cached spatialization coefficients. Each element represents the gain
+    /// that Unity's spatializer applied to the constant 1.0 signal for that
+    /// sample/channel position. Updated every audio frame.
+    /// </summary>
+    public float[] cache = new float[8192];
+    public int cacheLength = 0;
+    public bool hasValidData = false;
+    
+    // Debug: track max coefficient value to verify spatializer is working
+    public float debugMaxCoefficient = 0f;
+    private int debugFrameCounter = 0;
+
+    void OnAudioFilterRead(float[] data, int channels)
+    {
+        // Resize cache if needed
+        if (cache.Length < data.Length)
+        {
+            cache = new float[data.Length];
+        }
+        
+        cacheLength = data.Length;
+        
+        // Store the spatialised output (1.0 * spatialisation = spatialisation coefficients)
+        Array.Copy(data, cache, data.Length);
+        
+        // Track if we have any non-zero spatialization data
+        float maxVal = 0f;
+        for (int i = 0; i < data.Length; i++)
+        {
+            float abs = Math.Abs(data[i]);
+            if (abs > maxVal) maxVal = abs;
+        }
+        debugMaxCoefficient = maxVal;
+        hasValidData = maxVal > 0.0001f;
+    }
+}
+
+/// <summary>
 /// WebRTC-style jitter buffer that handles audio packet reordering, 
 /// adaptive playback rate, and demand-driven dequeuing via OnAudioFilterRead.
+/// 
+/// Spatialization approach (same technique as Ubiq's WebRTC implementation):
+/// The AudioSource plays a clip filled with 1.0f values. Unity's spatializer
+/// processes these 1s into per-channel gain coefficients. VoipSpatialisationCache
+/// (which runs first in the filter chain) captures these coefficients.
+/// Then this component's OnAudioFilterRead replaces the data with actual VoIP
+/// audio multiplied by the cached spatialization coefficients, giving us both
+/// smooth OnAudioFilterRead delivery AND proper 3D spatialization.
 /// </summary>
 public class VoipJitterBuffer : MonoBehaviour
 {
@@ -20,7 +73,7 @@ public class VoipJitterBuffer : MonoBehaviour
 
     // Audio processing
     private const float VOLUME_BOOST = 3f;
-    private const float POST_FILTER_BOOST = 1.3f;
+    private const float POST_FILTER_BOOST = 2f;
     private const float LOW_PASS_CUTOFF = 3400f;   // More aggressive cutoff to remove high-freq hiss (voice is ~300-3400 Hz)
     private const float HIGH_PASS_CUTOFF = 200f;   // More aggressive to remove rumble and wind noise
     private const float NOISE_GATE_THRESHOLD = 0.02f;  // Suppress audio below this amplitude (-34 dB)
@@ -82,10 +135,16 @@ public class VoipJitterBuffer : MonoBehaviour
     private bool isInitialized = false;
     private int outputSampleRate;
     private double resampleRatio;
+    
+    // Spatialization cache - captures Unity's spatialization coefficients
+    private VoipSpatialisationCache spatialisationCache;
+    
+    // Debug logging
+    private float debugLogTimer = 0f;
+    private const float DEBUG_LOG_INTERVAL = 5f;
 
     void Awake()
     {
-        // Ensure we have an AudioSource on this GameObject for OnAudioFilterRead to work
         audioSource = GetComponent<AudioSource>();
         
         // Cache output sample rate - must be called from main thread
@@ -113,36 +172,67 @@ public class VoipJitterBuffer : MonoBehaviour
         filterAlpha = dt / (RC + dt);
         
         // Initialize biquad low-pass filter coefficients
-        // Second-order Butterworth low-pass filter for better attenuation
-        CalculateBiquadCoefficients(LOW_PASS_CUTOFF, SAMPLE_RATE, 0.707f); // Q = 0.707 for Butterworth response
+        CalculateBiquadCoefficients(LOW_PASS_CUTOFF, SAMPLE_RATE, 0.707f);
         
         // Initialize high-pass filter coefficients
-        // High-pass at 200 Hz to remove rumble, wind noise, and subsonic frequencies
         CalculateHighPassCoefficients(HIGH_PASS_CUTOFF, SAMPLE_RATE, 0.707f);
 
-        // Configure audio source for OnAudioFilterRead streaming
-        // OnAudioFilterRead requires: AudioSource on same GameObject, AudioSource playing
         if (audioSource != null)
         {
-            // Create a short looping clip - OnAudioFilterRead will replace the audio data
-            // Using output sample rate for proper playback
-            int outputSampleRate = AudioSettings.outputSampleRate;
-            var streamClip = AudioClip.Create("VoipStream_" + userId, outputSampleRate, 1, outputSampleRate, false);
-            float[] silence = new float[outputSampleRate];
-            streamClip.SetData(silence, 0);
+            // Get the spatialization cache filter - must already exist on the GameObject
+            // and must have been added BEFORE this component so it runs first in the
+            // OnAudioFilterRead chain (Unity calls filters in component order).
+            spatialisationCache = audioSource.gameObject.GetComponent<VoipSpatialisationCache>();
+            if (spatialisationCache == null)
+            {
+                Debug.LogWarning($"VoipJitterBuffer: VoipSpatialisationCache not found on {audioSource.gameObject.name}. " +
+                    "Spatialization will not work. Ensure it is added before VoipJitterBuffer.");
+            }
             
-            audioSource.clip = streamClip;
+            // Create a clip filled with 1.0f values.
+            // When Unity spatializes this, the 1s become per-channel gain coefficients
+            // that encode the 3D position (panning, distance attenuation, HRTF, etc).
+            // The cache filter captures these, then our OnAudioFilterRead multiplies
+            // the actual VoIP audio by them to apply spatialization.
+            int clipLength = outputSampleRate; // 1 second, looping
+            var samples = new float[clipLength];
+            for (int i = 0; i < samples.Length; i++)
+            {
+                samples[i] = 1.0f;
+            }
+            
+            var onesClip = AudioClip.Create("VoipSpatial_" + userId, clipLength, 1, outputSampleRate, false);
+            onesClip.SetData(samples, 0);
+            
+            audioSource.clip = onesClip;
             audioSource.loop = true;
             audioSource.volume = 1.0f;
             audioSource.priority = 0; // Highest priority for voice
             audioSource.Play();
             
             isInitialized = true;
-            Debug.Log($"VoipJitterBuffer initialized for user {userId}, output sample rate: {outputSampleRate}");
+            Debug.Log($"VoipJitterBuffer initialized for user {userId} with spatialization cache, output sample rate: {outputSampleRate}");
         }
         else
         {
-            Debug.LogError($"VoipJitterBuffer: No AudioSource found for user {userId}. OnAudioFilterRead will not work!");
+            Debug.LogError($"VoipJitterBuffer: No AudioSource found for user {userId}!");
+        }
+    }
+
+    void Update()
+    {
+        if (!isInitialized) return;
+        
+        debugLogTimer += Time.deltaTime;
+        if (debugLogTimer >= DEBUG_LOG_INTERVAL)
+        {
+            debugLogTimer = 0f;
+            int buffered = GetBufferedSampleCount();
+            float spatMax = spatialisationCache != null ? spatialisationCache.debugMaxCoefficient : -1f;
+            bool spatValid = spatialisationCache != null && spatialisationCache.hasValidData;
+            Debug.Log($"VoipJitterBuffer ({UserId}): playing={isPlaying}, muted={isMuted}, " +
+                $"buffered={buffered}, spatValid={spatValid}, spatMax={spatMax:F4}, " +
+                $"rate={currentPlaybackRate:F3}");
         }
     }
 
@@ -434,8 +524,9 @@ public class VoipJitterBuffer : MonoBehaviour
     }
 
     /// <summary>
-    /// Called by Unity's audio thread. This is where we implement demand-driven dequeuing
-    /// and adaptive playback rate.
+    /// Called by Unity's audio thread. Runs AFTER VoipSpatialisationCache in the filter chain.
+    /// Replaces the spatialized 1s with actual VoIP audio multiplied by the cached 
+    /// spatialization coefficients, giving us both smooth delivery and 3D audio.
     /// </summary>
     void OnAudioFilterRead(float[] data, int channels)
     {
@@ -445,6 +536,13 @@ public class VoipJitterBuffer : MonoBehaviour
             Array.Clear(data, 0, data.Length);
             return;
         }
+
+        // Check if we have valid spatialization data with actual non-zero coefficients.
+        // If the spatializer isn't producing output (e.g. not initialized, wrong plugin),
+        // fall back to writing audio without spatialization so it's still audible.
+        bool hasSpatialisation = spatialisationCache != null 
+            && spatialisationCache.hasValidData
+            && spatialisationCache.cacheLength >= data.Length;
 
         lock (bufferLock)
         {
@@ -473,7 +571,6 @@ public class VoipJitterBuffer : MonoBehaviour
             currentPlaybackRate = Mathf.Lerp(currentPlaybackRate, targetPlaybackRate, RATE_SMOOTHING);
 
             // Fill output buffer with resampled audio
-            // resampleRatio is pre-calculated in Awake() to convert from 16kHz to output sample rate
             int samplesPerChannel = data.Length / channels;
             
             for (int i = 0; i < samplesPerChannel; i++)
@@ -494,7 +591,6 @@ public class VoipJitterBuffer : MonoBehaviour
                     lastSample = sample;
 
                     // Advance read position: resampleRatio * playbackRate
-                    // resampleRatio converts sample rates, playbackRate handles jitter compensation
                     resamplePosition += resampleRatio * currentPlaybackRate;
                     
                     while (resamplePosition >= 1.0)
@@ -523,10 +619,20 @@ public class VoipJitterBuffer : MonoBehaviour
                     }
                 }
 
-                // Write to all channels (mono to stereo/surround expansion)
+                // Write to all channels, multiplied by spatialization coefficients.
+                // The cache contains what Unity's spatializer did to the 1.0 clip,
+                // so multiplying our audio by it applies the same 3D panning/HRTF.
                 for (int ch = 0; ch < channels; ch++)
                 {
-                    data[i * channels + ch] = sample;
+                    int dataIndex = i * channels + ch;
+                    if (hasSpatialisation)
+                    {
+                        data[dataIndex] = sample * spatialisationCache.cache[dataIndex];
+                    }
+                    else
+                    {
+                        data[dataIndex] = sample;
+                    }
                 }
             }
         }

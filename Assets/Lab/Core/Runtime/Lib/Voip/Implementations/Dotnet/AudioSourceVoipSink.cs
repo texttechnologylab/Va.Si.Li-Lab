@@ -280,7 +280,7 @@ namespace Ubiq.Voip.Implementations.Dotnet
             unityAudioSource.spatialBlend = 1.0f;
             unityAudioSource.Play();
 
-            rtpBufferer = new RtpBufferer(latencySamples,syncSamples);
+            rtpBufferer = new RtpBufferer(latencySamples,syncSamples,2.0f);
         }
 
         private void OnDestroy()

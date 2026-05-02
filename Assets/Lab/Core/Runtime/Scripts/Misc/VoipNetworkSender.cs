@@ -164,6 +164,16 @@ public class VoipNetworkSender : MonoBehaviour
                     audioSource.rolloffMode = AudioRolloffMode.Linear;
                 }
 
+                // Add spatialization cache BEFORE jitter buffer.
+                // Unity calls OnAudioFilterRead in component order, so the cache
+                // must exist first to capture spatialization coefficients before
+                // VoipJitterBuffer overwrites the audio data.
+                var spatCache = avatar.gameObject.GetComponent<VoipSpatialisationCache>();
+                if (spatCache == null)
+                {
+                    spatCache = avatar.gameObject.AddComponent<VoipSpatialisationCache>();
+                }
+
                 // Add or get jitter buffer component on the avatar
                 var jitterBuffer = avatar.gameObject.GetComponent<VoipJitterBuffer>();
                 if (jitterBuffer == null)

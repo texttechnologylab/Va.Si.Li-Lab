@@ -11,7 +11,7 @@ public class BrowserJS : MonoBehaviour
     private bool isInitialized = false;
     public void Start()
     {
-        browser.eventCallback.onPageFinish.AddListener(OnBrowserEvent);
+        browser.eventCallback.onPageStart.AddListener(OnBrowserEvent);
         
     }
 
@@ -23,21 +23,23 @@ public class BrowserJS : MonoBehaviour
             browser.ClearCookie();
             browser.ClearCache(true);
             browser.SetUserAgent("Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36", true);
+            browser.LoadUrl(browser.GetUrl());
         }
     }
 
-    public void ButtonStuff()
-    {
-        resultId++;
-        StartCoroutine(LogJSResult("resultId" + resultId, $"tlab.unitySendMessage('WebViewReceiver', 'OnJsResult', JSON.stringify(Object.values($(\".answer-text\").not(\".hidden\")).map((e) => e.innerHTML?.trim()))); tlab.postResult(resultId{resultId}, 1);"));
-    
-    }
-    //$(".answer-item").not(".hidden").children("label").toArray().map((e, index) => index + ': ' + e.innerHTML?.trim())
-    // [...new Set($(".answer-item").not(".hidden").children("label").toArray().map((e, index) => e.innerHTML?.trim()))]
     private void OnBrowserEvent(string message)
     {
         resultId++;
-        StartCoroutine(LogJSResult("resultId" + resultId, $"tlab.unitySendMessage('WebViewReceiver', 'OnJsResult', JSON.stringify(Object.values($('.answer-text').not('.hidden')).map((e) => e.id?.split('-')[1] + ': ' + e.innerHTML?.trim()))); tlab.postResult(resultId{resultId}, 1);"));
+        // Set up message listener to receive postMessage from the website
+        string jsCode = $@"
+            window.addEventListener('message', function(event) {{
+                if (event.data && event.data.event === 'label_listing' && event.data.data) {{
+                    tlab.unitySendMessage('WebViewReceiver', 'OnJsResult', JSON.stringify(event.data.data));
+                }}
+            }});
+            tlab.postResult('resultId{resultId}', 1);
+        ";
+        StartCoroutine(LogJSResult("resultId" + resultId, jsCode));
     }
 
     private IEnumerator LogJSResult(string varName, string jsCode)

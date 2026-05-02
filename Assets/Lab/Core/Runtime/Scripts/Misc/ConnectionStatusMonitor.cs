@@ -37,6 +37,8 @@ public class ConnectionStatusMonitor : MonoBehaviour
     [SerializeField] private string symbolPending = "…";
     [SerializeField] private string symbolWarning = "⚠️";
 
+    public enum ConnectionStatus { Ok, Error, Pending, Warning }
+
     [Header("VoIP Test Settings")]
     [SerializeField]
     [Tooltip("Fallback STUN server if room doesn't provide ice-servers.")]
@@ -230,7 +232,7 @@ public class ConnectionStatusMonitor : MonoBehaviour
     private string BuildStatusString()
     {
         // Room status
-        string roomStatus = GetRoomStatus();
+        string roomStatus = GetConnectionStatusSymbol(GetRoomStatus());
 
         // API status
         string apiStatus = isCheckingApi ? symbolPending : (apiOnline ? symbolOk : symbolError);
@@ -242,19 +244,35 @@ public class ConnectionStatusMonitor : MonoBehaviour
         return $"Room:{roomStatus} API:{apiStatus} VoIP:{voipStatus}";
     }
 
-    private string GetRoomStatus()
+    public ConnectionStatus GetRoomStatus()
     {
         if (roomClient == null)
-            return symbolError;
+            return ConnectionStatus.Error;
 
         // Check if there's an active timeout notification (connection lost)
         if (timeoutNotification != null && !timeoutNotification.Deleted)
-            return symbolWarning;
-
+            return ConnectionStatus.Warning;
         if (roomClient.JoinedRoom)
-            return symbolOk;
+            return ConnectionStatus.Ok;
 
-        return symbolPending;
+        return ConnectionStatus.Ok;
+    }
+
+    private string GetConnectionStatusSymbol(ConnectionStatus status)
+    {
+        switch (status)
+        {
+            case ConnectionStatus.Ok:
+                return symbolOk;
+            case ConnectionStatus.Error:
+                return symbolError;
+            case ConnectionStatus.Pending:
+                return symbolPending;
+            case ConnectionStatus.Warning:
+                return symbolWarning;
+            default:
+                return symbolError;
+        }
     }
 
     private string GetVoipStatus()
