@@ -506,7 +506,7 @@
       "url": "https://packages.unity.com"
     },
     "org.nuget.newtonsoft.json": {
-      "version": "13.0.3",
+      "version": "13.0.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
