@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using TMPro;
 using Unity.WebRTC;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 using VaSiLi.Janus;
+using VaSiLi.Janus.TextRoom;
 using VaSiLi.Janus.VideoRoom;
 using VaSiLi.Janus.WebRTC;
 #if !UNITY_WEBGL
@@ -43,12 +48,49 @@ namespace VaSiLi.WebCam
         public MeshRenderer frame;
         public AudioSource output;
 
+        [Header("Chat (optional)")]
+        [Tooltip("If set, the client attaches a textroom plugin handle and joins the same room id.")]
+        public bool enableChat = false;
+        public string chatUsername = "";
+        [Tooltip("TMP_Text where incoming/outgoing messages are appended.")]
+        public TMP_Text chatMessages;
+        public TMP_InputField chatInput;
+        public Button chatSendButton;
+        public int chatMaxLines = 50;
+
+        [Header("Recording (optional)")]
+        [Tooltip("Button toggles recording state via the videoroom plugin.")]
+        public Button recordButton;
+        [Tooltip("Enabled when recording is on, disabled when off.")]
+        public GameObject recordIndicator;
+        [Tooltip("Optional renderer whose material color is swapped between idle and recording.")]
+        public Renderer recordButtonRenderer;
+        public Color recordIdleColor = Color.white;
+        public Color recordActiveColor = Color.red;
+        public TMP_Text recordButtonLabel;
+        public string recordIdleText = "Record";
+        public string recordActiveText = "Stop";
+        public UnityEvent<bool> OnRecordingChanged;
+
+        [Header("Answer Options (optional)")]
+        [Tooltip("If set, the client listens for OnAnswerOptionsReceived and forwards them over the textroom data channel.")]
+        public WebViewReceiver answerOptionsSource;
+
+        public JanusConnection Connection => _connection;
+        public JanusSession Session => _session;
+        public VideoRoomHandle PublisherHandle => _publisherHandle;
+        public JanusTextRoomClient Chat => _chat;
+
         JanusConnection _connection;
         JanusSession _session;
         VideoRoomHandle _publisherHandle;
         VideoRoomHandle _subscriberHandle;
         JanusVideoRoomPublisher _publisher;
         JanusVideoRoomSubscriber _subscriber;
+        TextRoomHandle _textHandle;
+        JanusTextRoomClient _chat;
+        bool _chatReady;
+        string[] _pendingAnswerOptions;
 
 #if !UNITY_WEBGL
         private IVoipSource _micInput;
@@ -119,6 +161,7 @@ namespace VaSiLi.WebCam
             _publisherHandle.PublisherLeft += (_, e) => Debug.Log($"[VideoRoom] publisher {e.Id} left");
             _publisherHandle.PublisherUnpublished += (_, e) => Debug.Log($"[VideoRoom] publisher {e.Id} unpublished");
             _publisherHandle.RoomDestroyed += (_, e) => Debug.LogWarning($"[VideoRoom] room {e.Room} destroyed");
+            _publisherHandle.RecordingChanged += (_, on) => UpdateRecordingUI(on);
 
             var joined = await _publisherHandle.JoinOrCreateAsync(
                 Room,
@@ -139,6 +182,186 @@ namespace VaSiLi.WebCam
 
             if (joined.Publishers != null && joined.Publishers.Count > 0)
                 await SubscribeToAvailable(joined.Publishers);
+
+            if (enableChat)
+                await SetupChatAsync();
+
+            WireRecordingButton();
+            WireAnswerOptionsSource();
+        }
+
+        // ---------- Chat (textroom plugin over data channel) ----------
+
+        async Task SetupChatAsync()
+        {
+            _textHandle = await _session.AttachAsync<TextRoomHandle>("vasili-textroom");
+            _chat = new JanusTextRoomClient(this, _textHandle, BuildRtcConfiguration());
+            _chat.ConnectionStateChanged += s => Debug.Log("[TextRoom] PC: " + s);
+            _chat.MessageReceived += OnChatMessage;
+            _chat.Announcement += (_, text) => AppendChatLine($"<i>{text}</i>");
+            _chat.ParticipantJoined += (_, p) => AppendChatLine($"<i>{p.Display ?? p.Username} joined</i>");
+            _chat.ParticipantLeft += (_, p) => AppendChatLine($"<i>{p.Display ?? p.Username} left</i>");
+            _chat.Ready += async (_, __) =>
+            {
+                try
+                {
+                    await _chat.EnsureRoomAsync(Room, "VaSiLi room " + Room);
+                    var username = string.IsNullOrEmpty(chatUsername) ? DisplayName + UnityEngine.Random.Range(1000, 9999) : chatUsername;
+                    await _chat.JoinAsync(Room, username, DisplayName);
+                    _chatReady = true;
+                    AppendChatLine("<i>Chat ready</i>");
+                    if (_pendingAnswerOptions != null)
+                    {
+                        SendAnswerOptions(_pendingAnswerOptions);
+                        _pendingAnswerOptions = null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"[TextRoom] Join failed: {ex.Message}");
+                }
+            };
+
+            await _chat.SetupAsync();
+            WireChatInput();
+        }
+
+        void WireChatInput()
+        {
+            if (chatSendButton != null)
+                chatSendButton.onClick.AddListener(SendChatFromInput);
+            if (chatInput != null)
+                chatInput.onSubmit.AddListener(_ => SendChatFromInput());
+        }
+
+        void SendChatFromInput()
+        {
+            if (chatInput == null || !_chatReady) return;
+            var text = (chatInput.text ?? "").Trim();
+            if (text.Length == 0) return;
+            _ = SendChatTextAsync(text);
+            chatInput.text = "";
+            chatInput.ActivateInputField();
+        }
+
+        public async Task SendChatTextAsync(string text)
+        {
+            if (_chat == null || !_chatReady) return;
+            try
+            {
+                await _chat.SendChatAsync(text);
+                AppendChatLine($"<b>You:</b> {text}");
+            }
+            catch (Exception ex) { Debug.LogError($"[TextRoom] Send failed: {ex.Message}"); }
+        }
+
+        void OnChatMessage(object _, TextRoomMessageEventArgs e)
+        {
+            // Skip our own echo (textroom acks back our own messages).
+            if (_chat != null && e.From == _chat.Username) return;
+
+            // Inspect for structured payloads (answer_options) sent as JSON in the text field.
+            if (!string.IsNullOrEmpty(e.Text) && e.Text.StartsWith("{"))
+            {
+                try
+                {
+                    var probe = JsonConvert.DeserializeObject<AnswerOptionsPayload>(e.Text);
+                    if (probe != null && probe.kind == "answer_options")
+                    {
+                        Debug.Log($"[TextRoom] answer_options received ({probe.data?.Length ?? 0} items)");
+                        // Mirror them onto WebViewReceiver if there is one local.
+                        if (answerOptionsSource != null && probe.data != null)
+                            answerOptionsSource.OnAnswerOptionsReceived?.Invoke(probe.data);
+                        return;
+                    }
+                }
+                catch { /* not a structured payload — fall through */ }
+            }
+
+            AppendChatLine($"<b>{e.Display ?? e.From}:</b> {e.Text}");
+        }
+
+        void AppendChatLine(string line)
+        {
+            if (chatMessages == null) return;
+            chatMessages.text += line + "\n";
+            // Trim to last N lines to keep TMP from getting huge.
+            var lines = chatMessages.text.Split('\n');
+            if (lines.Length > chatMaxLines)
+                chatMessages.text = string.Join("\n", lines, lines.Length - chatMaxLines, chatMaxLines);
+        }
+
+        // ---------- Recording ----------
+
+        void WireRecordingButton()
+        {
+            if (recordButton != null)
+                recordButton.onClick.AddListener(ToggleRecording);
+            UpdateRecordingUI(false);
+        }
+
+        public async void ToggleRecording()
+        {
+            if (_publisherHandle == null) return;
+            var next = !(_publisherHandle.IsRecording ?? false);
+            try
+            {
+                await _publisherHandle.EnableRecordingAsync(Room, next);
+                Debug.Log($"[VideoRoom] enable_recording sent (record={next})");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[VideoRoom] enable_recording failed: {ex.Message}");
+            }
+        }
+
+        void UpdateRecordingUI(bool on)
+        {
+            if (recordIndicator != null) recordIndicator.SetActive(on);
+            if (recordButtonRenderer != null && recordButtonRenderer.material != null)
+            {
+                var color = on ? recordActiveColor : recordIdleColor;
+                recordButtonRenderer.material.color = color;
+                recordButtonRenderer.material.SetColor("_BaseColor", color); // URP Lit
+            }
+            if (recordButtonLabel != null)
+                recordButtonLabel.text = on ? recordActiveText : recordIdleText;
+            OnRecordingChanged?.Invoke(on);
+        }
+
+        // ---------- Answer options forwarding ----------
+
+        [Serializable]
+        class AnswerOptionsPayload
+        {
+            public string kind;
+            public string[] data;
+        }
+
+        void WireAnswerOptionsSource()
+        {
+            if (answerOptionsSource == null) return;
+            if (answerOptionsSource.OnAnswerOptionsReceived == null)
+                answerOptionsSource.OnAnswerOptionsReceived = new WebViewReceiver.AnswerOptionsEvent();
+            answerOptionsSource.OnAnswerOptionsReceived.AddListener(SendAnswerOptions);
+        }
+
+        public void SendAnswerOptions(string[] options)
+        {
+            if (options == null || options.Length == 0) return;
+            if (_chat == null || !_chatReady)
+            {
+                _pendingAnswerOptions = options;
+                return;
+            }
+            var payload = JsonConvert.SerializeObject(new AnswerOptionsPayload { kind = "answer_options", data = options });
+            _ = SendStructuredAsync(payload);
+        }
+
+        async Task SendStructuredAsync(string payload)
+        {
+            try { await _chat.SendChatAsync(payload); }
+            catch (Exception ex) { Debug.LogError($"[TextRoom] answer_options send failed: {ex.Message}"); }
         }
 
         RTCConfiguration BuildRtcConfiguration() => new RTCConfiguration
@@ -251,6 +474,10 @@ namespace VaSiLi.WebCam
                 if (_micInput is MicrophoneVoipSource micSource)
                     micSource.OnAudioPcmSample -= OnAudioPcmSample;
 #endif
+                if (answerOptionsSource != null && answerOptionsSource.OnAnswerOptionsReceived != null)
+                    answerOptionsSource.OnAnswerOptionsReceived.RemoveListener(SendAnswerOptions);
+
+                _chat?.Dispose();
                 _publisher?.Dispose();
                 _subscriber?.Dispose();
                 if (_connection != null) await _connection.CloseAsync();

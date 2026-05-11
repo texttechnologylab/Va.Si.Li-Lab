@@ -96,6 +96,14 @@ namespace VaSiLi.Janus.VideoRoom
         [JsonProperty("request")] public string Request = "unpublish";
     }
 
+    public class EnableRecordingRequest
+    {
+        [JsonProperty("request")] public string Request = "enable_recording";
+        [JsonProperty("room")] public long Room;
+        [JsonProperty("record")] public bool Record;
+        [JsonProperty("secret", NullValueHandling = NullValueHandling.Ignore)] public string Secret;
+    }
+
     public class StartSubscriberRequest
     {
         [JsonProperty("request")] public string Request = "start";

@@ -45,6 +45,11 @@ namespace VaSiLi.Janus.VideoRoom
         public event EventHandler<StreamsAttachedEventArgs> OwnStreamsConfigured;
         public event EventHandler<RoomDestroyedEventArgs> RoomDestroyed;
         public event EventHandler<VideoRoomEventData> EventReceived;
+        /// <summary>Fires when the server reports a change to the room's recording state.</summary>
+        public event EventHandler<bool> RecordingChanged;
+
+        /// <summary>Last known server-reported recording state, or null if never reported.</summary>
+        public bool? IsRecording { get; private set; }
 
         public VideoRoomHandle()
         {
@@ -119,6 +124,13 @@ namespace VaSiLi.Janus.VideoRoom
             => SendMessageAsync(new UnpublishRequest(), null, cancellation);
 
         /// <summary>
+        /// Toggles room recording on/off. Server reflects the state via a Videoroom 'event' with
+        /// a 'record' boolean which fires <see cref="RecordingChanged"/> on the publisher handle.
+        /// </summary>
+        public Task EnableRecordingAsync(long room, bool record, string secret = null, CancellationToken cancellation = default)
+            => SendMessageAsync(new EnableRecordingRequest { Room = room, Record = record, Secret = secret }, null, cancellation);
+
+        /// <summary>
         /// Subscribe handle: send 'join' as subscriber. Returns the SDP offer from the server.
         /// </summary>
         public async Task<Jsep> JoinSubscriberAsync(long room, List<StreamSubscription> streams, long? privateId = null, CancellationToken cancellation = default)
@@ -171,6 +183,12 @@ namespace VaSiLi.Janus.VideoRoom
             }
 
             EventReceived?.Invoke(this, data);
+
+            if (data.Record.HasValue && IsRecording != data.Record.Value)
+            {
+                IsRecording = data.Record.Value;
+                RecordingChanged?.Invoke(this, data.Record.Value);
+            }
 
             switch (data.Videoroom)
             {

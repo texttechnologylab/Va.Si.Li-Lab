@@ -2,6 +2,7 @@ using TMPro;
 using Ubiq.Messaging;
 using Ubiq.Rooms;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class WebViewReceiver : MonoBehaviour
 {
@@ -9,7 +10,13 @@ public class WebViewReceiver : MonoBehaviour
     private RoomClient roomClient;
     public TMP_Text textMesh1;
     public TMP_Text textMesh2;
-    
+
+    [System.Serializable]
+    public class AnswerOptionsEvent : UnityEvent<string[]> { }
+
+    /// <summary>Fires whenever a non-empty filtered set of answer options is received from the iframe.</summary>
+    public AnswerOptionsEvent OnAnswerOptionsReceived;
+
     // Track current data so we can synchronize to new peers
     private string[] currentStrings;
 
@@ -42,6 +49,7 @@ public class WebViewReceiver : MonoBehaviour
         currentStrings = res.strings;
         context.SendJson(res);
         SetText(res.strings);
+        OnAnswerOptionsReceived?.Invoke(res.strings);
     }
 
     private void SetText(string[] text)
@@ -169,5 +177,6 @@ public class WebViewReceiver : MonoBehaviour
     {
         var msg = message.FromJson<StringArrayWrapper>();
         SetText(msg.strings);
+        OnAnswerOptionsReceived?.Invoke(msg.strings);
     }
 }
