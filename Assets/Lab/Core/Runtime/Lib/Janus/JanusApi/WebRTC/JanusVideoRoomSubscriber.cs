@@ -37,6 +37,9 @@ namespace VaSiLi.Janus.WebRTC
         long? _privateId;
         readonly List<StreamSubscription> _activeSubscriptions = new List<StreamSubscription>();
         bool _disposed;
+        bool _joined;
+
+        public bool IsJoined => _joined;
 
         public JanusVideoRoomSubscriber(MonoBehaviour runner, VideoRoomHandle handle, RTCConfiguration config)
         {
@@ -115,20 +118,36 @@ namespace VaSiLi.Janus.WebRTC
             var answerDesc = await answerOp.AsTask(_runner).ConfigureAwait(true);
             await PeerConnection.SetLocalDescription(ref answerDesc).AsTask(_runner).ConfigureAwait(true);
             await Handle.StartAsync(answerDesc.ToJsep(), cancellation).ConfigureAwait(true);
+            _joined = true;
         }
 
-        public Task UpdateAsync(List<StreamSubscription> add, List<StreamSubscription> remove, CancellationToken cancellation = default)
+        public async Task UpdateAsync(List<StreamSubscription> add, List<StreamSubscription> remove, CancellationToken cancellation = default)
         {
             if (add != null)
                 foreach (var s in add) _activeSubscriptions.Add(s);
             if (remove != null)
                 _activeSubscriptions.RemoveAll(s => remove.Exists(r => r.Feed == s.Feed && r.Mid == s.Mid));
-            return Handle.UpdateSubscriptionAsync(add, remove, cancellation);
+
+            var ev = await Handle.UpdateSubscriptionAsync(add, remove, cancellation).ConfigureAwait(true);
+
+            // Janus sends a new SDP offer whenever streams are added (renegotiation).
+            // Without completing the exchange the new tracks never arrive.
+            if (ev?.Jsep != null && ev.Jsep.Type == "offer")
+            {
+                Debug.Log("[JanusSubscriber] UpdateAsync: renegotiating SDP after update");
+                var sd = ev.Jsep.ToSessionDescription();
+                await PeerConnection.SetRemoteDescription(ref sd).AsTask(_runner).ConfigureAwait(true);
+                var answerOp = PeerConnection.CreateAnswer();
+                var answerDesc = await answerOp.AsTask(_runner).ConfigureAwait(true);
+                await PeerConnection.SetLocalDescription(ref answerDesc).AsTask(_runner).ConfigureAwait(true);
+                await Handle.StartAsync(answerDesc.ToJsep(), cancellation).ConfigureAwait(true);
+            }
         }
 
         async void OnHandleRestored(object sender, EventArgs args)
         {
             if (_disposed || _activeSubscriptions.Count == 0) return;
+            _joined = false;
             try
             {
                 ClosePeerConnection();
@@ -154,6 +173,7 @@ namespace VaSiLi.Janus.WebRTC
         {
             if (_disposed) return;
             _disposed = true;
+            _joined = false;
             Handle.Restored -= OnHandleRestored;
             Handle.SubscriberAttached -= OnSubscriberAttached;
             ClosePeerConnection();

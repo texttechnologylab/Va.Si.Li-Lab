@@ -1,6 +1,6 @@
 using System.Collections;
-using NUnit.Framework;
 using UnityEngine;
+using VaSiLi.WebCam;
 
 public class BrowserJS : MonoBehaviour
 {
@@ -12,7 +12,7 @@ public class BrowserJS : MonoBehaviour
     public void Start()
     {
         browser.eventCallback.onPageStart.AddListener(OnBrowserEvent);
-        
+
     }
 
     public void Update()
@@ -21,22 +21,32 @@ public class BrowserJS : MonoBehaviour
         {
             isInitialized = true;
             browser.ClearCookie();
-            browser.ClearCache(true);
+            //browser.ClearCache(true);
             browser.SetUserAgent("Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36", true);
-            browser.LoadUrl(browser.GetUrl());
+
+            // Use the token-aware URL when an interview token has been set.
+            var tokenMgr = InterviewTokenManager.Instance;
+            var url = (tokenMgr != null && !string.IsNullOrEmpty(tokenMgr.Token))
+                ? tokenMgr.BrowserUrl
+                : browser.GetUrl();
+            browser.LoadUrl(url);
         }
     }
 
     private void OnBrowserEvent(string message)
     {
         resultId++;
-        // Set up message listener to receive postMessage from the website
+        // Guard with a window flag so each page load only installs one listener.
+        // Without the guard, every onPageStart adds a new listener and label_listing fires N times.
         string jsCode = $@"
-            window.addEventListener('message', function(event) {{
-                if (event.data && event.data.event === 'label_listing' && event.data.data) {{
-                    tlab.unitySendMessage('WebViewReceiver', 'OnJsResult', JSON.stringify(event.data.data));
-                }}
-            }});
+            if (!window.__vasiliListenerInstalled) {{
+                window.__vasiliListenerInstalled = true;
+                window.addEventListener('message', function(event) {{
+                    if (event.data && event.data.event === 'label_listing' && event.data.data) {{
+                        tlab.unitySendMessage('WebViewReceiver', 'OnJsResult', JSON.stringify(event.data.data));
+                    }}
+                }});
+            }}
             tlab.postResult('resultId{resultId}', 1);
         ";
         StartCoroutine(LogJSResult("resultId" + resultId, jsCode));

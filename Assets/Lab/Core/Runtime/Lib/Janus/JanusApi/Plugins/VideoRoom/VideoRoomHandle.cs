@@ -51,6 +51,9 @@ namespace VaSiLi.Janus.VideoRoom
         /// <summary>Last known server-reported recording state, or null if never reported.</summary>
         public bool? IsRecording { get; private set; }
 
+        /// <summary>Locally override the recording state (used when the server does not echo the state back to the sender).</summary>
+        public void SetIsRecording(bool value) => IsRecording = value;
+
         public VideoRoomHandle()
         {
             PluginName = Plugin;
@@ -160,7 +163,7 @@ namespace VaSiLi.Janus.VideoRoom
         public Task StartAsync(Jsep answer, CancellationToken cancellation = default)
             => SendMessageAsync(new StartSubscriberRequest { Room = Room == 0 ? (long?)null : Room }, answer, cancellation);
 
-        public Task UpdateSubscriptionAsync(List<StreamSubscription> add, List<StreamSubscription> remove, CancellationToken cancellation = default)
+        public Task<JanusPluginEvent> UpdateSubscriptionAsync(List<StreamSubscription> add, List<StreamSubscription> remove, CancellationToken cancellation = default)
             => SendMessageAsync(new UpdateSubscriptionRequest { Subscribe = add, Unsubscribe = remove }, null, cancellation);
 
         public Task LeaveAsync(CancellationToken cancellation = default)
@@ -184,7 +187,7 @@ namespace VaSiLi.Janus.VideoRoom
 
             EventReceived?.Invoke(this, data);
 
-            if (data.Record.HasValue && IsRecording != data.Record.Value)
+            if (data.Record.HasValue)
             {
                 IsRecording = data.Record.Value;
                 RecordingChanged?.Invoke(this, data.Record.Value);
@@ -223,11 +226,10 @@ namespace VaSiLi.Janus.VideoRoom
                 try { await JoinPublisherAsync(_restoreRoom.Value, _restoreDisplay, cancellation).ConfigureAwait(false); }
                 catch (Exception ex) { Debug.LogError($"[VideoRoom] Failed to rejoin as publisher: {ex.Message}"); }
             }
-            else if (_wasSubscriber && _restoreRoom.HasValue && _restoreSubscriberStreams != null)
-            {
-                try { await JoinSubscriberAsync(_restoreRoom.Value, _restoreSubscriberStreams, PrivateId, cancellation).ConfigureAwait(false); }
-                catch (Exception ex) { Debug.LogError($"[VideoRoom] Failed to rejoin as subscriber: {ex.Message}"); }
-            }
+            // Subscriber restore: JanusVideoRoomSubscriber.OnHandleRestored drives the full
+            // JoinSubscriberAsync + SDP exchange. Calling JoinSubscriberAsync here would produce a
+            // first join whose JSEP offer is silently discarded, then the second join from
+            // OnHandleRestored would fail because the handle is already in subscriber mode.
             await base.RestoreAsync(cancellation).ConfigureAwait(false);
         }
     }

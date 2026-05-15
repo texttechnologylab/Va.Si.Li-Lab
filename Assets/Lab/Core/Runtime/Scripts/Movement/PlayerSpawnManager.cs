@@ -17,6 +17,8 @@ namespace VaSiLi.Movement
         public static UnityAction playerTeleported = delegate { };
         public bool lockPlayer = false;
         private Coroutine teleportCoroutine;
+        static readonly WaitForSeconds WaitPoint2 = new(0.2f);
+        static readonly WaitForSeconds WaitPoint5 = new(0.5f);
         void Start()
         {
             SceneSwitcher.switchedScenes += OnSceneSwitch;
@@ -25,6 +27,18 @@ namespace VaSiLi.Movement
 
         void OnSceneSwitch(ApiScene? scene)
         {
+            StartCoroutine(TeleportAfterDelay());
+        }
+
+        IEnumerator TeleportAfterDelay()
+        {
+            // Wait several frames for the Meta SDK (OVRCameraRig, OVRPlayerController) to
+            // finish re-initializing after scene load before we set position — otherwise the
+            // tracking system overwrites the teleport position on its first update.
+            yield return null;
+            yield return null;
+            yield return null;
+            yield return WaitPoint2;
             var go = GameObject.Find("DefaultSpawn");
             TeleportPlayer(go, lockPlayer);
         }
@@ -77,7 +91,7 @@ namespace VaSiLi.Movement
 
                 if (Vector3.Distance(playerTransform.position, target.transform.position) > 0.5f)
                     TeleportPlayer(target);
-                yield return new WaitForSeconds(0.5f);
+                yield return WaitPoint5;
             }
         }
     }
