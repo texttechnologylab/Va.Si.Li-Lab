@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TMPro;
@@ -84,6 +85,17 @@ namespace VaSiLi.WebCam
         [Header("Gaze Overlay (Interviewer)")]
         [Tooltip("Button that toggles the gaze calibration overlay on the remote side.")]
         public Button gazeOverlayButton;
+        [Tooltip("Activated while the gaze overlay is currently showing on the remote side.")]
+        public GameObject gazeIndicator;
+        [Tooltip("Optional renderer whose material color is swapped between idle and active.")]
+        public Renderer gazeButtonRenderer;
+        public Color gazeIdleColor = Color.white;
+        public Color gazeActiveColor = Color.green;
+        public TMP_Text gazeButtonLabel;
+        public string gazeIdleText = "Kalibrierung";
+        public string gazeActiveText = "Kalibrierung aktiv";
+        [Tooltip("Fires with the current overlay state whenever it changes. Use to drive any extra UI not covered by the indicator/renderer/label fields above.")]
+        public UnityEvent<bool> OnGazeOverlayChanged;
         [Tooltip("Text shown at the top-left of the interviewee gaze overlay.")]
         public string gazeTextTopLeft = "Bitte lesen Sie diesen Text laut vor.";
         [Tooltip("Text shown at the bottom-right of the interviewee gaze overlay.")]
@@ -142,6 +154,10 @@ namespace VaSiLi.WebCam
         readonly Dictionary<long, RemotePublisher> _knownPublishers = new Dictionary<long, RemotePublisher>();
         readonly Dictionary<long, List<StreamSubscription>> _publisherStreams = new Dictionary<long, List<StreamSubscription>>();
 
+        // Serializes (re)subscribe vs. unsubscribe so their multi-await SDP sequences can't
+        // interleave on the shared subscriber PeerConnection.
+        readonly SemaphoreSlim _subLifecycleLock = new SemaphoreSlim(1, 1);
+
         // ---------- State ----------
 
         public bool IsConnected => _connection != null && _connection.IsConnected;
@@ -190,6 +206,7 @@ namespace VaSiLi.WebCam
                 _chat?.Dispose();  _chat = null;  _chatReady = false;
                 _publisher?.Dispose();  _publisher = null;
                 _subscriber?.Dispose();  _subscriber = null;  _subscriberHandle = null;
+                if (microphoneSource != null) microphoneSource.OnAudioRead -= ForwardMicAudio;
                 _audioTrack?.Dispose();  _audioTrack = null;
                 _knownPublishers.Clear();
                 _publisherStreams.Clear();
@@ -240,11 +257,11 @@ namespace VaSiLi.WebCam
                 new CreateRoomRequest
                 {
                     Description  = "VaSiLi room " + Room,
-                    Publishers   = 12,
+                    Publishers   = 6,
                     Bitrate      = 0,
                     FirFreq      = 10,
                     AudioCodec   = "opus",
-                    VideoCodec   = "vp8,h264,vp9",
+                    VideoCodec   = "h264,vp8,vp9",
                     NotifyJoining = false,
                     RecDir       = recDir
                 });
@@ -272,6 +289,7 @@ namespace VaSiLi.WebCam
 
         async Task SetupChatAsync()
         {
+            Debug.Log("[TextRoom] Attaching textroom handle");
             _textHandle = await _session.AttachAsync<TextRoomHandle>("vasili-textroom");
             _chat = new JanusTextRoomClient(this, _textHandle, BuildRtcConfiguration());
             _chat.ConnectionStateChanged += s => Debug.Log("[TextRoom] PC: " + s);
@@ -281,13 +299,17 @@ namespace VaSiLi.WebCam
             _chat.ParticipantLeft        += (_, p) => AppendChatLine($"<i>{p.Display ?? p.Username} left</i>");
             _chat.Ready += async (_, __) =>
             {
+                Debug.Log("[TextRoom] Ready fired — starting join sequence");
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
                 try
                 {
-                    await _chat.EnsureRoomAsync(Room, "VaSiLi room " + Room);
+                    await _chat.EnsureRoomAsync(Room, "VaSiLi room " + Room, cts.Token);
+                    Debug.Log("[TextRoom] EnsureRoom done");
                     var username = string.IsNullOrEmpty(chatUsername)
                         ? DisplayName + UnityEngine.Random.Range(1000, 9999)
                         : chatUsername;
-                    await _chat.JoinAsync(Room, username, DisplayName);
+                    await _chat.JoinAsync(Room, username, DisplayName, cts.Token);
+                    Debug.Log("[TextRoom] JoinAsync done — chat is ready");
                     _chatReady = true;
                     AppendChatLine("<i>Chat ready</i>");
 
@@ -299,10 +321,16 @@ namespace VaSiLi.WebCam
                     if (enableRemoteLogs)
                         StartRemoteLogs();
                 }
-                catch (Exception ex) { Debug.LogError($"[TextRoom] Join failed: {ex.Message}"); }
+                catch (OperationCanceledException)
+                {
+                    Debug.LogError("[TextRoom] Join sequence timed out (15 s) — data channel may not be routing to Janus textroom plugin correctly");
+                }
+                catch (Exception ex) { Debug.LogError($"[TextRoom] Join failed: {ex.Message}\n{ex.StackTrace}"); }
             };
 
+            Debug.Log("[TextRoom] Starting SDP setup (SetupAsync)");
             await _chat.SetupAsync();
+            Debug.Log("[TextRoom] SetupAsync complete — waiting for data channel to open");
             WireChatInput();
         }
 
@@ -349,7 +377,7 @@ namespace VaSiLi.WebCam
                         case "answer_options":
                             var ao = JsonConvert.DeserializeObject<AnswerOptionsPayload>(e.Text);
                             if (answerOptionsSource != null && ao?.data != null)
-                                answerOptionsSource.OnAnswerOptionsReceived?.Invoke(ao.data);
+                                answerOptionsSource.DisplayOptions(ao.data);
                             return;
 
                         case "gaze_overlay":
@@ -455,6 +483,7 @@ namespace VaSiLi.WebCam
         {
             if (gazeOverlayButton != null)
                 gazeOverlayButton.onClick.AddListener(() => _ = SendGazeOverlayAsync(!_gazeOverlayOn));
+            UpdateGazeOverlayUI(false);
         }
 
         /// <summary>Send a gaze calibration overlay command to all room participants.</summary>
@@ -462,7 +491,13 @@ namespace VaSiLi.WebCam
         {
             if (_chat == null || !_chatReady) { Debug.LogWarning($"[WebCamClient] SendGazeOverlay: chat not ready (chatReady={_chatReady})"); return; }
             Debug.Log($"[WebCamClient] SendGazeOverlay show={show}");
+            // Update local state + UI BEFORE awaiting the send. SendChatAsync uses textroom
+            // `ack: false` (matching the website) so Janus never sends a transaction-matched
+            // response and the awaited Task never completes — anything after the await would
+            // never run, which previously left the toggle stuck on "active" because !_gazeOverlayOn
+            // kept reading the un-updated value.
             _gazeOverlayOn = show;
+            UpdateGazeOverlayUI(show);
             var payload = JsonConvert.SerializeObject(new GazeOverlayPayload
             {
                 show           = show,
@@ -471,6 +506,20 @@ namespace VaSiLi.WebCam
             }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             try { await _chat.SendChatAsync(payload); }
             catch (Exception ex) { Debug.LogError($"[WebCam] gaze_overlay send failed: {ex.Message}"); }
+        }
+
+        void UpdateGazeOverlayUI(bool on)
+        {
+            if (gazeIndicator != null) gazeIndicator.SetActive(on);
+            if (gazeButtonRenderer != null && gazeButtonRenderer.material != null)
+            {
+                var color = on ? gazeActiveColor : gazeIdleColor;
+                gazeButtonRenderer.material.color = color;
+                gazeButtonRenderer.material.SetColor("_BaseColor", color); // URP Lit
+            }
+            if (gazeButtonLabel != null)
+                gazeButtonLabel.text = on ? gazeActiveText : gazeIdleText;
+            OnGazeOverlayChanged?.Invoke(on);
         }
 
         // ---------- Follow-up survey ----------
@@ -485,6 +534,11 @@ namespace VaSiLi.WebCam
         public async Task SendFollowupSurveyAsync(string url)
         {
             if (_chat == null || !_chatReady || string.IsNullOrEmpty(url)) { Debug.LogWarning($"[WebCamClient] SendFollowup: chat not ready or url empty (chatReady={_chatReady}, url='{url}')"); return; }
+            if (InterviewTokenManager.Instance != null && !string.IsNullOrEmpty(InterviewTokenManager.Instance.Token))
+            {
+                var token = InterviewTokenManager.Instance.Token;
+                url += (url.Contains('?') ? "&" : "?") + "token=" + Uri.EscapeDataString(token);
+            }
             Debug.Log($"[WebCamClient] SendFollowup url={url}");
             var payload = JsonConvert.SerializeObject(new FollowupPayload { url = url },
                 new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
@@ -568,22 +622,26 @@ namespace VaSiLi.WebCam
             }
         };
 
+        void ForwardMicAudio(float[] data, int channels, int sampleRate) =>
+            _audioTrack?.SetData(data, channels, sampleRate);
+
         // ---------- Publishing ----------
 
         async Task StartPublishing()
         {
             var rtcConfig = BuildRtcConfiguration();
+            foreach (var srv in rtcConfig.iceServers)
+                Debug.Log($"[WebCamClient] iceServer urls=[{string.Join(", ", srv.urls)}] username={srv.username}");
             _publisher = new JanusVideoRoomPublisher(this, _publisherHandle, rtcConfig);
             _publisher.IceStateChanged        += s => Debug.Log("[Publisher] ICE: " + s);
             _publisher.ConnectionStateChanged += s => Debug.Log("[Publisher] PC: " + s);
 
             var sendStream = new MediaStream();
-            // AudioStreamTrack(AudioSource) hooks OnAudioFilterRead internally at the native
-            // 48 kHz audio-thread cadence — no resampling, no main-thread timing jitter.
+            _audioTrack = new AudioStreamTrack();
             if (microphoneSource != null)
-                _audioTrack = new AudioStreamTrack(microphoneSource.AudioSource);
+                microphoneSource.OnAudioRead += ForwardMicAudio;
             else
-                _audioTrack = new AudioStreamTrack();
+                Debug.LogWarning("[WebCamClient] microphoneSource not assigned — publishing silent audio. Assign the JanusMicrophoneSource child in the Inspector.");
             _publisher.AddTrack(_audioTrack, sendStream);
 
             var videoTrack  = captureCamera.CaptureStreamTrack(captureWidth, captureHeight);
@@ -612,68 +670,94 @@ namespace VaSiLi.WebCam
 
         async void OnPublisherLeft(object sender, PublisherLeftEventArgs e)
         {
-            Debug.Log($"[VideoRoom] publisher {e.Id} left/unpublished — tearing down subscriber so rejoin gets a clean slate");
-            _knownPublishers.Remove(e.Id);
-            _publisherStreams.Remove(e.Id);
+            long leftId = e.Id;
 
-            if (frame != null)
+            await _subLifecycleLock.WaitAsync();
+            try
             {
-                frame.material.mainTexture = null;
-                frame.material.SetTexture("_BaseMap", null);
-            }
+                // The handler is wired to both PublisherLeft and PublisherUnpublished, so a single
+                // disconnect fires it more than once. The _knownPublishers guard is what stops the
+                // duplicate from re-tearing-down a freshly built subscriber: the first call removes
+                // the id, any later call for the same id finds it absent and returns.
+                if (!_knownPublishers.ContainsKey(leftId)) return;
 
-            // Dispose the subscriber completely. When the remote peer rejoins, SubscribeToAvailable
-            // will see _subscriber == null and do a fresh attach + join, which is the only reliable
-            // path. Trying to update/unsubscribe on the existing handle leaves it in an ambiguous
-            // SDP state that prevents the renegotiation from succeeding on rejoin.
-            if (_subscriber != null)
-            {
-                _subscriber.Dispose();
+                Debug.Log($"[VideoRoom] publisher {leftId} left/unpublished — tearing down subscriber so the next subscribe gets a clean slate");
+                _knownPublishers.Remove(leftId);
+                _publisherStreams.Remove(leftId);
+
+                if (frame != null)
+                {
+                    frame.material.mainTexture = null;
+                    frame.material.SetTexture("_BaseMap", null);
+                }
+
+                // Keeping the subscriber handle and renegotiating via 'update' was tried and leaves
+                // Unity WebRTC's transceiver/SDP state ambiguous enough that a subsequent
+                // resubscribe doesn't deliver tracks (e.g. after the web peer reloads the page).
+                // Capture the locals and null the fields synchronously so a resubscribe that runs
+                // after the await below builds a fresh handle instead of racing with this detach.
+                var sub = _subscriber;
+                var handle = _subscriberHandle;
                 _subscriber = null;
-                try { await _subscriberHandle.DetachAsync(); } catch { }
                 _subscriberHandle = null;
+
+                if (sub != null)
+                {
+                    sub.Dispose();
+                    if (handle != null)
+                    {
+                        try { await handle.DetachAsync(); } catch { }
+                    }
+                }
             }
+            catch (Exception ex) { Debug.LogWarning($"[Subscriber] teardown error: {ex.Message}"); }
+            finally { _subLifecycleLock.Release(); }
         }
 
         async Task SubscribeToAvailable(List<RemotePublisher> publishers)
         {
-            var newStreams = new List<StreamSubscription>();
-            foreach (var p in publishers)
+            await _subLifecycleLock.WaitAsync();
+            try
             {
-                if (p.Dummy == true) continue;
-                if (_knownPublishers.ContainsKey(p.Id)) continue;
-                _knownPublishers[p.Id] = p;
-                if (p.Streams == null) continue;
-                var subs = new List<StreamSubscription>();
-                foreach (var s in p.Streams)
+                var newStreams = new List<StreamSubscription>();
+                foreach (var p in publishers)
                 {
-                    var sub = new StreamSubscription { Feed = p.Id, Mid = s.Mid };
-                    subs.Add(sub);
-                    newStreams.Add(sub);
+                    if (p.Dummy == true) continue;
+                    if (_knownPublishers.ContainsKey(p.Id)) continue;
+                    _knownPublishers[p.Id] = p;
+                    if (p.Streams == null) continue;
+                    var subs = new List<StreamSubscription>();
+                    foreach (var s in p.Streams)
+                    {
+                        var sub = new StreamSubscription { Feed = p.Id, Mid = s.Mid };
+                        subs.Add(sub);
+                        newStreams.Add(sub);
+                    }
+                    _publisherStreams[p.Id] = subs;
                 }
-                _publisherStreams[p.Id] = subs;
-            }
-            if (newStreams.Count == 0) return;
+                if (newStreams.Count == 0) return;
 
-            if (_subscriber == null)
-            {
-                _subscriberHandle = await _session.AttachAsync<VideoRoomHandle>("vasili-subscriber");
-                _subscriber = new JanusVideoRoomSubscriber(this, _subscriberHandle, BuildRtcConfiguration());
-                _subscriber.RemoteTrackAdded      += OnRemoteTrack;
-                _subscriber.IceStateChanged       += s => Debug.Log("[Subscriber] ICE: " + s);
-                _subscriber.ConnectionStateChanged += s => Debug.Log("[Subscriber] PC: " + s);
-                await _subscriber.SubscribeAsync(Room, newStreams);
+                if (_subscriber == null)
+                {
+                    _subscriberHandle = await _session.AttachAsync<VideoRoomHandle>("vasili-subscriber");
+                    _subscriber = new JanusVideoRoomSubscriber(this, _subscriberHandle, BuildRtcConfiguration());
+                    _subscriber.RemoteTrackAdded      += OnRemoteTrack;
+                    _subscriber.IceStateChanged       += s => Debug.Log("[Subscriber] ICE: " + s);
+                    _subscriber.ConnectionStateChanged += s => Debug.Log("[Subscriber] PC: " + s);
+                    await _subscriber.SubscribeAsync(Room, newStreams, _publisherHandle.PrivateId);
+                }
+                else if (_subscriber.IsJoined)
+                {
+                    await _subscriber.UpdateAsync(newStreams, null);
+                }
+                else
+                {
+                    // Subscriber exists but is mid-restore (SDP exchange not complete); call SubscribeAsync
+                    // so it does a fresh join rather than an update on an un-joined handle.
+                    await _subscriber.SubscribeAsync(Room, newStreams, _publisherHandle.PrivateId);
+                }
             }
-            else if (_subscriber.IsJoined)
-            {
-                await _subscriber.UpdateAsync(newStreams, null);
-            }
-            else
-            {
-                // Subscriber exists but is mid-restore (SDP exchange not complete); call SubscribeAsync
-                // so it does a fresh join rather than an update on an un-joined handle.
-                await _subscriber.SubscribeAsync(Room, newStreams);
-            }
+            finally { _subLifecycleLock.Release(); }
         }
 
         void OnRemoteTrack(object sender, RemoteTrackEventArgs e)
@@ -681,11 +765,16 @@ namespace VaSiLi.WebCam
             Debug.Log($"[WebCam] RemoteTrack: type={(e.Track != null ? e.Track.GetType().Name : "null")} mid={e.Mid} feed={e.StreamInfo?.FeedId}");
             if (e.Track is AudioStreamTrack audio)
             {
-                if (output != null)
+                if (output == null)
                 {
-                    output.SetTrack(audio);
+                    Debug.LogWarning("[WebCam] AudioTrack received but no output AudioSource assigned — assign it in the Inspector.");
+                }
+                else
+                {
                     output.loop = true;
+                    output.SetTrack(audio);
                     output.Play();
+                    Debug.Log($"[WebCam] AudioTrack playing: volume={output.volume} mute={output.mute} spatialBlend={output.spatialBlend}");
                 }
             }
             else if (e.Track is VideoStreamTrack video)

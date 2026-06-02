@@ -52,6 +52,15 @@ public class WebViewReceiver : MonoBehaviour
         OnAnswerOptionsReceived?.Invoke(res.strings);
     }
 
+    /// <summary>Display-only entry point for options received over the Janus textroom
+    /// (interviewee side). Does NOT re-broadcast — unlike OnJsResult, which is the
+    /// interviewer's questionnaire-webview path.</summary>
+    public void DisplayOptions(string[] options)
+    {
+        if (options == null) return;
+        SetText(options);
+    }
+
     private void SetText(string[] text)
     {
         Clear();

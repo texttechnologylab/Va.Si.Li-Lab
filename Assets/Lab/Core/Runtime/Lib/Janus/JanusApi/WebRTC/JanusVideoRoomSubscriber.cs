@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using Unity.WebRTC;
 using UnityEngine;
 using VaSiLi.Janus.VideoRoom;
@@ -32,6 +33,7 @@ namespace VaSiLi.Janus.WebRTC
         readonly MonoBehaviour _runner;
         readonly RTCConfiguration _config;
         readonly Dictionary<string, RemoteStream> _streamsByMid = new Dictionary<string, RemoteStream>();
+        readonly RemoteCandidateApplier _remoteCandidates = new RemoteCandidateApplier("[JanusSubscriber]");
 
         long _room;
         long? _privateId;
@@ -49,7 +51,10 @@ namespace VaSiLi.Janus.WebRTC
             CreatePeerConnection();
             handle.Restored += OnHandleRestored;
             handle.SubscriberAttached += OnSubscriberAttached;
+            handle.TrickleReceived += OnRemoteTrickle;
         }
+
+        void OnRemoteTrickle(object sender, JObject candidate) => _remoteCandidates.Receive(candidate);
 
         void CreatePeerConnection()
         {
@@ -58,7 +63,9 @@ namespace VaSiLi.Janus.WebRTC
             PeerConnection.OnIceCandidate = HandleIceCandidate;
             PeerConnection.OnIceConnectionChange += s => IceStateChanged?.Invoke(s);
             PeerConnection.OnConnectionStateChange += s => ConnectionStateChanged?.Invoke(s);
+            PeerConnection.OnIceGatheringStateChange += s => Debug.Log("[JanusSubscriber] ICE gathering: " + s);
             PeerConnection.OnTrack = HandleTrack;
+            _remoteCandidates.Bind(PeerConnection);
         }
 
         void HandleIceCandidate(RTCIceCandidate candidate)
@@ -68,9 +75,11 @@ namespace VaSiLi.Janus.WebRTC
             {
                 if (candidate == null || string.IsNullOrEmpty(candidate.Candidate))
                 {
+                    Debug.Log("[JanusSubscriber] local ICE gathering complete (end-of-candidates)");
                     _ = Handle.SendTrickleCompletedAsync();
                     return;
                 }
+                Debug.Log($"[JanusSubscriber] local ICE candidate: typ={UnityWebRtcExtensions.IceCandidateType(candidate.Candidate)} mid={candidate.SdpMid}");
                 _ = Handle.SendTrickleAsync(new JanusCandidate
                 {
                     Candidate = candidate.Candidate,
@@ -111,13 +120,20 @@ namespace VaSiLi.Janus.WebRTC
             _activeSubscriptions.Clear();
             _activeSubscriptions.AddRange(streams);
 
+            Debug.Log($"[JanusSubscriber] SubscribeAsync: joining room {room} with {streams.Count} streams (private_id={privateId})");
             var offer = await Handle.JoinSubscriberAsync(room, streams, privateId, cancellation).ConfigureAwait(true);
+            Debug.Log("[JanusSubscriber] Offer SDP m= lines:\n" + UnityWebRtcExtensions.MLineSummary(offer.Sdp));
             var sd = offer.ToSessionDescription();
             await PeerConnection.SetRemoteDescription(ref sd).AsTask(_runner).ConfigureAwait(true);
+            _remoteCandidates.MarkReady();
+            Debug.Log("[JanusSubscriber] ✓ Remote description set");
             var answerOp = PeerConnection.CreateAnswer();
             var answerDesc = await answerOp.AsTask(_runner).ConfigureAwait(true);
+            Debug.Log("[JanusSubscriber] Answer SDP m= lines:\n" + UnityWebRtcExtensions.MLineSummary(answerDesc.sdp));
             await PeerConnection.SetLocalDescription(ref answerDesc).AsTask(_runner).ConfigureAwait(true);
+            Debug.Log("[JanusSubscriber] ✓ Local description set, sending start to Janus");
             await Handle.StartAsync(answerDesc.ToJsep(), cancellation).ConfigureAwait(true);
+            Debug.Log("[JanusSubscriber] ✓ Start sent — PC waiting for ICE to connect");
             _joined = true;
         }
 
@@ -137,6 +153,7 @@ namespace VaSiLi.Janus.WebRTC
                 Debug.Log("[JanusSubscriber] UpdateAsync: renegotiating SDP after update");
                 var sd = ev.Jsep.ToSessionDescription();
                 await PeerConnection.SetRemoteDescription(ref sd).AsTask(_runner).ConfigureAwait(true);
+                _remoteCandidates.MarkReady();
                 var answerOp = PeerConnection.CreateAnswer();
                 var answerDesc = await answerOp.AsTask(_runner).ConfigureAwait(true);
                 await PeerConnection.SetLocalDescription(ref answerDesc).AsTask(_runner).ConfigureAwait(true);
@@ -176,6 +193,7 @@ namespace VaSiLi.Janus.WebRTC
             _joined = false;
             Handle.Restored -= OnHandleRestored;
             Handle.SubscriberAttached -= OnSubscriberAttached;
+            Handle.TrickleReceived -= OnRemoteTrickle;
             ClosePeerConnection();
         }
     }

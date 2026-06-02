@@ -19,6 +19,10 @@ namespace VaSiLi.WebCam
 
         public string Token { get; private set; } = "";
 
+        /// <summary>Fires whenever <see cref="SetToken"/> stores a new value. Subscribers
+        /// (e.g. the browser URL loader) can react late-binding without having to poll.</summary>
+        public event System.Action<string> TokenChanged;
+
         /// <summary>Numeric Janus room ID derived from Token.</summary>
         public long RoomId { get; private set; }
 
@@ -49,6 +53,7 @@ namespace VaSiLi.WebCam
             Token = (token ?? "").Trim();
             RoomId = RoomIdFromString(Token);
             Debug.Log($"[InterviewToken] token='{Token}' roomId={RoomId} ubiqRoom='{UbiqRoomName}'");
+            TokenChanged?.Invoke(Token);
         }
 
         public static long RoomIdFromString(string s)

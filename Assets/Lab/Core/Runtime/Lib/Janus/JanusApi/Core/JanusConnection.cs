@@ -138,6 +138,24 @@ namespace VaSiLi.Janus
             lock (_sessionsLock) _sessions.Remove(sessionId);
         }
 
+        /// <summary>
+        /// Re-keys a session in the lookup map after its id changes (e.g. a fresh session is
+        /// created during reconnect). Without this, inbound messages addressed to the new
+        /// session id would not resolve to the existing <see cref="JanusSession"/> instance.
+        /// </summary>
+        internal void ReplaceSessionId(long oldId, long newId)
+        {
+            if (oldId == newId) return;
+            lock (_sessionsLock)
+            {
+                if (_sessions.TryGetValue(oldId, out var session))
+                {
+                    _sessions.Remove(oldId);
+                    _sessions[newId] = session;
+                }
+            }
+        }
+
         void HandleMessage(object sender, string text)
         {
             JanusEnvelope env;

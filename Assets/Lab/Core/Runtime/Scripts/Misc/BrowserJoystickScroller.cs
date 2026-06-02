@@ -61,7 +61,7 @@ public class BrowserJoystickScroller : MonoBehaviour
         {
             browser = GetComponent<Browser>();
         }
-
+        
         if (browserCollider == null && browser != null)
         {
             browserCollider = browser.GetComponent<Collider>();

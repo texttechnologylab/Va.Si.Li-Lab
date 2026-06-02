@@ -1,16 +1,15 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 namespace VaSiLi.WebCam
 {
     /// <summary>
-    /// Owns an AudioSource that captures the microphone at 48 kHz so that
-    /// Unity WebRTC's AudioStreamTrack(AudioSource) constructor can hook
-    /// OnAudioFilterRead at the native audio-thread cadence.
+    /// Owns the AudioSource that feeds microphone audio into a WebRTC AudioStreamTrack.
     ///
-    /// This avoids the pops and clicks caused by feeding resampled 16 kHz PCM
-    /// from MicrophoneVoipSource into SetData() on the main thread (irregular
-    /// timing, wrong sample rate for WebRTC's internal 48 kHz pipeline).
+    /// OnAudioFilterRead applies gain, fires OnAudioRead (audio thread) so WebCamClient can
+    /// forward PCM to the track via SetData, then clears the buffer to prevent local self-hearing.
+    /// volume=1f is required so Unity does not skip the DSP chain as an optimisation.
     /// </summary>
     [RequireComponent(typeof(AudioSource))]
     public class JanusMicrophoneSource : MonoBehaviour
@@ -18,102 +17,129 @@ namespace VaSiLi.WebCam
         [Tooltip("Leave empty to use the default microphone device.")]
         public string deviceName = "";
 
+        [Tooltip("Linear gain applied before the signal reaches WebRTC. 1 = unity gain.")]
+        [Range(1f, 8f)]
+        public float gain = 1f;
+
+        /// <summary>Fired on the audio thread with (data, channels, sampleRate) after gain is applied.
+        /// Subscribe to forward PCM to an AudioStreamTrack via SetData. The buffer is cleared
+        /// immediately after so local speakers hear silence.</summary>
+        public event Action<float[], int, int> OnAudioRead;
+
         public AudioSource AudioSource { get; private set; }
 
-        // WebRTC's internal pipeline runs at 48 kHz.
-        const int SampleRate = 48000;
+        const int DesiredSampleRate = 48000;
 
-        // ---------- Debug state (written on audio thread, read on main thread) ----------
-        // Use volatile so main-thread reads aren't optimised away.
-        volatile int _filterCallCount;
-        volatile float _peakAmplitude;   // max |sample| seen across all filter calls since last log
-        volatile bool _hasNonZero;       // true once any non-silent sample has arrived
+        string _device;
+        int _outputSampleRate;
 
         void Awake()
         {
             AudioSource = GetComponent<AudioSource>();
             AudioSource.loop = true;
-            AudioSource.volume = 0f;   // silence local playback without muting the DSP graph
+            AudioSource.volume = 1f;      // must be >0 so Unity runs the DSP chain and calls OnAudioFilterRead
             AudioSource.spatialBlend = 0f;
             AudioSource.playOnAwake = false;
+            _outputSampleRate = AudioSettings.outputSampleRate;
+            AudioSettings.OnAudioConfigurationChanged += OnAudioConfigChanged;
         }
+
+        void OnDestroy()
+        {
+            AudioSettings.OnAudioConfigurationChanged -= OnAudioConfigChanged;
+        }
+
+        void OnAudioConfigChanged(bool _) => _outputSampleRate = AudioSettings.outputSampleRate;
 
         void OnEnable()
         {
-            var device = string.IsNullOrEmpty(deviceName) ? null : deviceName;
-            Debug.Log($"[JanusMic] Starting microphone '{device ?? "default"}' at {SampleRate} Hz");
-            AudioSource.clip = Microphone.Start(device, loop: true, lengthSec: 1, frequency: SampleRate);
-            StartCoroutine(WaitAndPlay(device));
-            StartCoroutine(DebugLogger());
+            _device = ResolveDevice();
+            int freq = ResolveFrequency(_device);
+            Debug.Log($"[JanusMic] Starting '{_device ?? "default"}' at {freq} Hz");
+            try
+            {
+                AudioSource.clip = Microphone.Start(_device, loop: true, lengthSec: 1, frequency: freq);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[JanusMic] Microphone.Start threw: {ex.Message}. Retrying with default.");
+                _device = null;
+                freq = ResolveFrequency(null);
+                AudioSource.clip = Microphone.Start(null, loop: true, lengthSec: 1, frequency: freq);
+            }
+
+            // Microphone.Start can fail silently on Quest (FMOD error 80 / OVR Oboe conflict):
+            // it logs a native error but does not throw, returning a null or invalid clip.
+            if (AudioSource.clip == null || !Microphone.IsRecording(_device))
+            {
+                Debug.LogWarning($"[JanusMic] Microphone.Start returned no clip (device may be claimed by OVR Oboe). Retrying with null device.");
+                Microphone.End(_device);
+                _device = null;
+                freq = ResolveFrequency(null);
+                AudioSource.clip = Microphone.Start(null, loop: true, lengthSec: 1, frequency: freq);
+            }
+
+            StartCoroutine(WaitAndPlay());
         }
 
-        IEnumerator WaitAndPlay(string device)
+        IEnumerator WaitAndPlay()
         {
-            // Wait until the microphone has actually started before playing,
-            // otherwise the AudioSource plays silence and the filter gets no data.
+            const int TimeoutFrames = 300; // ~5 s at 60 fps
             int waited = 0;
-            while (Microphone.GetPosition(device) <= 0)
+            while (Microphone.GetPosition(_device) <= 0)
             {
+                if (++waited >= TimeoutFrames)
+                {
+                    Debug.LogError("[JanusMic] Microphone did not start within timeout — no audio will be sent.");
+                    yield break;
+                }
                 yield return null;
-                waited++;
             }
-            Debug.Log($"[JanusMic] Microphone ready after {waited} frames, position={Microphone.GetPosition(device)}. Playing AudioSource.");
+            Debug.Log($"[JanusMic] Microphone ready after {waited} frames. Playing.");
             AudioSource.Play();
         }
 
-        IEnumerator DebugLogger()
-        {
-            var wait5 = new WaitForSeconds(5f);
-            yield return wait5; // first report after 5 s to let things stabilise
-
-            while (isActiveAndEnabled)
-            {
-                int calls = _filterCallCount;
-                float peak = _peakAmplitude;
-                bool nonZero = _hasNonZero;
-                // Reset for next window
-                _filterCallCount = 0;
-                _peakAmplitude = 0f;
-
-                Debug.Log($"[JanusMic] 5 s window — OnAudioFilterRead calls: {calls}, " +
-                          $"peak amplitude: {peak:F4}, " +
-                          $"mic playing: {AudioSource.isPlaying}, " +
-                          $"clip: {(AudioSource.clip != null ? $"{AudioSource.clip.frequency} Hz" : "null")}, " +
-                          $"ever non-silent: {nonZero}, " +
-                          $"mic pos: {Microphone.GetPosition(string.IsNullOrEmpty(deviceName) ? null : deviceName)}");
-
-                yield return wait5;
-            }
-        }
-
-        // Called by Unity's audio engine on the audio thread every time the AudioSource
-        // needs a buffer — this is the same callback WebRTC's AudioCustomFilter uses.
-        // NOTE: volume=0 already silences the speaker output; we still inspect the data
-        // before it reaches the speaker so we can measure real mic amplitude.
         void OnAudioFilterRead(float[] data, int channels)
         {
-            _filterCallCount++;
-            for (int i = 0; i < data.Length; i++)
+            if (gain != 1f)
             {
-                float abs = data[i] < 0 ? -data[i] : data[i];
-                if (abs > _peakAmplitude) _peakAmplitude = abs;
-                if (abs > 0.0001f) _hasNonZero = true;
+                float g = gain;
+                for (int i = 0; i < data.Length; i++)
+                {
+                    float s = data[i] * g;
+                    data[i] = s > 1f ? 1f : s < -1f ? -1f : s;
+                }
             }
-            // Don't zero out — WebRTC's AudioCustomFilter reads this same buffer.
-            // volume=0 prevents the AudioSource from emitting to the local speaker.
+            OnAudioRead?.Invoke(data, channels, _outputSampleRate);
+            Array.Clear(data, 0, data.Length); // silence local speaker — WebRTC already captured the signal
         }
 
         void OnDisable()
         {
             AudioSource.Stop();
-            var device = string.IsNullOrEmpty(deviceName) ? null : deviceName;
-            Microphone.End(device);
-            Debug.Log($"[JanusMic] Microphone stopped.");
+            Microphone.End(_device);
             if (AudioSource.clip != null)
             {
                 Destroy(AudioSource.clip);
                 AudioSource.clip = null;
             }
+            Debug.Log("[JanusMic] Microphone stopped.");
+        }
+
+        string ResolveDevice()
+        {
+            if (string.IsNullOrEmpty(deviceName)) return null;
+            foreach (var d in Microphone.devices)
+                if (d == deviceName) return deviceName;
+            Debug.LogWarning($"[JanusMic] Device '{deviceName}' not found; falling back to default.");
+            return null;
+        }
+
+        static int ResolveFrequency(string device)
+        {
+            Microphone.GetDeviceCaps(device, out int min, out int max);
+            if (min == 0 && max == 0) return DesiredSampleRate;
+            return Mathf.Clamp(DesiredSampleRate, min, max);
         }
     }
 }

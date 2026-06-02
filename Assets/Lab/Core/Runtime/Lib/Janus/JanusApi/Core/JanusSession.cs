@@ -100,26 +100,21 @@ namespace VaSiLi.Janus
 
         internal async Task ReclaimAsync(CancellationToken cancellation = default)
         {
-            // Re-claim the session by id, or recreate if it expired server-side
-            var env = await Connection.SendRequestAsync(new JanusRequest
+            // After a transport drop the previous session's handles (and their PeerConnections)
+            // are dead. A successful Janus 'claim' would keep those old handles alive server-side
+            // as ghosts — still occupying publisher slots and showing frozen feeds to peers until
+            // they time out. So we always create a brand-new session, re-attach every handle to
+            // it, and re-key the connection's session map to the new id.
+            var oldId = Id;
+            var fresh = await Connection.SendRequestAsync(new JanusRequest
             {
-                Janus = JanusVerbs.Claim,
-                SessionId = Id,
+                Janus = JanusVerbs.Create,
                 Transaction = JanusProtocol.NewTransactionId()
             }, cancellation).ConfigureAwait(false);
-
-            if (env.Janus != JanusVerbs.Success)
-            {
-                // Session probably expired; create a fresh one and update id
-                var fresh = await Connection.SendRequestAsync(new JanusRequest
-                {
-                    Janus = JanusVerbs.Create,
-                    Transaction = JanusProtocol.NewTransactionId()
-                }, cancellation).ConfigureAwait(false);
-                if (fresh.Janus != JanusVerbs.Success || fresh.Data == null)
-                    throw new JanusException("Failed to recreate session after disconnect: " + fresh.Reason);
-                Id = fresh.Data["id"]?.Value<long>() ?? 0;
-            }
+            if (fresh.Janus != JanusVerbs.Success || fresh.Data == null)
+                throw new JanusException("Failed to recreate session after disconnect: " + fresh.Reason);
+            Id = fresh.Data["id"]?.Value<long>() ?? 0;
+            Connection.ReplaceSessionId(oldId, Id);
 
             IsValid = true;
 
