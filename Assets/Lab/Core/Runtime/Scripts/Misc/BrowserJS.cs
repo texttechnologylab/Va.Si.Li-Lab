@@ -8,14 +8,18 @@ public class BrowserJS : MonoBehaviour
     private TLab.WebView.WebView browser;
     private int resultId = 0;
 
-    private bool isInitialized = false;
     private bool nativeSetupDone = false;
-    private string loadedToken;            // the token reflected in the currently-loaded URL, or null if nothing has loaded
+    private bool firstLoadStarted = false;
+    private bool cookiesClearedAndReloaded = false;
     private InterviewTokenManager subscribedManager;
+
+    private static readonly WaitForSeconds WaitSettle = new(0.5f);
+    private static readonly WaitForSeconds WaitReload = new(1.0f);
 
     public void Start()
     {
-        browser.eventCallback.onPageStart.AddListener(OnBrowserEvent);
+        browser.eventCallback.onPageStart.AddListener(OnPageStart);
+        browser.eventCallback.onPageFinish.AddListener(OnPageFinish);
     }
 
     public void OnDestroy()
@@ -26,53 +30,84 @@ public class BrowserJS : MonoBehaviour
 
     public void Update()
     {
-        // One-time native setup as soon as the WebView is ready. URL loading is gated separately
-        // on the token being available so we never show a token-less page if SetToken hasn't
-        // landed yet (the race we were hitting: browser initialises before the token arrives).
         if (!nativeSetupDone && browser.IsInitialized())
         {
             nativeSetupDone = true;
-            browser.ClearCookie();
-            //browser.ClearCache(true);
-            browser.SetUserAgent("Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36", true);
+            browser.SetUserAgent("Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36", false);
         }
 
-        // Lazily attach to the manager — it may live in a different scene that loads after us,
-        // and Awake order isn't guaranteed even within one scene.
         if (subscribedManager == null && InterviewTokenManager.Instance != null)
         {
             subscribedManager = InterviewTokenManager.Instance;
             subscribedManager.TokenChanged += OnTokenChanged;
         }
 
-        TryLoadTokenUrl();
+        TryFirstLoad();
     }
 
-    private void OnTokenChanged(string _) => TryLoadTokenUrl();
+    private void OnTokenChanged(string _) => TryFirstLoad();
 
-    private void TryLoadTokenUrl()
+    private void TryFirstLoad()
     {
         if (!nativeSetupDone) return;
-        var tokenMgr = subscribedManager ?? InterviewTokenManager.Instance;
-        if (tokenMgr == null || string.IsNullOrEmpty(tokenMgr.Token))
-        {
-            if (!isInitialized)
-                Debug.Log("[BrowserJS] Waiting for interview token before loading URL.");
-            return;
-        }
-        if (loadedToken == tokenMgr.Token) return; // already showing this token's page
+        if (firstLoadStarted) return;
 
-        loadedToken = tokenMgr.Token;
-        isInitialized = true;
-        Debug.Log($"[BrowserJS] Loading URL with token='{tokenMgr.Token}'");
+        var tokenMgr = subscribedManager;
+        if (tokenMgr == null) tokenMgr = InterviewTokenManager.Instance;
+        if (tokenMgr == null || string.IsNullOrEmpty(tokenMgr.Token)) return;
+
+        firstLoadStarted = true;
+        Debug.Log($"[BrowserJS] First load — URL: {tokenMgr.BrowserUrl}");
         browser.LoadUrl(tokenMgr.BrowserUrl);
     }
 
-    private void OnBrowserEvent(string message)
+    private void OnPageStart(string url)
+    {
+        Debug.Log($"[BrowserJS] onPageStart: {url}");
+    }
+
+    private void OnPageFinish(string url)
+    {
+        Debug.Log($"[BrowserJS] onPageFinish: {url}");
+
+        if (!cookiesClearedAndReloaded)
+        {
+            // First page has finished loading — now clear cookies and reload with the token URL.
+            StartCoroutine(ClearAndReload());
+            return;
+        }
+
+        // Second load (post-cookie-clear) is done — install the JS message listener.
+        OnBrowserReady();
+    }
+
+    private IEnumerator ClearAndReload()
+    {
+        cookiesClearedAndReloaded = true;
+
+        // Give the browser a moment to settle before touching it again.
+        yield return WaitSettle;
+
+        browser.ClearCookie();
+        Debug.Log("[BrowserJS] Cookies cleared, waiting before reload...");
+
+        yield return WaitReload;
+
+        var tokenMgr = subscribedManager;
+        if (tokenMgr == null) tokenMgr = InterviewTokenManager.Instance;
+        if (tokenMgr == null || string.IsNullOrEmpty(tokenMgr.Token))
+        {
+            Debug.LogWarning("[BrowserJS] Token missing at reload time — aborting reload.");
+            yield break;
+        }
+
+        Debug.Log($"[BrowserJS] Reloading with token URL: {tokenMgr.BrowserUrl}");
+        browser.LoadUrl(tokenMgr.BrowserUrl);
+    }
+
+    private void OnBrowserReady()
     {
         resultId++;
-        // Guard with a window flag so each page load only installs one listener.
-        // Without the guard, every onPageStart adds a new listener and label_listing fires N times.
         string jsCode = $@"
             if (!window.__vasiliListenerInstalled) {{
                 window.__vasiliListenerInstalled = true;
@@ -89,21 +124,14 @@ public class BrowserJS : MonoBehaviour
 
     private IEnumerator LogJSResult(string varName, string jsCode)
     {
-
-        // Call the function
         var enumerable = browser.EvaluateJSForResult(varName, jsCode);
-
-        // Iterate through the coroutine it returns
         foreach (var result in enumerable)
         {
-            // Because it's a coroutine, some iterations will yield null (waiting)
             if (result == null)
             {
                 yield return null;
                 continue;
             }
-
-            //break; // Exit the loop after processing the result
         }
     }
 
@@ -112,13 +140,13 @@ public class BrowserJS : MonoBehaviour
         if (browser != null)
         {
             var res = browser.EvaluateJSForResult("options", jsCode);
-            foreach (var result in res) // Iterate over the yielded values
+            foreach (var result in res)
             {
-                if (result != null) // Ignore the null yields
+                if (result != null)
                 {
                     Debug.Log("JS Result: " + result);
                 }
-                yield return result; // Keep coroutine timing consistent
+                yield return result;
             }
         }
         else
@@ -128,6 +156,4 @@ public class BrowserJS : MonoBehaviour
 
         yield break;
     }
-
-
 }
