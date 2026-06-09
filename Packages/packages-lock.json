@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.meta.xr.runtimeoptimizer": {
+      "version": "0.2.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.meta.xr.sdk.avatars": {
       "version": "40.0.1",
       "depth": 0,

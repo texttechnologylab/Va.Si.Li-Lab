@@ -54,7 +54,7 @@ public class MetaRegister : MonoBehaviour
         }
         OVRPlugin.systemDisplayFrequency = 90.0f;
         OVRPlugin.foveatedRenderingLevel = OVRPlugin.FoveatedRenderingLevel.High;
-        OVRManager.SetSpaceWarp(true);
+        //OVRManager.SetSpaceWarp(true);
     }
 
     // Update is called once per frame

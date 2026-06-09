@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.meta.xr.runtimeoptimizer": "0.2.2",
     "com.meta.xr.sdk.avatars": "40.0.1",
     "com.meta.xr.sdk.avatars.sample.assets": "24.1.1",
     "com.meta.xr.sdk.haptics": "201.0.0",
