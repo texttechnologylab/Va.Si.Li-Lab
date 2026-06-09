@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -31,17 +32,35 @@ namespace VaSiLi.WebCam
         public string RecordingPath = "/mnt/recordings/";
 
         [Header("ICE")]
-        public string TurnUrl = "turn:turn.vasililab.texttechnologylab.org:3478";
-        public string TurnUsername = "testuser";
-        public string TurnCredential = "";
+        [Tooltip("List of STUN/TURN servers used for WebRTC. Leave username/credential empty for STUN servers.")]
+        public List<IceServerConfig> IceServers = new List<IceServerConfig>
+        {
+            new IceServerConfig
+            {
+                urls       = new List<string> { "turn:turn.vasililab.texttechnologylab.org:3478" },
+                username   = "testuser",
+                credential = ""
+            }
+        };
+
+        [Serializable]
+        public class IceServerConfig
+        {
+            [Tooltip("One or more URLs for this server, e.g. \"stun:stun.l.google.com:19302\" or \"turn:host:3478\".")]
+            public List<string> urls = new List<string>();
+            [Tooltip("Username for TURN authentication. Leave empty for STUN.")]
+            public string username = "";
+            [Tooltip("Credential/password for TURN authentication. Leave empty for STUN.")]
+            public string credential = "";
+        }
 
         [Header("Capture")]
         public Camera captureCamera;
-        public int captureWidth = 1280;
-        public int captureHeight = 720;
+        public int captureWidth = 854;
+        public int captureHeight = 480;
         public int maxBitrate = 1_000_000;
         public int minBitrate = 250_000;
-        public int maxFramerate = 30;
+        public int maxFramerate = 24;
 
         [Header("Playback")]
         public MeshRenderer frame;
@@ -116,6 +135,10 @@ namespace VaSiLi.WebCam
         public bool enableRemoteLogs = false;
         [Tooltip("How often (in seconds) to batch and send buffered log lines.")]
         public float remoteLogIntervalSeconds = 5f;
+        [Tooltip("Comma-separated substrings (case-insensitive). A log line is forwarded if it " +
+                 "contains ANY of them. Leave empty to forward everything. Default matches the " +
+                 "WebRTC/Janus triage prefixes.")]
+        public string remoteLogFilter = "Janus,Publisher,Subscriber,TextRoom,VideoRoom,WebCam";
         [Tooltip("Fired on this client when a remote-log batch is received from the interviewee.")]
         public UnityEvent<string> OnRemoteLogReceived;
 
@@ -261,7 +284,10 @@ namespace VaSiLi.WebCam
                     Bitrate      = 0,
                     FirFreq      = 10,
                     AudioCodec   = "opus",
-                    VideoCodec   = "h264,vp8,vp9",
+                    // Priority order; Janus (SFU, no transcode) picks the first codec each
+                    // publisher's offer supports. Browsers that can't do vp9/h265 fall through
+                    // to h264. The Quest can hardware en/decode all of these.
+                    VideoCodec   = "h264,vp8",
                     NotifyJoining = false,
                     RecDir       = recDir
                 });
@@ -556,6 +582,11 @@ namespace VaSiLi.WebCam
 
         void BufferLogMessage(string condition, string stackTrace, LogType type)
         {
+            // Only forward lines matching the filter so triage chat isn't flooded.
+            // Empty filter = forward everything.
+            if (!MatchesRemoteLogFilter(condition))
+                return;
+
             var level = type switch
             {
                 LogType.Error     => "ERROR",
@@ -567,13 +598,40 @@ namespace VaSiLi.WebCam
             _pendingLogLines.Add($"[{DateTime.Now:HH:mm:ss}] {level}: {condition}");
         }
 
+        string[] _remoteLogFilterTerms;
+        string _remoteLogFilterCache;
+
+        bool MatchesRemoteLogFilter(string condition)
+        {
+            if (string.IsNullOrEmpty(remoteLogFilter)) return true; // no filter = forward all
+            if (string.IsNullOrEmpty(condition)) return false;
+
+            // Re-parse the comma-separated list only when the Inspector value changes.
+            if (!ReferenceEquals(_remoteLogFilterCache, remoteLogFilter))
+            {
+                _remoteLogFilterCache = remoteLogFilter;
+                _remoteLogFilterTerms = remoteLogFilter
+                    .Split(',')
+                    .Select(t => t.Trim())
+                    .Where(t => t.Length > 0)
+                    .ToArray();
+            }
+
+            foreach (var term in _remoteLogFilterTerms)
+                if (condition.IndexOf(term, StringComparison.OrdinalIgnoreCase) >= 0)
+                    return true;
+            return false;
+        }
+
         async void FlushRemoteLogs()
         {
             if (!_chatReady || _pendingLogLines.Count == 0) return;
             var text = string.Join("\n", _pendingLogLines);
             _pendingLogLines.Clear();
             try { await _chat.SendChatAsync(text); }
-            catch (Exception ex) { Debug.LogWarning($"[WebCam] remote log flush failed: {ex.Message}"); }
+            // Prefix deliberately avoids the default remote-log filter terms so a failing flush
+            // can't buffer its own error and amplify into a feedback loop.
+            catch (Exception ex) { Debug.LogWarning($"[RemoteLogFlush] failed: {ex.Message}"); }
         }
 
         // ---------- Answer options ----------
@@ -609,18 +667,32 @@ namespace VaSiLi.WebCam
 
         // ---------- RTC configuration ----------
 
-        RTCConfiguration BuildRtcConfiguration() => new RTCConfiguration
+        RTCConfiguration BuildRtcConfiguration()
         {
-            iceServers = new[]
+            var servers = new List<RTCIceServer>();
+            foreach (var cfg in IceServers)
             {
-                new RTCIceServer
+                if (cfg == null)
+                    continue;
+
+                var urls = cfg.urls?.Where(u => !string.IsNullOrWhiteSpace(u)).ToArray();
+                if (urls == null || urls.Length == 0)
+                    continue;
+
+                var server = new RTCIceServer { urls = urls };
+
+                // Only set credentials for TURN servers; leaving them set for STUN can break some stacks.
+                if (!string.IsNullOrEmpty(cfg.username) && !string.IsNullOrEmpty(cfg.credential))
                 {
-                    urls       = new[] { TurnUrl },
-                    credential = TurnCredential,
-                    username   = TurnUsername
+                    server.username   = cfg.username;
+                    server.credential = cfg.credential;
                 }
+
+                servers.Add(server);
             }
-        };
+
+            return new RTCConfiguration { iceServers = servers.ToArray() };
+        }
 
         void ForwardMicAudio(float[] data, int channels, int sampleRate) =>
             _audioTrack?.SetData(data, channels, sampleRate);
@@ -658,6 +730,59 @@ namespace VaSiLi.WebCam
 
             await _publisher.PublishAsync(new ConfigureRequest { Audio = true, Video = true });
             Debug.Log("[Publisher] published");
+
+            if (logOutboundStats)
+                StartCoroutine(LogOutboundStats());
+        }
+
+        [Header("WebRTC Stats")]
+        [Tooltip("Periodically log the publisher's outbound RTP stats (and the receiver's loss/jitter " +
+                 "report) to triage audio loops/crackling. Logs under [JanusStats] so it relays to chat.")]
+        public bool logOutboundStats = false;
+        [Tooltip("How often (seconds) to sample WebRTC stats.")]
+        public float outboundStatsIntervalSeconds = 3f;
+
+        System.Collections.IEnumerator LogOutboundStats()
+        {
+            // Track deltas between samples so we report per-interval loss, not cumulative totals.
+            int lastAudioLost = 0;
+            ulong lastAudioPackets = 0;
+
+            while (_publisher != null && _publisher.PeerConnection != null)
+            {
+                yield return new WaitForSeconds(outboundStatsIntervalSeconds);
+
+                var pc = _publisher?.PeerConnection;
+                if (pc == null) yield break;
+
+                var op = pc.GetStats();
+                yield return op;
+                if (op.IsError || op.Value == null) continue;
+
+                using (var report = op.Value)
+                {
+                    foreach (var s in report.Stats.Values)
+                    {
+                        // Our send side, audio track.
+                        if (s is RTCOutboundRTPStreamStats outAudio && outAudio.kind == "audio")
+                        {
+                            ulong dPackets = outAudio.packetsSent - lastAudioPackets;
+                            lastAudioPackets = outAudio.packetsSent;
+                            Debug.Log($"[JanusStats] out-audio: +{dPackets} pkts/{outboundStatsIntervalSeconds:0}s, " +
+                                      $"retx={outAudio.retransmittedPacketsSent}, targetBitrate={outAudio.targetBitrate:0}");
+                        }
+                        // The REMOTE end's report back to us — what the receiver actually experienced.
+                        else if (s is RTCRemoteInboundRtpStreamStats remote && remote.kind == "audio")
+                        {
+                            int dLost = remote.packetsLost - lastAudioLost;
+                            lastAudioLost = remote.packetsLost;
+                            Debug.Log($"[JanusStats] remote-audio: +{dLost} lost/{outboundStatsIntervalSeconds:0}s " +
+                                      $"(total={remote.packetsLost}), fractionLost={remote.fractionLost:0.000}, " +
+                                      $"jitter={remote.jitter * 1000:0.0}ms, rtt={remote.roundTripTime * 1000:0}ms");
+                        }
+                    }
+                }
+            }
         }
 
         // ---------- Subscribing ----------

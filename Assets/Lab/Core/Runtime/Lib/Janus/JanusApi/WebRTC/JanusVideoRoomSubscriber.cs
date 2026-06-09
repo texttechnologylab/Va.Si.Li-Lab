@@ -93,6 +93,37 @@ namespace VaSiLi.Janus.WebRTC
             }
         }
 
+        static bool _loggedDecoders;
+
+        /// <summary>
+        /// Dumps the video codecs this Unity build can RECEIVE/decode. If a remote (e.g. a
+        /// browser) offers a codec/profile that isn't in this list, CreateAnswer() rejects the
+        /// video m-line (port 0) and no frames arrive — compare this against "Offer codecs".
+        /// </summary>
+        static void LogSupportedVideoDecoders()
+        {
+            if (_loggedDecoders) return;
+            _loggedDecoders = true;
+            try
+            {
+                var caps = RTCRtpReceiver.GetCapabilities(TrackKind.Video);
+                // Single line on purpose: Android logcat drops everything after the first '\n'
+                // in a message, so multi-line dumps lose their body when captured via adb.
+                var sb = new System.Text.StringBuilder("[JanusSubscriber] Supported video decoders:");
+                if (caps.codecs == null || caps.codecs.Length == 0)
+                    sb.Append(" <none>");
+                else
+                    foreach (var c in caps.codecs)
+                        sb.Append(" | ").Append(c.mimeType)
+                          .Append(string.IsNullOrEmpty(c.sdpFmtpLine) ? "" : " [" + c.sdpFmtpLine + "]");
+                Debug.Log(sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning("[JanusSubscriber] Could not query video decoder capabilities: " + ex.Message);
+            }
+        }
+
         void HandleTrack(RTCTrackEvent ev)
         {
             string mid = null;
@@ -121,15 +152,22 @@ namespace VaSiLi.Janus.WebRTC
             _activeSubscriptions.AddRange(streams);
 
             Debug.Log($"[JanusSubscriber] SubscribeAsync: joining room {room} with {streams.Count} streams (private_id={privateId})");
+            LogSupportedVideoDecoders();
             var offer = await Handle.JoinSubscriberAsync(room, streams, privateId, cancellation).ConfigureAwait(true);
-            Debug.Log("[JanusSubscriber] Offer SDP m= lines:\n" + UnityWebRtcExtensions.MLineSummary(offer.Sdp));
+            Debug.Log("[JanusSubscriber] Offer SDP m= lines: " + UnityWebRtcExtensions.MLineSummary(offer.Sdp));
+            Debug.Log("[JanusSubscriber] Offer codecs: " + UnityWebRtcExtensions.CodecSummary(offer.Sdp));
+            // Browsers offer H.264 Baseline (profile-iop "00"); the Quest decoder only advertises
+            // Constrained Baseline ("e0"). They are decode-compatible, but WebRTC's exact-string
+            // profile match would otherwise reject the video m-line. Normalize before negotiating.
+            offer.Sdp = UnityWebRtcExtensions.NormalizeH264ProfileLevelId(offer.Sdp);
             var sd = offer.ToSessionDescription();
             await PeerConnection.SetRemoteDescription(ref sd).AsTask(_runner).ConfigureAwait(true);
             _remoteCandidates.MarkReady();
             Debug.Log("[JanusSubscriber] ✓ Remote description set");
             var answerOp = PeerConnection.CreateAnswer();
             var answerDesc = await answerOp.AsTask(_runner).ConfigureAwait(true);
-            Debug.Log("[JanusSubscriber] Answer SDP m= lines:\n" + UnityWebRtcExtensions.MLineSummary(answerDesc.sdp));
+            Debug.Log("[JanusSubscriber] Answer SDP m= lines: " + UnityWebRtcExtensions.MLineSummary(answerDesc.sdp));
+            Debug.Log("[JanusSubscriber] Answer codecs: " + UnityWebRtcExtensions.CodecSummary(answerDesc.sdp));
             await PeerConnection.SetLocalDescription(ref answerDesc).AsTask(_runner).ConfigureAwait(true);
             Debug.Log("[JanusSubscriber] ✓ Local description set, sending start to Janus");
             await Handle.StartAsync(answerDesc.ToJsep(), cancellation).ConfigureAwait(true);
@@ -151,6 +189,7 @@ namespace VaSiLi.Janus.WebRTC
             if (ev?.Jsep != null && ev.Jsep.Type == "offer")
             {
                 Debug.Log("[JanusSubscriber] UpdateAsync: renegotiating SDP after update");
+                ev.Jsep.Sdp = UnityWebRtcExtensions.NormalizeH264ProfileLevelId(ev.Jsep.Sdp);
                 var sd = ev.Jsep.ToSessionDescription();
                 await PeerConnection.SetRemoteDescription(ref sd).AsTask(_runner).ConfigureAwait(true);
                 _remoteCandidates.MarkReady();

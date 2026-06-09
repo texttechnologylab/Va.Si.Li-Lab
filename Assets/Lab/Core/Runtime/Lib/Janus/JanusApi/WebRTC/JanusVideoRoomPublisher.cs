@@ -92,12 +92,12 @@ namespace VaSiLi.Janus.WebRTC
             _lastConfigure = options;
             var offerOp = PeerConnection.CreateOffer();
             var offer = await offerOp.AsTask(_runner).ConfigureAwait(true);
-            Debug.Log("[JanusPublisher] Offer SDP m= lines:\n" + UnityWebRtcExtensions.MLineSummary(offer.sdp));
+            Debug.Log("[JanusPublisher] Offer SDP m= lines: " + UnityWebRtcExtensions.MLineSummary(offer.sdp));
             await PeerConnection.SetLocalDescription(ref offer).AsTask(_runner).ConfigureAwait(true);
             Debug.Log("[JanusPublisher] ✓ Local description set, sending configure to Janus");
             var jsepOffer = offer.ToJsep();
             var jsepAnswer = await Handle.PublishAsync(jsepOffer, options, cancellation).ConfigureAwait(true);
-            Debug.Log("[JanusPublisher] Answer SDP m= lines:\n" + UnityWebRtcExtensions.MLineSummary(jsepAnswer.Sdp));
+            Debug.Log("[JanusPublisher] Answer SDP m= lines: " + UnityWebRtcExtensions.MLineSummary(jsepAnswer.Sdp));
             var answer = jsepAnswer.ToSessionDescription();
             await PeerConnection.SetRemoteDescription(ref answer).AsTask(_runner).ConfigureAwait(true);
             _remoteCandidates.MarkReady();

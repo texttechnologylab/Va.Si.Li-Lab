@@ -50,6 +50,10 @@ namespace VaSiLi.MetaAvatar
         public NativeArray<byte> dataBuffer;
         public uint dataByteCount;
 
+        // Reusable buffers so Send()/ProcessMessage() don't allocate a byte[] per network tick.
+        private byte[] _sendScratch;
+        private byte[] _recvScratch;
+
         protected void Start()
         {
             //TODO: 
@@ -103,13 +107,14 @@ namespace VaSiLi.MetaAvatar
                 rightGrip = ToNetwork(InputVar<float>.invalid)
             };
 
-            // The avatars themselves are solved via this.
-            dataByteCount = avatar.GetActiveAvatarScript().RecordStreamData_AutoBuffer(StreamLOD.Full, ref dataBuffer);
-
-            // Send it through network
+            // Record + send the avatar stream at UpdateRate, not every frame. The recorded
+            // buffer is only consumed by Send(), so recording on non-transmit frames is wasted
+            // work (and re-runs the SDK's per-frame record path). Caps avatar recording at
+            // UpdateRate once the app runs faster than it.
             if ((Time.time - lastTransmitTime) > (1f / avatar.UpdateRate))
             {
                 lastTransmitTime = Time.time;
+                dataByteCount = avatar.GetActiveAvatarScript().RecordStreamData_AutoBuffer(StreamLOD.Full, ref dataBuffer);
                 Send();
             }
 
@@ -153,9 +158,13 @@ namespace VaSiLi.MetaAvatar
             transformBytes.CopyTo(new Span<byte>(message.bytes, message.start, message.length));
             context.Send(message);
 
-            // Sending Meta Avatar stuff. 
+            // Sending Meta Avatar stuff. Copy the NativeArray into the pooled message via a
+            // reusable scratch buffer instead of allocating with ToArray() every transmit.
+            if (_sendScratch == null || _sendScratch.Length != dataBuffer.Length)
+                _sendScratch = new byte[dataBuffer.Length];
+            dataBuffer.CopyTo(_sendScratch);
             var message2 = ReferenceCountedSceneGraphMessage.Rent(dataBuffer.Length);
-            dataBuffer.ToArray().CopyTo(new Span<byte>(message2.bytes, message2.start, message2.length));
+            Array.Copy(_sendScratch, 0, message2.bytes, message2.start, message2.length);
             context.Send(message2);
         }
 
@@ -171,8 +180,12 @@ namespace VaSiLi.MetaAvatar
             }
             else if (message.length > 0)
             {
-                byte[] data = new ReadOnlySpan<byte>(message.bytes, message.start, message.length).ToArray();
-                ReceivePacketData(data, StreamLOD.Full);
+                // Reuse an exact-length buffer (avatar stream size is stable per LOD, so this
+                // reallocates only when the size actually changes) instead of ToArray() per packet.
+                if (_recvScratch == null || _recvScratch.Length != message.length)
+                    _recvScratch = new byte[message.length];
+                Array.Copy(message.bytes, message.start, _recvScratch, 0, message.length);
+                ReceivePacketData(_recvScratch, StreamLOD.Full);
             }
         }
 

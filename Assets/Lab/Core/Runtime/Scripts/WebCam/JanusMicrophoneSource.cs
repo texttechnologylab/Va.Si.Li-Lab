@@ -33,6 +33,16 @@ namespace VaSiLi.WebCam
         string _device;
         int _outputSampleRate;
 
+        // --- capture-cadence triage (audio thread writes, main thread reads/logs) ---
+        long _cbCount;            // OnAudioFilterRead invocations since last report
+        long _sampleCount;        // PCM frames seen since last report
+        double _lastCbDspTime;    // AudioSettings.dspTime of previous callback
+        double _maxGapSeconds;    // largest inter-callback gap since last report
+        int _lastInputChannels;   // channels Unity delivered to the filter
+        int _lastSentChannels;    // channels we actually forwarded to WebRTC (1 after downmix)
+        int _lastBufferLen;
+        float[] _monoBuffer;      // reused downmix scratch (audio thread only)
+
         void Awake()
         {
             AudioSource = GetComponent<AudioSource>();
@@ -42,6 +52,16 @@ namespace VaSiLi.WebCam
             AudioSource.playOnAwake = false;
             _outputSampleRate = AudioSettings.outputSampleRate;
             AudioSettings.OnAudioConfigurationChanged += OnAudioConfigChanged;
+
+            // One-time: surface the three rates that must agree for clean Opus encoding.
+            // If outputSampleRate != 48000, the PCM we tag for WebRTC is mis-rated -> stutter.
+            var cfg = AudioSettings.GetConfiguration();
+            Debug.Log($"[JanusMic] Audio config: outputSampleRate={AudioSettings.outputSampleRate} " +
+                      $"dspBufferSize={cfg.dspBufferSize} speakerMode={cfg.speakerMode} " +
+                      $"(reporting {_outputSampleRate} Hz to WebRTC)");
+            if (_outputSampleRate != 48000)
+                Debug.LogWarning($"[JanusMic] outputSampleRate is {_outputSampleRate} Hz, not 48000 — " +
+                                 "Opus expects 48 kHz; mismatch causes send-side stutter. Set Project Audio sample rate to 48000.");
         }
 
         void OnDestroy()
@@ -101,6 +121,19 @@ namespace VaSiLi.WebCam
 
         void OnAudioFilterRead(float[] data, int channels)
         {
+            // --- cadence triage: measure callback interval/jitter (audio thread) ---
+            double now = AudioSettings.dspTime;
+            if (_lastCbDspTime > 0)
+            {
+                double gap = now - _lastCbDspTime;
+                if (gap > _maxGapSeconds) _maxGapSeconds = gap;
+            }
+            _lastCbDspTime = now;
+            _cbCount++;
+            _sampleCount += channels > 0 ? data.Length / channels : data.Length;
+            _lastInputChannels = channels;
+            _lastBufferLen = data.Length;
+
             if (gain != 1f)
             {
                 float g = gain;
@@ -110,8 +143,58 @@ namespace VaSiLi.WebCam
                     data[i] = s > 1f ? 1f : s < -1f ? -1f : s;
                 }
             }
-            OnAudioRead?.Invoke(data, channels, _outputSampleRate);
+
+            // Downmix to mono before handing PCM to WebRTC. Unity delivers this buffer at the
+            // output channel count (stereo on Quest), but a mic is mono — sending stereo just
+            // doubles the data and risks channel-framing artifacts in the Opus path. We average
+            // the channels into a reusable mono buffer and report ch=1.
+            if (channels > 1)
+            {
+                int frames = data.Length / channels;
+                if (_monoBuffer == null || _monoBuffer.Length < frames)
+                    _monoBuffer = new float[frames];
+                for (int f = 0; f < frames; f++)
+                {
+                    float sum = 0f;
+                    int baseIdx = f * channels;
+                    for (int c = 0; c < channels; c++) sum += data[baseIdx + c];
+                    _monoBuffer[f] = sum / channels;
+                }
+                OnAudioRead?.Invoke(_monoBuffer, 1, _outputSampleRate);
+                _lastSentChannels = 1;
+            }
+            else
+            {
+                OnAudioRead?.Invoke(data, channels, _outputSampleRate);
+                _lastSentChannels = channels;
+            }
+
             Array.Clear(data, 0, data.Length); // silence local speaker — WebRTC already captured the signal
+        }
+
+        float _nextReportTime;
+
+        void Update()
+        {
+            // Report capture cadence ~every 2 s from the main thread. A steady stream at the
+            // output rate should show samples/s ≈ outputSampleRate and a small max gap
+            // (≈ dspBufferSize / rate). A large maxGap or samples/s far from the rate means the
+            // audio thread is starving/irregular — the cause of send-side stutter.
+            if (Time.unscaledTime < _nextReportTime) return;
+            const float Interval = 2f;
+            _nextReportTime = Time.unscaledTime + Interval;
+
+            long cb = System.Threading.Interlocked.Exchange(ref _cbCount, 0);
+            long samples = System.Threading.Interlocked.Exchange(ref _sampleCount, 0);
+            double maxGapMs = _maxGapSeconds * 1000.0;
+            _maxGapSeconds = 0;
+            if (cb == 0) return; // not capturing yet
+
+            double samplesPerSec = samples / Interval;
+            double drift = _outputSampleRate > 0 ? samplesPerSec / _outputSampleRate : 0;
+            Debug.Log($"[JanusMic] capture: {cb} cb/{Interval:0}s, {samplesPerSec:0} samp/s " +
+                      $"(rate={_outputSampleRate}, ratio={drift:0.00}), ch={_lastInputChannels}->{_lastSentChannels}, " +
+                      $"buf={_lastBufferLen}, maxGap={maxGapMs:0.0}ms");
         }
 
         void OnDisable()

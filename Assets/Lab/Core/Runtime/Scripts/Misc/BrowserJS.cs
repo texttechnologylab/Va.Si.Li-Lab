@@ -6,7 +6,6 @@ public class BrowserJS : MonoBehaviour
 {
     [SerializeField]
     private TLab.WebView.WebView browser;
-    private int resultId = 0;
 
     private bool nativeSetupDone = false;
     private bool firstLoadStarted = false;
@@ -107,32 +106,21 @@ public class BrowserJS : MonoBehaviour
 
     private void OnBrowserReady()
     {
-        resultId++;
-        string jsCode = $@"
-            if (!window.__vasiliListenerInstalled) {{
+        // Install the JS message listener once. This is fire-and-forget — we never read a
+        // result back — so use EvaluateJS, not EvaluateJSForResult. The latter spins a
+        // coroutine that polls GetAsyncResult() over JNI every frame (allocating a string
+        // each time) until a result arrives, costing ~3 ms/frame of GC for a value we ignore.
+        const string jsCode = @"
+            if (!window.__vasiliListenerInstalled) {
                 window.__vasiliListenerInstalled = true;
-                window.addEventListener('message', function(event) {{
-                    if (event.data && event.data.event === 'label_listing' && event.data.data) {{
+                window.addEventListener('message', function(event) {
+                    if (event.data && event.data.event === 'label_listing' && event.data.data) {
                         tlab.unitySendMessage('WebViewReceiver', 'OnJsResult', JSON.stringify(event.data.data));
-                    }}
-                }});
-            }}
-            tlab.postResult('resultId{resultId}', 1);
-        ";
-        StartCoroutine(LogJSResult("resultId" + resultId, jsCode));
-    }
-
-    private IEnumerator LogJSResult(string varName, string jsCode)
-    {
-        var enumerable = browser.EvaluateJSForResult(varName, jsCode);
-        foreach (var result in enumerable)
-        {
-            if (result == null)
-            {
-                yield return null;
-                continue;
+                    }
+                });
             }
-        }
+        ";
+        browser.EvaluateJS(jsCode);
     }
 
     public IEnumerator ExecuteJS(string jsCode)
