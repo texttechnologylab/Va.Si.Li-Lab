@@ -75,8 +75,8 @@ namespace VaSiLi.WebCam
         [Tooltip("If set, the client attaches a textroom plugin handle and joins the same room id.")]
         public bool enableChat = false;
         public string chatUsername = "";
-        [Tooltip("TMP_Text where incoming/outgoing messages are appended.")]
-        public TMP_Text chatMessages;
+        [Tooltip("ScrollRect that wraps the chat content. The TMP_Text must be on the ScrollRect's content child.")]
+        public ScrollRect chatScrollRect;
         public TMP_InputField chatInput;
         public Button chatSendButton;
         public int chatMaxLines = 50;
@@ -100,6 +100,25 @@ namespace VaSiLi.WebCam
         [Header("Answer Options (optional)")]
         [Tooltip("If set, the client listens for OnAnswerOptionsReceived and forwards them over the textroom data channel.")]
         public WebViewReceiver answerOptionsSource;
+
+        [Header("Answer-Option Ack Pill (Interviewer)")]
+        [Tooltip("Root of the header chip; shown only once at least one batch has been sent.")]
+        public GameObject ackPill;
+        [Tooltip("Background graphic of the pill. Turns orange if any batch ever failed to be acked.")]
+        public Graphic ackPillBackground;
+        [Tooltip("Status icon. Reflects the MOST RECENT batch (check / warn / spinner).")]
+        public Image ackIcon;
+        [Tooltip("Label showing acked/total, e.g. \"2/3\".")]
+        public TMP_Text ackCountLabel;
+        public Sprite ackCheckSprite;
+        public Sprite ackWarnSprite;
+        public Sprite ackSpinnerSprite;
+        [Tooltip("How long (seconds) to wait for an ack before marking a batch failed.")]
+        public float ackTimeoutSeconds = 5f;
+        public Color ackGreen = new Color(0.30f, 0.78f, 0.31f);
+        public Color ackGrey = new Color(0.62f, 0.62f, 0.62f);
+        public Color ackNeutralGrey = new Color(0.20f, 0.20f, 0.20f);
+        public Color ackOrange = new Color(0.95f, 0.55f, 0.10f);
 
         [Header("Gaze Overlay (Interviewer)")]
         [Tooltip("Button that toggles the gaze calibration overlay on the remote side.")]
@@ -168,6 +187,8 @@ namespace VaSiLi.WebCam
         bool _chatOpen;
         int _unreadCount;
         string[] _pendingAnswerOptions;
+        string[] _lastAnswerOptions;
+        readonly AckTracker _ackTracker = new AckTracker();
         bool _gazeOverlayOn;
         readonly List<string> _pendingLogLines = new List<string>();
         bool _buttonsWired;
@@ -191,9 +212,18 @@ namespace VaSiLi.WebCam
         {
             StartCoroutine(WebRTC.Update());
 
+            _ackTracker.Changed += OnAckEntriesChanged;
+            if (ackPill != null) ackPill.SetActive(false);
+
             // Apply room ID from the token manager if available.
             if (InterviewTokenManager.Instance != null && InterviewTokenManager.Instance.RoomId != 0)
                 Room = InterviewTokenManager.Instance.RoomId;
+        }
+
+        void Update()
+        {
+            // Drives the ack timeout — the Unity-idiomatic replacement for setTimeout (no threads).
+            _ackTracker.Tick((long)(ackTimeoutSeconds * 1000));
         }
 
 
@@ -321,7 +351,15 @@ namespace VaSiLi.WebCam
             _chat.ConnectionStateChanged += s => Debug.Log("[TextRoom] PC: " + s);
             _chat.MessageReceived        += OnChatMessage;
             _chat.Announcement           += (_, text) => AppendChatLine($"<i>{text}</i>");
-            _chat.ParticipantJoined      += (_, p) => AppendChatLine($"<i>{p.Display ?? p.Username} joined</i>");
+            _chat.ParticipantJoined      += (_, p) =>
+            {
+                AppendChatLine($"<i>{p.Display ?? p.Username} joined</i>");
+                // Push-on-join: re-send the current answer categories as a fresh tracked batch
+                // (new msgId → fresh ack) so a participant who joined or reloaded gets the
+                // current options and the interviewer gets fresh confirmation.
+                if (_lastAnswerOptions != null && _lastAnswerOptions.Length > 0)
+                    SendAnswerOptions(_lastAnswerOptions);
+            };
             _chat.ParticipantLeft        += (_, p) => AppendChatLine($"<i>{p.Display ?? p.Username} left</i>");
             _chat.Ready += async (_, __) =>
             {
@@ -404,6 +442,16 @@ namespace VaSiLi.WebCam
                             var ao = JsonConvert.DeserializeObject<AnswerOptionsPayload>(e.Text);
                             if (answerOptionsSource != null && ao?.data != null)
                                 answerOptionsSource.DisplayOptions(ao.data);
+                            // Interviewee acknowledges the batch right after rendering, so the
+                            // interviewer's pill can confirm receipt. Skip if no msgId (older sender).
+                            if (!string.IsNullOrEmpty(ao?.msgId))
+                                _ = SendAckAsync(ao.msgId);
+                            return;
+
+                        case "ack":
+                            // Interviewer side: correlate the interviewee's ack to a tracked batch.
+                            var ack = JsonConvert.DeserializeObject<AckPayload>(e.Text);
+                            if (ack != null) _ackTracker.Ack(ack.ackOf);
                             return;
 
                         case "gaze_overlay":
@@ -440,13 +488,27 @@ namespace VaSiLi.WebCam
             AppendChatLine($"<b>{e.Display ?? e.From}:</b> {e.Text}");
         }
 
+        TMP_Text _chatText; // cached reference to the TMP_Text inside the ScrollRect content
+
         void AppendChatLine(string line)
         {
-            if (chatMessages == null) return;
-            chatMessages.text += line + "\n";
-            var lines = chatMessages.text.Split('\n');
+            if (chatScrollRect == null || chatScrollRect.content == null) return;
+            
+            // Handle both cases: TMP_Text on the Content object itself or as a child.
+            if (_chatText == null)
+                _chatText = chatScrollRect.content.GetComponentInChildren<TMP_Text>();
+            if (_chatText == null) return;
+
+            _chatText.text += line + "\n";
+            var lines = _chatText.text.Split('\n');
             if (lines.Length > chatMaxLines)
-                chatMessages.text = string.Join("\n", lines, lines.Length - chatMaxLines, chatMaxLines);
+                _chatText.text = string.Join("\n", lines, lines.Length - chatMaxLines, chatMaxLines);
+
+            // Force layout rebuild so the ContentSizeFitter updates the height immediately.
+            LayoutRebuilder.ForceRebuildLayoutImmediate(chatScrollRect.content);
+            
+            // Stay grounded: move scroll to the bottom (0 is bottom in a standard vertical ScrollRect).
+            chatScrollRect.verticalNormalizedPosition = 0f;
         }
 
         /// <summary>Call when the chat panel is opened or closed to manage the unread badge.</summary>
@@ -647,9 +709,24 @@ namespace VaSiLi.WebCam
         public void SendAnswerOptions(string[] options)
         {
             if (options == null || options.Length == 0) return;
+            // Remember the latest batch so we can re-send (with a fresh msgId) to participants
+            // who join or reload after the original send. See push-on-join below.
+            _lastAnswerOptions = options;
             if (_chat == null || !_chatReady) { _pendingAnswerOptions = options; return; }
-            var payload = JsonConvert.SerializeObject(new AnswerOptionsPayload { data = options });
+
+            var meta = new Dictionary<string, object> { { "count", options.Length } };
+            var msgId = _ackTracker.Track(meta);
+            var payload = JsonConvert.SerializeObject(new AnswerOptionsPayload { msgId = msgId, data = options });
             _ = SendStructuredAsync(payload);
+        }
+
+        /// <summary>Interviewee → interviewer confirmation that a batch was received and rendered.</summary>
+        Task SendAckAsync(string ackOf)
+        {
+            if (_chat == null || !_chatReady) return Task.CompletedTask;
+            var payload = JsonConvert.SerializeObject(new AckPayload { ackOf = ackOf },
+                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            return SendStructuredAsync(payload);
         }
 
         async Task SendStructuredAsync(string payload)
@@ -658,10 +735,48 @@ namespace VaSiLi.WebCam
             catch (Exception ex) { Debug.LogError($"[TextRoom] send failed: {ex.Message}"); }
         }
 
+        // ---------- Answer-option ack pill (Interviewer) ----------
+
+        void OnAckEntriesChanged(IReadOnlyList<AckEntry> entries)
+        {
+            if (ackPill != null) ackPill.SetActive(entries.Count > 0);
+            if (entries.Count == 0) return;
+
+            var latest = entries[entries.Count - 1];
+            bool hadFailure = entries.Any(e => e.Status == AckStatus.Failed);
+            int acked = entries.Count(e => e.Status == AckStatus.Acked);
+
+            // ICON = status of the MOST RECENT batch, so the newest send is always readable.
+            if (ackIcon != null)
+            {
+                ackIcon.sprite = latest.Status switch
+                {
+                    AckStatus.Acked  => ackCheckSprite,
+                    AckStatus.Failed => ackWarnSprite,
+                    _                => ackSpinnerSprite,
+                };
+
+                // On the orange pill keep the icon white for legibility; otherwise colour by
+                // the latest status. Decoupled from the pill background on purpose.
+                ackIcon.color = hadFailure ? Color.white
+                              : latest.Status == AckStatus.Acked ? ackGreen
+                              : ackGrey;
+            }
+
+            // PILL background = orange if ANY batch EVER failed (persistent error signal),
+            // independent of the icon, so one old failure can't be masked by a newer success.
+            if (ackPillBackground != null)
+                ackPillBackground.color = hadFailure ? ackOrange : ackNeutralGrey;
+
+            if (ackCountLabel != null)
+                ackCountLabel.text = $"{acked}/{entries.Count}";
+        }
+
         // ---------- Payload types ----------
 
         [Serializable] class KindProbe        { public string kind; }
-        [Serializable] class AnswerOptionsPayload { public string kind = "answer_options"; public string[] data; }
+        [Serializable] class AnswerOptionsPayload { public string kind = "answer_options"; public string msgId; public string[] data; }
+        [Serializable] class AckPayload           { public string kind = "ack"; public string ackOf; public string status = "received"; }
         [Serializable] class GazeOverlayPayload   { public string kind = "gaze_overlay";   public bool show; public string textTopLeft; public string textBottomRight; }
         [Serializable] class FollowupPayload       { public string kind = "followup_survey"; public string url; }
 

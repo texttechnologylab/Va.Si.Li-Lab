@@ -52,8 +52,11 @@ public class MetaRegister : MonoBehaviour
         {
             Debug.Log("Eye-tracked foveated rendering is not supported.");
         }
-        OVRPlugin.systemDisplayFrequency = 90.0f;
+        OVRPlugin.suggestedCpuPerfLevel = OVRPlugin.ProcessorPerformanceLevel.SustainedHigh;
+        Debug.Log("Suggested CPU Performance Level: " + OVRPlugin.suggestedCpuPerfLevel);
+        OVRPlugin.systemDisplayFrequency = 72.0f;
         OVRPlugin.foveatedRenderingLevel = OVRPlugin.FoveatedRenderingLevel.High;
+        
         //OVRManager.SetSpaceWarp(true);
     }
 

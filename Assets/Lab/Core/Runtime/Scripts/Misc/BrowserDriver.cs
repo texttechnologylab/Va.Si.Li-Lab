@@ -24,6 +24,12 @@ public class BrowserDriver : MonoBehaviour
              "SetFps value (e.g. 10). Lower = cheaper. Does not affect input/event responsiveness.")]
     [SerializeField] private float frameUpdateFps = 10f;
 
+    [Tooltip("Optional OVROverlayCanvas displaying this browser. If set, it is marked dirty after " +
+             "each web-frame pull so it re-renders only when the content actually changes. The " +
+             "canvas should have Manual Redraw enabled — otherwise it ignores this and keeps " +
+             "rendering every frame (see OVROverlayCanvas.ShouldRender).")]
+    [SerializeField] private OVROverlayCanvas m_overlayCanvas;
+
     private float _nextFrameTime;
 
     void Awake()
@@ -60,6 +66,11 @@ public class BrowserDriver : MonoBehaviour
         {
             _nextFrameTime = Time.time + 1f / Mathf.Max(1f, frameUpdateFps);
             browser.UpdateFrame();
+
+            // Tell the overlay a new frame landed so it re-renders the quad at content rate
+            // (~frameUpdateFps) instead of every app frame. Only effective with Manual Redraw on.
+            if (m_overlayCanvas != null)
+                m_overlayCanvas.SetFrameDirty();
         }
     }
 }

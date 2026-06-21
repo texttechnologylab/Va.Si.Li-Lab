@@ -20,7 +20,7 @@ TagManager:
   - whatIsGround
   - GraspedObject
   - Player
-  - 
+  - IgnoreMirror
   - 
   - 
   - 

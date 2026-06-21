@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.meta.xr.runtimeoptimizer": {
-      "version": "0.2.2",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
     "com.meta.xr.sdk.avatars": {
       "version": "40.0.1",
       "depth": 0,
@@ -29,7 +22,7 @@
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.core": {
-      "version": "201.0.0",
+      "version": "203.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -44,16 +37,16 @@
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.haptics": {
-      "version": "201.0.0",
+      "version": "203.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.meta.xr.sdk.core": "201.0.0"
+        "com.meta.xr.sdk.core": "203.0.0"
       },
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.interaction": {
-      "version": "201.0.0",
+      "version": "203.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -63,12 +56,12 @@
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.interaction.ovr": {
-      "version": "201.0.0",
+      "version": "203.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.meta.xr.sdk.core": "201.0.0",
-        "com.meta.xr.sdk.interaction": "201.0.0"
+        "com.meta.xr.sdk.core": "203.0.0",
+        "com.meta.xr.sdk.interaction": "203.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -84,12 +77,13 @@
       "hash": "2d2fe7d8ce451e69be0599eee2f597b5935f8e04"
     },
     "com.meta.xr.sdk.platform": {
-      "version": "201.0.0",
+      "version": "203.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
-        "com.unity.inputsystem": "1.7.0"
+        "com.unity.inputsystem": "1.7.0",
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
       "url": "https://packages.unity.com"
     },
@@ -236,6 +230,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.performance.profile-analyzer": {
       "version": "1.2.4",
       "depth": 0,
@@ -244,10 +245,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.postprocessing": {
-      "version": "3.5.0",
+      "version": "3.5.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
+        "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.physics": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -465,11 +467,10 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.management": {
-      "version": "4.5.1",
+      "version": "4.5.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.modules.vr": "1.0.0",
         "com.unity.modules.xr": "1.0.0",
         "com.unity.xr.core-utils": "2.2.1",
         "com.unity.modules.subsystems": "1.0.0",

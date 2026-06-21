@@ -114,7 +114,10 @@ namespace VaSiLi.MetaAvatar
             if ((Time.time - lastTransmitTime) > (1f / avatar.UpdateRate))
             {
                 lastTransmitTime = Time.time;
-                dataByteCount = avatar.GetActiveAvatarScript().RecordStreamData_AutoBuffer(StreamLOD.Full, ref dataBuffer);
+                // Medium LOD is cheaper to record (CPU) and produces smaller packets than Full,
+                // and is visually indistinguishable for a networked remote representation. Full
+                // detail isn't perceptible on another participant's avatar at interaction distance.
+                dataByteCount = avatar.GetActiveAvatarScript().RecordStreamData_AutoBuffer(StreamLOD.Medium, ref dataBuffer);
                 Send();
             }
 
