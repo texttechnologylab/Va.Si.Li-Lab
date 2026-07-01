@@ -64,47 +64,21 @@ public class WebViewReceiver : MonoBehaviour
     private void SetText(string[] text)
     {
         Clear();
-        
-        // Filter out unwanted entries and check for blocking patterns
-        var filteredEntries = new System.Collections.Generic.List<string>();
-        
-        foreach (string textEntry in text)
+
+        // Filtering is shared with the interviewer side (and ported from the web
+        // frontend) via AnswerOptionFilter, so the Quest renders exactly what the
+        // website would. A null result means the batch resolves to "no concrete
+        // options" (a block term matched, or too many non-scale entries) — the
+        // free-answer case, where nothing is displayed.
+        var filteredEntries = VaSiLi.WebCam.AnswerOptionFilter.Filter(text);
+        if (filteredEntries == null)
         {
-            if (string.IsNullOrWhiteSpace(textEntry))
-            {
-                continue;
-            }
-            
-            // Check for blocking patterns - if any are found, don't display anything
-            if (textEntry.Contains("ZP gibt", System.StringComparison.OrdinalIgnoreCase) ||
-                textEntry.Contains("Interviewer", System.StringComparison.OrdinalIgnoreCase) ||
-                textEntry.Contains("ledig", System.StringComparison.OrdinalIgnoreCase) ||
-                textEntry.Contains("ja", System.StringComparison.OrdinalIgnoreCase) || 
-                textEntry.Contains("stunden", System.StringComparison.OrdinalIgnoreCase))
-            {
-                Debug.Log($"Blocked pattern found in: {textEntry}");
-                return; // Exit without displaying anything
-            }
-            
-            // Skip unwanted entries
-            if (textEntry.Contains("weiß nicht", System.StringComparison.OrdinalIgnoreCase) ||
-                textEntry.Contains("undefined", System.StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-            
-            filteredEntries.Add(textEntry);
-        }
-        
-        // Don't display if more than 6 options (excluding numeric scales)
-        if (filteredEntries.Count > 6 && !IsNumericScale(filteredEntries))
-        {
-            Debug.Log($"Too many options ({filteredEntries.Count}), not displaying.");
+            Debug.Log("Answer options filtered out (free-answer / blocked) — not displaying.");
             return;
         }
-        
+
         // Check if this is a 0-10 numeric scale
-        if (IsNumericScale(filteredEntries) && filteredEntries.Count == 11)
+        if (VaSiLi.WebCam.AnswerOptionFilter.IsNumericScale(filteredEntries) && filteredEntries.Count == 11)
         {
             DisplayNumericScale(filteredEntries);
         }
@@ -113,24 +87,7 @@ public class WebViewReceiver : MonoBehaviour
             DisplayNormalList(filteredEntries);
         }
     }
-    
-    private bool IsNumericScale(System.Collections.Generic.List<string> entries)
-    {
-        // Check if entries follow a 0-10 pattern
-        if (entries.Count != 11) return false;
-        
-        for (int i = 0; i < entries.Count; i++)
-        {
-            // Check if the entry starts with the number matching its index
-            if (!entries[i].TrimStart().StartsWith(i.ToString()))
-            {
-                return false;
-            }
-        }
-        
-        return true;
-    }
-    
+
     private void DisplayNumericScale(System.Collections.Generic.List<string> entries)
     {
         // For 0-10 scale, display in a compact format:

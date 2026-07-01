@@ -1,4 +1,3 @@
-using Oculus.Avatar2;
 using Oculus.Platform;
 using Oculus.Platform.Models;
 using UnityEngine;
@@ -9,27 +8,49 @@ public class MetaRegister : MonoBehaviour
     void Start()
     {
         //Oculus.Platform.Core.LogMessages = true;
-        OvrPlatformInit.InitializeOvrPlatform();
-        //OvrAvatarLog.logLevel = 0;
-        Debug.Log("Status: " + OvrPlatformInit.status);
-        Debug.Log("Valid Token: " + OvrAvatarEntitlement.AccessTokenIsValid());
-        Entitlements.IsUserEntitledToApplication().OnComplete(callbackMethod);
-        
-        void callbackMethod(Message msg)
+
+        // Core.AsyncInitialize() is asynchronous: it returns immediately and the
+        // platform is NOT ready yet. Every platform call (entitlement check,
+        // GetLoggedInUser, access token) must happen AFTER init completes, otherwise
+        // you get "This function requires an initialized Oculus Platform" followed by
+        // a NullReferenceException. So gate all of it behind the init callback.
+        try
         {
-            if (!msg.IsError)
+            Core.AsyncInitialize().OnComplete(OnPlatformInitialized);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Failed to start Oculus Platform initialization: " + e.Message);
+        }
+
+        ConfigurePerformance();
+    }
+
+    private void OnPlatformInitialized(Message<PlatformInitialize> msg)
+    {
+        if (msg.IsError || msg.Data.Result != PlatformInitializeResult.Success)
+        {
+            var reason = msg.IsError ? msg.GetError().Message : msg.Data.Result.ToString();
+            Debug.LogError("Oculus Platform failed to initialize: " + reason);
+            return;
+        }
+
+        Debug.Log("Oculus Platform initialized.");
+
+        Entitlements.IsUserEntitledToApplication().OnComplete(entitlementMsg =>
+        {
+            if (!entitlementMsg.IsError)
             {
                 Debug.Log("User is entitled to the application.");
-
             }
             else
             {
-                Debug.LogError("User is not entitled to the application: " + msg.GetError().Message);
+                Debug.LogError("User is not entitled to the application: " + entitlementMsg.GetError().Message);
             }
-        }
-        Users.GetLoggedInUser().OnComplete(callback: (Message<User> msg) =>
+        });
+
+        Users.GetLoggedInUser().OnComplete((Message<User> msg) =>
         {
-            Debug.Log("Valid Token: " + OvrAvatarEntitlement.AccessTokenIsValid());
             if (msg.IsError)
             {
                 Debug.LogError("Failed to get logged in user: " + msg.GetError().Message);
@@ -42,6 +63,10 @@ public class MetaRegister : MonoBehaviour
                 // You can store the user information if needed
             }
         });
+    }
+
+    private void ConfigurePerformance()
+    {
         if (OVRManager.eyeTrackedFoveatedRenderingSupported)
         {
             Debug.Log("Eye-tracked foveated rendering is supported and enabled.");

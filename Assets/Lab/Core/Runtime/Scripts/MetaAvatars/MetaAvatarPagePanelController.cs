@@ -22,8 +22,8 @@ namespace VaSiLi.MetaAvatar
 
         private PagePanel pagePanel;
         private NetworkScene networkScene;
-        private ulong[] avatarIds = new ulong[] { 25114505871472498, 25076688645296872, 31996848129930621, 25729338716652792 };
-        
+        private ulong[] avatarIds = new ulong[] { 25114505871472498, 25076688645296872, 31996848129930621, 25729338716652792, 27541906932101271, 26336333412710360 };
+
         // Shuffled indices for randomized display order
         private List<int> shuffledIndices;
 

@@ -16,9 +16,16 @@ namespace VaSiLi.MetaAvatar
     public class LocalSampleAvatarEntity : SampleAvatarEntity
     {
 
+        [Header("Expression Exaggeration")]
+        [Tooltip("Multiplier applied to the tracked face blendshape weights. 1 = no change, " +
+                 "higher values exaggerate facial expressions.")]
+        [Range(1f, 3f)]
+        [SerializeField] private float _expressionMultiplier = 1.3f;
+
         private RoomClient roomClient;
         //private DesktopPlayerController desktoplayer;
         private TrackedMetaAvatar tracker;
+        private ExaggeratedFacePoseBehavior _exaggeratedFaceBehavior;
         private static List<XRInputSubsystem> tmpSubsystems = new List<XRInputSubsystem>();
 
         protected override IEnumerator Start()
@@ -43,7 +50,9 @@ namespace VaSiLi.MetaAvatar
                 }
 
                 SetEyePoseProvider(metamanager.GetComponent<OvrAvatarEyeTrackingBehaviorOvrPlugin>());
-                SetFacePoseProvider(metamanager.GetComponent<OvrAvatarFaceTrackingBehaviorOvrPlugin>());
+
+                var faceTracking = metamanager.GetComponent<OvrAvatarFaceTrackingBehaviorOvrPlugin>();
+                SetFacePoseProvider(WrapWithExaggeration(faceTracking));
                 //SetLipSync(player.GetComponent<OvrAvatarLipSyncBehavior>());
             }
 
@@ -105,6 +114,43 @@ namespace VaSiLi.MetaAvatar
         {
             SubsystemManager.GetSubsystems<XRInputSubsystem>(tmpSubsystems);
             return tmpSubsystems.Count < 1;
+        }
+
+        /// <summary>
+        /// Wraps the live face tracking behavior with an <see cref="ExaggeratedFacePoseBehavior"/>
+        /// that multiplies the tracked blendshape weights to exaggerate facial expressions.
+        /// Falls back to the original tracking behavior if no source provider is available.
+        /// </summary>
+        private OvrAvatarFacePoseBehavior WrapWithExaggeration(OvrAvatarFacePoseBehavior source)
+        {
+            if (source == null || _expressionMultiplier <= 1f)
+            {
+                return source;
+            }
+
+            _exaggeratedFaceBehavior = gameObject.AddComponent<ExaggeratedFacePoseBehavior>();
+            if (_exaggeratedFaceBehavior.Initialize(source, _expressionMultiplier))
+            {
+                return _exaggeratedFaceBehavior;
+            }
+
+            // Source provider not ready (e.g. face tracking unavailable on this platform);
+            // use the original behavior so tracking still works without exaggeration.
+            Destroy(_exaggeratedFaceBehavior);
+            _exaggeratedFaceBehavior = null;
+            return source;
+        }
+
+        /// <summary>
+        /// Adjusts the facial-expression exaggeration multiplier at runtime.
+        /// </summary>
+        public void SetExpressionMultiplier(float multiplier)
+        {
+            _expressionMultiplier = multiplier;
+            if (_exaggeratedFaceBehavior != null)
+            {
+                _exaggeratedFaceBehavior.SetExpressionMultiplier(multiplier);
+            }
         }
 
         public void UpdateTexture(int id)

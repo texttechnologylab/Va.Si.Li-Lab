@@ -253,6 +253,7 @@ namespace VaSiLi.WebCam
             {
                 Application.logMessageReceived -= BufferLogMessage;
                 CancelInvoke(nameof(FlushRemoteLogs));
+                CancelInvoke(nameof(BroadcastRecordingState));
                 if (answerOptionsSource != null && answerOptionsSource.OnAnswerOptionsReceived != null)
                     answerOptionsSource.OnAnswerOptionsReceived.RemoveListener(SendAnswerOptions);
 
@@ -356,9 +357,14 @@ namespace VaSiLi.WebCam
                 AppendChatLine($"<i>{p.Display ?? p.Username} joined</i>");
                 // Push-on-join: re-send the current answer categories as a fresh tracked batch
                 // (new msgId → fresh ack) so a participant who joined or reloaded gets the
-                // current options and the interviewer gets fresh confirmation.
+                // current options and the interviewer gets fresh confirmation. silentLocal: the
+                // interviewer already saw the batch echoed on the original send; a rejoin re-pushes
+                // for the participant but shouldn't add a duplicate notice to the interviewer's chat.
                 if (_lastAnswerOptions != null && _lastAnswerOptions.Length > 0)
-                    SendAnswerOptions(_lastAnswerOptions);
+                    SendAnswerOptions(_lastAnswerOptions, silentLocal: true);
+                // Catch a (re)joining participant up on the current recording state so their REC
+                // indicator is correct even if they reloaded mid-recording.
+                BroadcastRecordingState();
             };
             _chat.ParticipantLeft        += (_, p) => AppendChatLine($"<i>{p.Display ?? p.Username} left</i>");
             _chat.Ready += async (_, __) =>
@@ -382,6 +388,11 @@ namespace VaSiLi.WebCam
                         SendAnswerOptions(_pendingAnswerOptions);
                         _pendingAnswerOptions = null;
                     }
+                    // Re-announce recording state whenever our textroom channel (re)connects, and
+                    // (re)start the heartbeat if we're already recording, so participants converge
+                    // on the correct REC indicator after a reconnect.
+                    BroadcastRecordingState();
+                    UpdateRecordingHeartbeat(_publisherHandle != null && (_publisherHandle.IsRecording ?? false));
                     if (enableRemoteLogs)
                         StartRemoteLogs();
                 }
@@ -490,25 +501,112 @@ namespace VaSiLi.WebCam
 
         TMP_Text _chatText; // cached reference to the TMP_Text inside the ScrollRect content
 
+        /// <summary>
+        /// One rendered block in the chat. Most are plain text (<see cref="AckId"/> null).
+        /// An answer-option notice carries the batch's msgId so its status (and therefore
+        /// the text it renders) can be flipped in place when the interviewee's ack arrives
+        /// or the batch times out — the Unity equivalent of the website's per-msgId DOM node.
+        /// </summary>
+        sealed class ChatBlock
+        {
+            public string AckId;             // null for plain chat lines
+            public string[] OptionLines;     // the echoed option lines (answer-option notices only)
+            public AckStatus Status;         // current ack state (answer-option notices only)
+        }
+
+        readonly List<ChatBlock> _chatBlocks = new List<ChatBlock>();
+
         void AppendChatLine(string line)
         {
+            _chatBlocks.Add(new ChatBlock { OptionLines = new[] { line } });
+            RenderChat();
+        }
+
+        /// <summary>
+        /// Echo the answer options the interviewer just sent into their OWN chat as a notice
+        /// block (local-only — never transmitted). Starts in the Pending state and is flipped
+        /// to Acked/Failed by <see cref="UpdateAnswerOptionsNotice"/>, keyed by msgId. Mirrors
+        /// the website's appendLocalAnswerOptions so the interviewer keeps a running record of
+        /// what was shown and whether the participant confirmed it.
+        /// </summary>
+        void AppendAnswerOptionsNotice(string msgId, string[] optionLines)
+        {
+            if (string.IsNullOrEmpty(msgId) || optionLines == null || optionLines.Length == 0) return;
+            _chatBlocks.Add(new ChatBlock { AckId = msgId, OptionLines = optionLines, Status = AckStatus.Pending });
+            RenderChat();
+        }
+
+        /// <summary>Flip a previously-appended answer-option notice to reflect the ack status.
+        /// No-op if there is no local notice for this msgId (e.g. a silent push-on-join re-send).</summary>
+        void UpdateAnswerOptionsNotice(string msgId, AckStatus status)
+        {
+            if (string.IsNullOrEmpty(msgId)) return;
+            bool changed = false;
+            foreach (var b in _chatBlocks)
+            {
+                if (b.AckId == msgId && b.Status != status) { b.Status = status; changed = true; }
+            }
+            if (changed) RenderChat();
+        }
+
+        void RenderChat()
+        {
             if (chatScrollRect == null || chatScrollRect.content == null) return;
-            
+
             // Handle both cases: TMP_Text on the Content object itself or as a child.
             if (_chatText == null)
                 _chatText = chatScrollRect.content.GetComponentInChildren<TMP_Text>();
             if (_chatText == null) return;
 
-            _chatText.text += line + "\n";
-            var lines = _chatText.text.Split('\n');
-            if (lines.Length > chatMaxLines)
-                _chatText.text = string.Join("\n", lines, lines.Length - chatMaxLines, chatMaxLines);
+            // Trim the oldest blocks so we never render more than chatMaxLines lines total.
+            TrimChatBlocks();
+
+            var sb = new System.Text.StringBuilder();
+            foreach (var b in _chatBlocks)
+            {
+                if (b.AckId != null) sb.Append(RenderAnswerOptionsNotice(b));
+                else foreach (var l in b.OptionLines) sb.Append(l).Append('\n');
+            }
+            _chatText.text = sb.ToString();
 
             // Force layout rebuild so the ContentSizeFitter updates the height immediately.
             LayoutRebuilder.ForceRebuildLayoutImmediate(chatScrollRect.content);
-            
+
             // Stay grounded: move scroll to the bottom (0 is bottom in a standard vertical ScrollRect).
             chatScrollRect.verticalNormalizedPosition = 0f;
+        }
+
+        // Status → header text/colour for the answer-option notice, mirroring the website's
+        // ANSWER_OPT_STATES (pending → "werden gesendet", acked → "angezeigt", failed → "nicht
+        // bestätigt"). TMP rich-text replaces the website's CSS classes.
+        static string RenderAnswerOptionsNotice(ChatBlock b)
+        {
+            // Plain-ASCII status markers (no FontAwesome/emoji) so they render in any TMP font
+            // atlas — TMP shows a tofu box for glyphs the font lacks, unlike the website's icon font.
+            string header, color;
+            switch (b.Status)
+            {
+                case AckStatus.Acked:  header = "[OK] Antwortoptionen angezeigt";    color = "#2E7D32"; break;
+                case AckStatus.Failed: header = "[!] Anzeige nicht bestätigt";       color = "#E65100"; break;
+                default:               header = "... Antwortoptionen werden gesendet"; color = "#9E9E9E"; break;
+            }
+            var sb = new System.Text.StringBuilder();
+            sb.Append("<color=").Append(color).Append("><b>").Append(header).Append("</b></color>\n");
+            foreach (var line in b.OptionLines)
+                sb.Append("<color=#777777>  - ").Append(line).Append("</color>\n");
+            return sb.ToString();
+        }
+
+        void TrimChatBlocks()
+        {
+            static int LineCount(ChatBlock b) => b.AckId != null ? b.OptionLines.Length + 1 : b.OptionLines.Length;
+            int total = 0;
+            foreach (var b in _chatBlocks) total += LineCount(b);
+            while (total > chatMaxLines && _chatBlocks.Count > 0)
+            {
+                total -= LineCount(_chatBlocks[0]);
+                _chatBlocks.RemoveAt(0);
+            }
         }
 
         /// <summary>Call when the chat panel is opened or closed to manage the unread badge.</summary>
@@ -563,6 +661,41 @@ namespace VaSiLi.WebCam
             if (recordButtonLabel != null)
                 recordButtonLabel.text = on ? recordActiveText : recordIdleText;
             OnRecordingChanged?.Invoke(on);
+
+            // Relay the recording state to the participant over the textroom data channel so
+            // their REC indicator lights up — the videoroom plugin doesn't notify other peers.
+            // Driven from here (rather than only ToggleRecording) so a state change reported by
+            // Janus's own 'record' event broadcasts too. Also (re)starts/stops the heartbeat.
+            BroadcastRecordingState();
+            UpdateRecordingHeartbeat(on);
+        }
+
+        // ---------- Recording-state broadcast (Interviewer → participant) ----------
+
+        const float RecordingHeartbeatSeconds = 10f;
+
+        /// <summary>
+        /// Best-effort, idempotent broadcast of the current recording state to the room. The
+        /// participant matches on kind=="recording" and just sets its indicator each time, so
+        /// re-sending the same value is expected. No-op until the chat data channel is ready.
+        /// Mirrors the website's broadcastRecordingState.
+        /// </summary>
+        void BroadcastRecordingState()
+        {
+            if (_chat == null || !_chatReady) return;
+            bool active = _publisherHandle != null && (_publisherHandle.IsRecording ?? false);
+            var payload = JsonConvert.SerializeObject(new RecordingPayload { active = active });
+            _ = SendStructuredAsync(payload);
+        }
+
+        // The data channel is lossy, so a single send can be missed. While recording is on we
+        // re-announce every RecordingHeartbeatSeconds so the participant's indicator converges;
+        // the heartbeat is stopped as soon as recording stops.
+        void UpdateRecordingHeartbeat(bool on)
+        {
+            CancelInvoke(nameof(BroadcastRecordingState));
+            if (on)
+                InvokeRepeating(nameof(BroadcastRecordingState), RecordingHeartbeatSeconds, RecordingHeartbeatSeconds);
         }
 
         // ---------- Gaze overlay ----------
@@ -706,7 +839,12 @@ namespace VaSiLi.WebCam
             answerOptionsSource.OnAnswerOptionsReceived.AddListener(SendAnswerOptions);
         }
 
-        public void SendAnswerOptions(string[] options)
+        public void SendAnswerOptions(string[] options) => SendAnswerOptions(options, silentLocal: false);
+
+        /// <param name="silentLocal">When true, skip echoing the batch into the interviewer's
+        /// own chat. Used by the push-on-join re-send so a rejoining participant gets the current
+        /// options without spamming the interviewer with a duplicate notice for each join.</param>
+        void SendAnswerOptions(string[] options, bool silentLocal)
         {
             if (options == null || options.Length == 0) return;
             // Remember the latest batch so we can re-send (with a fresh msgId) to participants
@@ -714,10 +852,60 @@ namespace VaSiLi.WebCam
             _lastAnswerOptions = options;
             if (_chat == null || !_chatReady) { _pendingAnswerOptions = options; return; }
 
-            var meta = new Dictionary<string, object> { { "count", options.Length } };
-            var msgId = _ackTracker.Track(meta);
+            // Apply the SAME filter the interviewee uses (AnswerOptionFilter), so we only treat
+            // this batch as "displayed" when concrete options would actually appear on their
+            // screen. If the filter strips everything (free-answer case), we still send so their
+            // panel updates, but we don't track an ack or echo anything as displayed — matching
+            // the website's getDisplayableOptions / hasConcrete behaviour.
+            var displayable = AnswerOptionFilter.Filter(options);
+            bool hasConcrete = displayable != null && displayable.Count > 0;
+
+            // Register the batch with the ack tracker BEFORE sending so its msgId rides along in
+            // the payload; the interviewee echoes it back in its ack, correlating the green
+            // confirmation to the exact batch. Only track/echo batches that show concrete options.
+            string msgId = null;
+            if (hasConcrete)
+            {
+                var meta = new Dictionary<string, object> { { "count", displayable.Count } };
+                msgId = _ackTracker.Track(meta);
+                if (!silentLocal)
+                    AppendAnswerOptionsNotice(msgId, AnswerOptionLines(displayable));
+            }
+
             var payload = JsonConvert.SerializeObject(new AnswerOptionsPayload { msgId = msgId, data = options });
             _ = SendStructuredAsync(payload);
+        }
+
+        /// <summary>Build the lines echoed into the interviewer's chat for a displayed batch.
+        /// Collapses an 11-point 0–10 scale into one readable line; otherwise one line per option
+        /// (descriptive second line stripped, like the rendered rows). Mirrors answerOptionLines on the web.</summary>
+        static string[] AnswerOptionLines(List<string> displayable)
+        {
+            if (AnswerOptionFilter.IsNumericScale(displayable) && displayable.Count == 11)
+            {
+                // Show the two endpoint anchor labels (e.g. "ganz unzufrieden … ganz zufrieden"),
+                // falling back to the bare numbers, like the website's answerOptionLines.
+                var (lowNum, lowLabel) = ParseScaleEntry(displayable[0]);
+                var (highNum, highLabel) = ParseScaleEntry(displayable[10]);
+                var ends = (lowLabel.Length > 0 || highLabel.Length > 0)
+                    ? $" ({(lowLabel.Length > 0 ? lowLabel : lowNum)} … {(highLabel.Length > 0 ? highLabel : highNum)})"
+                    : "";
+                return new[] { "Skala 0–10" + ends };
+            }
+            return displayable
+                .Select(e => AnswerOptionFilter.FilterText(e).Trim())
+                .Where(s => !string.IsNullOrEmpty(s))
+                .ToArray();
+        }
+
+        // Split a scale entry like "0 - ganz und gar unzufrieden" into its leading number and the
+        // descriptive anchor text. Falls back gracefully if no separator is present. Ports the
+        // website's parseScaleEntry.
+        static (string num, string label) ParseScaleEntry(string text)
+        {
+            var firstLine = AnswerOptionFilter.FilterText(text).Trim();
+            var m = System.Text.RegularExpressions.Regex.Match(firstLine, @"^(\d+)\s*[-–—:.]?\s*(.*)$");
+            return m.Success ? (m.Groups[1].Value, m.Groups[2].Value.Trim()) : (firstLine, "");
         }
 
         /// <summary>Interviewee → interviewer confirmation that a batch was received and rendered.</summary>
@@ -739,6 +927,11 @@ namespace VaSiLi.WebCam
 
         void OnAckEntriesChanged(IReadOnlyList<AckEntry> entries)
         {
+            // Keep the per-batch chat notice in sync with the real ack status, so it flips
+            // from "wird gesendet" to "angezeigt" only once the participant confirms (or to
+            // "nicht bestätigt" on timeout). Batches without a notice are silently skipped.
+            foreach (var e in entries) UpdateAnswerOptionsNotice(e.Id, e.Status);
+
             if (ackPill != null) ackPill.SetActive(entries.Count > 0);
             if (entries.Count == 0) return;
 
@@ -779,6 +972,7 @@ namespace VaSiLi.WebCam
         [Serializable] class AckPayload           { public string kind = "ack"; public string ackOf; public string status = "received"; }
         [Serializable] class GazeOverlayPayload   { public string kind = "gaze_overlay";   public bool show; public string textTopLeft; public string textBottomRight; }
         [Serializable] class FollowupPayload       { public string kind = "followup_survey"; public string url; }
+        [Serializable] class RecordingPayload      { public string kind = "recording"; public bool active; }
 
         // ---------- RTC configuration ----------
 
