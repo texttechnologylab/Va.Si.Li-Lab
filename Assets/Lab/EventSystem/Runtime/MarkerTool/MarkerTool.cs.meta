@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: db20c143a7cfd2649994fb1b7e31e190
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - target: {instanceID: 0}
+  - flagColorRed: {fileID: 2100000, guid: 158a26f41311b034eb78b60dae192e85, type: 2}
+  - flagColorBlue: {fileID: 2100000, guid: 2e22b860d9b70c64e9d03cf1304ed558, type: 2}
+  - flagColorGreen: {fileID: 2100000, guid: 0c4a1e94c7c433a49a02a1d2a5e832d6, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

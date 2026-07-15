@@ -16,6 +16,12 @@ namespace VaSiLi.VAnnotator
         {
             string shapeNetID = shapeNetData["id"].ToString();
 
+            string objPath = Path.Combine(path, shapeNetID + ".obj");
+            string mtlPath = Path.Combine(path, shapeNetID + ".mtl");
+
+            Debug.Log($"[ShapeNet] objPath: {objPath}");
+            Debug.Log($"[ShapeNet] mtlPath: {mtlPath}");
+
             GameObject _object = ObjectLoader.LoadObject(Path.Combine(path, shapeNetID + ".obj"), Path.Combine(path, shapeNetID + ".mtl"));
             _object.SetActive(false);
             Debug.Log(shapeNetData);

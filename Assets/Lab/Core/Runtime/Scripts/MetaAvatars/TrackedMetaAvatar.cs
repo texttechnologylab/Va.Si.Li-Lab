@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using Lab.Core.Runtime.Scripts.LLM;
 using UnityEngine;
 using UnityEngine.Events;
 using Ubiq.Messaging;
@@ -70,7 +71,8 @@ namespace VaSiLi.MetaAvatar
 
             AvatarLODManager.Instance.firstPersonAvatarLod = avatar.GetActiveAvatarScript().AvatarLOD;
             AvatarLODManager.Instance.enableDynamicStreaming = true;
-
+            
+            gameObject.AddComponent<PlayerMicListener>();
         }
 
 
@@ -174,6 +176,27 @@ namespace VaSiLi.MetaAvatar
                 byte[] data = new ReadOnlySpan<byte>(message.bytes, message.start, message.length).ToArray();
                 ReceivePacketData(data, StreamLOD.Full);
             }
+        }
+        
+        public bool TryGetLocalHeadPose(out Pose pose)
+        {
+            pose = default;
+
+            if (!avatar.IsLocal)
+                return false;
+
+            if (avatar.input.TryGet(out IMetaOVRInput src))
+            {
+                pose = src.head;
+                return true;
+            }
+
+            return false;
+        }
+
+        public Pose GetLeftHandPose()
+        {
+            return state[0].leftHand;
         }
 
         // State has been set either remotely or locally so update listeners
