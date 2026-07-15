@@ -9,6 +9,19 @@ TagManager:
   - NonTPCollide
   - LeftEye
   - RightEye
+  - QDSUIBackplateGradient
+  - QDSUIToggleButton
+  - QDSUIToggleSwitch
+  - QDSUITooltip
+  - QDSUISharedThemeColor
+  - QDSUIAccentColor
+  - QDSUIBorderlessButton
+  - QDSUISecondaryButton
+  - QDSUIToggleBorderlessButton
+  - QDSUIIcon
+  - QDSUITextSecondaryColor
+  - MapMarker
+  - affected
   layers:
   - Default
   - TransparentFX
@@ -20,7 +33,7 @@ TagManager:
   - whatIsGround
   - GraspedObject
   - Player
-  - 
+  - Mirror
   - 
   - 
   - 
