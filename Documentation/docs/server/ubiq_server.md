@@ -32,3 +32,9 @@ docker run -p 8009:8009 ubiq
 ## Unity
 
 `SocialNetworkScene > RoomClient`
+### Docker Compose
+
+The Ubiq server is also part of the combined
+[InterView deployment stack](https://texttechnologylab.github.io/InterView/services/ubiq/),
+which starts it alongside the other backend services with restart policies and
+versioned configuration.

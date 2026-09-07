@@ -19,6 +19,7 @@ nav:
       - Adding Scenes: ./getting_started/adding_scenes.md
       - Meta Avatars: ./getting_started/meta_avatar.md
       - Player Controller: ./getting_started/player_controller.md
+      - InterView VR Client: ./getting_started/interview_client.md
 
 
   - Other Functions:
@@ -52,7 +53,7 @@ nav:
   - Projects:
       - Digitell: ./projects/digitell.md
       - ViCom: ./projects/vicom.md
-      - New Data Spaces: ./projects/faces.md
+      - New Data Spaces (FACES): ./projects/faces.md
 
   - Publications: publications.md
 
@@ -141,6 +142,7 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
 
+  - admonition
   - attr_list
   - md_in_html
 
