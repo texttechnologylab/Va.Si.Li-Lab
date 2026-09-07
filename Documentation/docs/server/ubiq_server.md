@@ -20,13 +20,25 @@ One reason for this is that the original was not equipped with a corresponding D
 The other reason is that we had to add some functions to the original Ubiq.
 Now there is also an official docker build variant, which is why we want to integrate ubiq directly in a new version.
 
+The server lives in the
+[Va.Si.Li-Lab-backend](https://github.com/texttechnologylab/Va.Si.Li-Lab-backend)
+monorepo under `Ubiq-server/`.
+
 ```bash
-git clone https://github.com/texttechnologylab/ubiq.git
-cd Node
+git clone https://github.com/texttechnologylab/Va.Si.Li-Lab-backend.git
+cd Va.Si.Li-Lab-backend/Ubiq-server
 docker build -t ubiq .
-docker run -p 8009:8009 ubiq
-# (docker run -d --restart unless-stopped -p 8009:8009 ubiq)
+docker run -d --restart unless-stopped -p 8009:8009 -p 8011:8011 ubiq
 ```
+
+!!! info "Configuration and full reference"
+    Ports, the layered `nconf` configuration and the `iceservers` block are
+    documented at
+    **[Ubiq Server](https://texttechnologylab.github.io/Va.Si.Li-Lab-backend/ubiq_server/)**
+    in the backend documentation.
+
+    Deployment overrides belong in `config/local.json`, which is not tracked -
+    not in the committed `config/default.json`.
 
 
 ## Unity

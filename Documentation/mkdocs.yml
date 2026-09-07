@@ -43,8 +43,7 @@ nav:
   - Server Structure:
       - General: ./server/server_structure.md
       - Ubiq Server: ./server/ubiq_server.md
-      - Python Data Logger: ./server/python_data_logger.md
-      - Java Service: ./server/java_service.md
+      - Database API: ./server/python_data_logger.md
       - MongoDB: ./server/mongodb.md
 
   - For Students:
