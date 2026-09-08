@@ -9,7 +9,7 @@
 [FACES](https://gepris.dfg.de/gepris/projekt/539621548?language=en) (Feasibility,
 acceptance, and data quality of new multimodal surveys) is part of this SPP.
 
-Conventional surveys record the answer and discard everything that produced it —
+Conventional surveys record the answer and discard everything that produced it -
 the hesitation, the gaze, whether the question was understood at all. FACES asks
 whether conducting interviews in VR can retain that context, and whether the
 resulting data holds up: is a VR-mediated interview *feasible*, do respondents
@@ -28,7 +28,7 @@ interviewer console, and a token-driven session model.
 
 !!! info "InterView has its own documentation"
     Architecture, the full deployment guide, and reference documentation for
-    every service — Janus, coturn, Ubiq, the logging API and the web client — are
+    every service - Janus, coturn, Ubiq, the logging API and the web client - are
     at **[texttechnologylab.github.io/InterView](https://texttechnologylab.github.io/InterView/)**.
 
     Setting up the **VR client** is documented here, in

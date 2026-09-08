@@ -12,11 +12,20 @@ you must first add the scene to the Unity project and then to the MongoDB databa
 Add the following prefabs: `Social Network Scene`, `MetaPlayer`, `AvatarSdkManagerHorizon` to the scene.
 (Not testet. `Social Network Scene` e.g. is not nessessary for the scene to work.)
 
-## Add Scene to MongoDB
-The Scene must be added to the MongoDB database to be accessible via MetaStart.
-As a student, please ask your coresponding supervisor to add the scene to the database.
-The scenes need to be added to `Experiment/scenarios-languages`.
-The .json structure is as follow:
+## Add Scene to the Database
+The Scene must be added to the database to be accessible via MetaStart. There are
+two ways to do this:
+
+- **Via the Database API** (recommended). The
+  [Database API](https://texttechnologylab.github.io/Va.Si.Li-Lab-backend/database_api/#creating-a-scene)
+  now has endpoints for creating scenes, roles, levels and their locales, so you
+  don't need direct database access - just an API key. Start there; the
+  walkthrough builds exactly the structure documented below, one call at a time.
+- **Directly in MongoDB.** As a student, ask your corresponding supervisor to add
+  the scene for you. The scenes live in `Experiment/scenarios-languages`, in the
+  structure below.
+
+The .json structure - what either route produces - is as follows:
 
 ``` json title="Parameter Explanation"
 {
