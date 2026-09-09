@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using VaSiLi.WebCam;
 
 namespace VaSiLi.SceneManagement
 {
@@ -60,15 +61,23 @@ namespace VaSiLi.SceneManagement
                 switchedScenes.Invoke(currentScene);
                 return;
             }
-            // See if a room exists with the given scene name
-            var existingRoom = rooms.FirstOrDefault(room => room.Name == newScene.name);
+            // When an interview token is set, use a token-specific room name so each
+            // interview gets its own Ubiq room ("interview-{token}").
+            var tokenMgr = InterviewTokenManager.Instance;
+            string preferredRoomName = (tokenMgr != null && !string.IsNullOrEmpty(tokenMgr.UbiqRoomName))
+                ? tokenMgr.UbiqRoomName
+                : newScene.name;
+
+            // See if a room with the preferred name already exists
+            var existingRoom = rooms.FirstOrDefault(room => room.Name == preferredRoomName)
+                            ?? rooms.FirstOrDefault(room => room.Name == newScene.name);
 
             // If we've found a matching room
             if (existingRoom != null)
                 client.Join(existingRoom.JoinCode);
             else
             {
-                client.Join(currentScene?.internalName, true);
+                client.Join(preferredRoomName, true);
             }
             // Call that we've successfully loaded the scene / are now joinign the room
             switchedScenes.Invoke(currentScene);

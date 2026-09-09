@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boolProperties:
     keys:
-    - Meta.XR.SDK.UsageSettings.UsesBuildingBlocks
     - Meta.XR.SDK.UsageSettings.UsesProjectSetupTool
     - Meta.XR.SDK.UsageSettings.UsesXRSimulator
-    values: 010101
+    - Meta.XR.SDK.UsageSettings.UsesImmersiveDebugger
+    values: 01010101
   intProperties:
     keys: []
     values: 

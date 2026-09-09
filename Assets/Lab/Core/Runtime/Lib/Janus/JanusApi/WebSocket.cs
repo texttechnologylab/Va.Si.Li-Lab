@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Meta.Net.NativeWebSocket;
-using Org.BouncyCastle.Asn1.Esf;
 using UnityEngine;
 
 namespace VaSiLi.WebSocket

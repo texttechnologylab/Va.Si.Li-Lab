@@ -1,41 +1,5 @@
 {
   "dependencies": {
-    "com.meta.xr.mrutilitykit": {
-      "version": "78.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.meta.xr.sdk.core": "78.0.0",
-        "com.unity.textmeshpro": "3.0.6",
-        "com.unity.ai.navigation": "1.1.4",
-        "com.unity.nuget.newtonsoft-json": "3.0.2"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.meta.xr.sdk.all": {
-      "version": "78.0.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.meta.xr.sdk.core": "78.0.0",
-        "com.meta.xr.sdk.audio": "78.0.0",
-        "com.meta.xr.sdk.voice": "78.0.0",
-        "com.meta.xr.simulator": "78.0.0",
-        "com.meta.xr.sdk.haptics": "78.0.0",
-        "com.meta.xr.mrutilitykit": "78.0.0",
-        "com.meta.xr.sdk.platform": "78.0.0",
-        "com.meta.xr.sdk.interaction": "78.0.0",
-        "com.meta.xr.sdk.interaction.ovr": "78.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.meta.xr.sdk.audio": {
-      "version": "78.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
     "com.meta.xr.sdk.avatars": {
       "version": "40.0.1",
       "depth": 0,
@@ -58,23 +22,31 @@
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.core": {
-      "version": "78.0.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.meta.xr.sdk.haptics": {
-      "version": "78.0.0",
+      "version": "203.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.meta.xr.sdk.core": "78.0.0"
+        "com.unity.xr.hands": "1.7.2",
+        "com.unity.modules.ui": "1.0.0",
+        "com.unity.modules.audio": "1.0.0",
+        "com.unity.modules.imgui": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequestaudio": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.meta.xr.sdk.haptics": {
+      "version": "203.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.meta.xr.sdk.core": "203.0.0"
       },
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.interaction": {
-      "version": "78.0.0",
+      "version": "203.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -84,12 +56,12 @@
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.interaction.ovr": {
-      "version": "78.0.0",
-      "depth": 1,
+      "version": "203.0.0",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.meta.xr.sdk.core": "78.0.0",
-        "com.meta.xr.sdk.interaction": "78.0.0"
+        "com.meta.xr.sdk.core": "203.0.0",
+        "com.meta.xr.sdk.interaction": "203.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -102,27 +74,22 @@
         "com.unity.textmeshpro": "3.0.6",
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "b0553630bc45d4fd50b38a2508a7f82fe76c2756"
+      "hash": "2d2fe7d8ce451e69be0599eee2f597b5935f8e04"
     },
     "com.meta.xr.sdk.platform": {
-      "version": "78.0.0",
-      "depth": 1,
+      "version": "203.0.0",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.ugui": "1.0.0"
+        "com.unity.ugui": "1.0.0",
+        "com.unity.inputsystem": "1.7.0",
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.voice": {
-      "version": "78.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.meta.xr.simulator": {
-      "version": "78.0.0",
-      "depth": 1,
+      "version": "85.0.0",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -135,11 +102,11 @@
       "hash": "2b2755158be4a28d13384f22415782d57b9efab4"
     },
     "com.tlabaltoh.webview": {
-      "version": "https://github.com/TLabAltoh/TLabWebView.git#appstore-compatible-upm",
+      "version": "https://github.com/TLabAltoh/TLabWebView.git#upm",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "05a21e5a99035f9c1038a1e798aa1be219cc3530"
+      "hash": "88d68af5bcabc12d3a2f78d0e979464a388519c0"
     },
     "com.ucl.ubiq": {
       "version": "https://github.com/UCL-VR/ubiq.git#upm-unity-v1.0.0-pre.16",
@@ -186,7 +153,7 @@
     },
     "com.unity.collections": {
       "version": "2.5.7",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.burst": "1.8.19",
@@ -209,15 +176,6 @@
       "depth": 1,
       "source": "builtin",
       "dependencies": {}
-    },
-    "com.unity.ide.rider": {
-      "version": "3.0.37",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ext.nunit": "1.0.6"
-      },
-      "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
       "version": "2.0.23",
@@ -244,6 +202,19 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.memoryprofiler": {
+      "version": "1.1.12",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.burst": "1.8.0",
+        "com.unity.collections": "1.2.3",
+        "com.unity.mathematics": "1.2.1",
+        "com.unity.profiling.core": "1.0.0",
+        "com.unity.editorcoroutines": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.multiplayer.center": {
       "version": "1.0.0",
       "depth": 0,
@@ -254,7 +225,7 @@
     },
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.5",
-      "depth": 3,
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -266,11 +237,19 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.performance.profile-analyzer": {
+      "version": "1.2.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.postprocessing": {
-      "version": "3.5.0",
+      "version": "3.5.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
+        "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.physics": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -285,6 +264,13 @@
         "com.unity.modules.physics": "1.0.0",
         "com.unity.settings-manager": "1.0.3"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.profiling.core": {
+      "version": "1.0.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
@@ -365,7 +351,7 @@
     },
     "com.unity.test-framework.performance": {
       "version": "3.1.0",
-      "depth": 3,
+      "depth": 2,
       "source": "registry",
       "dependencies": {
         "com.unity.test-framework": "1.1.33",
@@ -421,16 +407,16 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.webrtc-ubiq-fork": {
-      "version": "https://github.com/UCL-VR/unity-webrtc-ubiq-fork.git#v3.0.1-pre.7",
+    "com.unity.webrtc": {
+      "version": "3.0.0",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {
-        "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.editorcoroutines": "1.0.0",
-        "com.unity.modules.audio": "1.0.0"
+        "com.unity.modules.jsonserialize": "1.0.0"
       },
-      "hash": "1724f81b5c39bb4f44bf550de64b9f1fa318ccc8"
+      "url": "https://packages.unity.com"
     },
     "com.unity.xr.core-utils": {
       "version": "2.5.3",
@@ -442,8 +428,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.hands": {
-      "version": "1.5.1",
-      "depth": 0,
+      "version": "1.7.2",
+      "depth": 2,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.xr": "1.0.0",
@@ -481,11 +467,10 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.management": {
-      "version": "4.5.1",
+      "version": "4.5.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.modules.vr": "1.0.0",
         "com.unity.modules.xr": "1.0.0",
         "com.unity.xr.core-utils": "2.2.1",
         "com.unity.modules.subsystems": "1.0.0",
@@ -506,7 +491,7 @@
       "url": "https://packages.unity.com"
     },
     "org.nuget.newtonsoft.json": {
-      "version": "13.0.3",
+      "version": "13.0.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {},

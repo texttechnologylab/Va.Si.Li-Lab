@@ -1,13 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Ubiq.Avatars;
 using Ubiq.Messaging;
 using Ubiq.Rooms;
+using Ubiq.Voip;
 using Ubiq.Voip.Implementations.Dotnet;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
 public class VoipNetworkSender : MonoBehaviour
 {
 #if !UNITY_WEBGL
@@ -15,104 +16,184 @@ public class VoipNetworkSender : MonoBehaviour
 #endif
     private NetworkContext context;
     private int counter = 0;
-    public AudioClip Clip;
-    private Dictionary<string, Queue<float[]>> audioQueue = new Dictionary<string, Queue<float[]>>();
+    
     public RoomClient client;
-    private AudioSource audioSource;
     public AvatarManager avatarManager;
+    
+    private VoipPeerConnectionManager peerConnectionManager;
+    private List<string> mutedUsers = new List<string>();
+    private List<VoipPeerConnection> peerConnections = new List<VoipPeerConnection>();
+    
+    // Jitter buffers per user
+    private Dictionary<string, VoipJitterBuffer> jitterBuffers = new Dictionary<string, VoipJitterBuffer>();
+    
+    // Track ICE connection state per user for detecting state changes
+    private Dictionary<string, VoipPeerConnection.IceConnectionState> peerConnectionStates = 
+        new Dictionary<string, VoipPeerConnection.IceConnectionState>();
+
     void Start()
     {
         context = NetworkScene.Register(this);
-        audioSource = GetComponent<AudioSource>();
+        peerConnectionManager = GameObject.Find("Voip Manager").GetComponent<VoipPeerConnectionManager>();
+        peerConnectionManager.OnPeerConnection.AddListener(
+            PeerConnectionManager_OnPeerConnection, runExisting: true);
     }
 
-    void LateUpdate()
+    private void PeerConnectionManager_OnPeerConnection(VoipPeerConnection pc)
     {
-        foreach (var userId in audioQueue.Keys)
+        if (peerConnections.Contains(pc))
+            return;
+            
+        var peerConnection = peerConnections.Find(x => x == pc);
+        if (peerConnection != null)
         {
-            var queue = audioQueue[userId];
-            if (queue.Count > 8)
-            {
-                var audioData = new List<float>();
-                while (queue.Count > 0)
+            peerConnection.OnIceConnectionStateChanged.RemoveListener(state => PeerConnection_OnIceConnectionStateChanged(state, pc.PeerUuid));
+            peerConnections.Remove(pc);
+        }
+        peerConnections.Add(pc);
+        
+        // Initialize peer state tracking - start with fallback mode (unmuted)
+        string peerId = pc.PeerUuid;
+        peerConnectionStates[peerId] = VoipPeerConnection.IceConnectionState.@new;
+        
+        // Ensure peer is unmuted initially (using fallback until ICE succeeds)
+        if (!mutedUsers.Contains(peerId))
+        {
+            mutedUsers.Add(peerId);
+        }
+        
+        pc.OnIceConnectionStateChanged.AddListener(state => PeerConnection_OnIceConnectionStateChanged(state, pc.PeerUuid));
+        Debug.Log($"VoipNetworkSender: Peer {peerId} registered, starting in fallback mode (muted fallback until ICE connects)");
+    }
+
+    private void PeerConnection_OnIceConnectionStateChanged(VoipPeerConnection.IceConnectionState state, string uuid)
+    {
+        // Track previous state for logging
+        peerConnectionStates.TryGetValue(uuid, out var previousState);
+        peerConnectionStates[uuid] = state;
+        
+        bool shouldMuteFallback = false;
+        string reason = "";
+
+        switch (state)
+        {
+            case VoipPeerConnection.IceConnectionState.connected:
+                // ICE connection established: mute fallback jitter buffer
+                // Use the proper WebRTC connection instead
+                shouldMuteFallback = true;
+                reason = "ICE connected successfully";
+                break;
+                
+            case VoipPeerConnection.IceConnectionState.closed:
+            case VoipPeerConnection.IceConnectionState.failed:
+            case VoipPeerConnection.IceConnectionState.disconnected:
+                // ICE connection lost: unmute fallback jitter buffer
+                shouldMuteFallback = false;
+                reason = $"ICE {state}, falling back to jitter buffer";
+                
+                // Reset jitter buffer state for clean restart
+                if (jitterBuffers.TryGetValue(uuid, out var buffer))
                 {
-                    audioData.AddRange(queue.Dequeue());
+                    buffer.Reset();
                 }
-                if (audioData != null)
-                {
-                    PlayAudioClip(userId, audioData.ToArray());
-                }
-            }
+                break;
+                
+            case VoipPeerConnection.IceConnectionState.checking:
+            case VoipPeerConnection.IceConnectionState.@new:
+                // Still trying to establish connection: keep fallback unmuted
+                // (don't mute until we're sure ICE worked)
+                shouldMuteFallback = false;
+                reason = $"ICE {state}, using fallback";
+                break;
+                
+            default:
+                // Unknown state: use fallback (unmuted)
+                shouldMuteFallback = false;
+                reason = $"ICE unknown state '{state}', using fallback";
+                break;
         }
 
+        // Update mute state
+        bool isMuted = mutedUsers.Contains(uuid);
+        if (shouldMuteFallback && !isMuted)
+        {
+            mutedUsers.Add(uuid);
+            Debug.Log($"VoipNetworkSender: Muting fallback for {uuid} ({reason})");
+        }
+        else if (!shouldMuteFallback && isMuted)
+        {
+            mutedUsers.Remove(uuid);
+            Debug.Log($"VoipNetworkSender: Unmuting fallback for {uuid} ({reason})");
+        }
+        
+        // Update jitter buffer mute state (only if jitter buffer exists)
+        // Don't create it here - it's created on first audio packet
+        if (jitterBuffers.TryGetValue(uuid, out var jb))
+        {
+            jb.IsMuted = shouldMuteFallback;
+        }
     }
 
-    float[] LowPassFilter(float[] data, float sampleRate, float cutoffFrequency)
+    /// <summary>
+    /// Gets or creates a jitter buffer for a specific user.
+    /// </summary>
+    private VoipJitterBuffer GetOrCreateJitterBuffer(string userId)
     {
-        float RC = 1.0f / (2 * Mathf.PI * cutoffFrequency);
-        float dt = 1.0f / sampleRate;
-        float alpha = dt / (RC + dt);
-
-        float[] filtered = new float[data.Length];
-        filtered[0] = data[0]; // initialize
-
-        for (int i = 1; i < data.Length; i++)
+        if (jitterBuffers.TryGetValue(userId, out var existingBuffer))
         {
-            filtered[i] = filtered[i - 1] + alpha * (data[i] - filtered[i - 1]);
+            return existingBuffer;
         }
 
-        return filtered;
-    }
-
-    void PlayAudioClip(string userId, float[] audioData)
-    {
-
+        // Find the user's avatar and audio source
         var user = client.Peers.FirstOrDefault(p => p.uuid == userId);
         AudioSource audioSource = null;
+        
         if (user != null)
         {
             var avatar = avatarManager.FindAvatar(user);
-            audioSource = avatar.gameObject.GetComponent<AudioSource>();
-            if (audioSource == null)
+            if (avatar != null)
             {
-                Debug.LogWarning($"No AudioSource found on Avatar for user {userId}. Creating a new one.");
-                audioSource = avatar.gameObject.AddComponent<AudioSource>();
-                audioSource.spatialize = true;
-                audioSource.maxDistance = 50;
+                audioSource = avatar.gameObject.GetComponent<AudioSource>();
+                if (audioSource == null)
+                {
+                    Debug.Log($"Creating AudioSource for user {userId}");
+                    audioSource = avatar.gameObject.AddComponent<AudioSource>();
+                    audioSource.spatialize = true;
+                    audioSource.spatialBlend = 1f; // Full 3D
+                    audioSource.maxDistance = 50;
+                    audioSource.rolloffMode = AudioRolloffMode.Linear;
+                }
+
+                // Add spatialization cache BEFORE jitter buffer.
+                // Unity calls OnAudioFilterRead in component order, so the cache
+                // must exist first to capture spatialization coefficients before
+                // VoipJitterBuffer overwrites the audio data.
+                var spatCache = avatar.gameObject.GetComponent<VoipSpatialisationCache>();
+                if (spatCache == null)
+                {
+                    spatCache = avatar.gameObject.AddComponent<VoipSpatialisationCache>();
+                }
+
+                // Add or get jitter buffer component on the avatar
+                var jitterBuffer = avatar.gameObject.GetComponent<VoipJitterBuffer>();
+                if (jitterBuffer == null)
+                {
+                    jitterBuffer = avatar.gameObject.AddComponent<VoipJitterBuffer>();
+                }
+                
+                jitterBuffer.Initialize(userId, audioSource);
+                jitterBuffer.IsMuted = mutedUsers.Contains(userId);
+                jitterBuffers[userId] = jitterBuffer;
+                
+                return jitterBuffer;
             }
         }
 
-        if (Clip == null || Clip.samples != audioData.Length)
-        {
-            Clip = AudioClip.Create("VoipAudio", audioData.Length, 1, 16000, false);
-        }
-        for (int i = 0; i < audioData.Length; i++)
-        {
-            audioData[i] = Mathf.Clamp(audioData[i] * 4f, -.9999f, .9999f); // Ensure values are within valid range
-        }
-        audioData = LowPassFilter(audioData, 16000, 2800); // Apply low pass filter
-        Clip.SetData(audioData, 0);
-
-        if (audioSource != null)
-        {
-            audioSource.clip = Clip;
-            audioSource.Play();
-        }
-        else if (this.audioSource != null)
-        {
-            // Fallback to the AudioSource on this GameObject if no AudioSource is found on the Avatar
-            this.audioSource.clip = Clip;
-            this.audioSource.Play();
-        }
-        else
-        {
-            Debug.LogWarning("No AudioSource component found to play the audio clip.");
-        }
+        return null;
     }
-    // Update is called once per frame
+
     void Update()
     {
-
 #if !UNITY_WEBGL
         if (input == null)
         {
@@ -129,7 +210,6 @@ public class VoipNetworkSender : MonoBehaviour
             }
         }
 #endif
-
     }
 
     private void OnAudioEncoded(SIPSorceryMedia.Abstractions.AudioSamplingRatesEnum samplingRate, float[] sample)
@@ -151,20 +231,33 @@ public class VoipNetworkSender : MonoBehaviour
             this.userId = userId;
             this.counter = counter;
         }
-
     }
 
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
-        // TODO: Sorting and discarding of old entries
         var msg = message.FromJson<VoipAudioMessage>();
-        if (!audioQueue.ContainsKey(msg.userId))
+        
+        // Get or create jitter buffer for this user
+        var jitterBuffer = GetOrCreateJitterBuffer(msg.userId);
+        if (jitterBuffer != null)
         {
-            audioQueue[msg.userId] = new Queue<float[]>();
+            // Enqueue with sequence number for proper ordering
+            jitterBuffer.EnqueuePacket(msg.counter, msg.data);
         }
-
-        audioQueue[msg.userId].Enqueue(msg.data);
-
     }
 
+    void OnDestroy()
+    {
+        // Clean up all jitter buffers and state
+        foreach (var kvp in jitterBuffers)
+        {
+            if (kvp.Value != null)
+            {
+                kvp.Value.Reset();
+            }
+        }
+        jitterBuffers.Clear();
+        mutedUsers.Clear();
+        peerConnectionStates.Clear();
+    }
 }

@@ -1,4 +1,5 @@
 
+using System.Collections;
 using TLab.WebView;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -23,7 +24,8 @@ public class BrowserScroller : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         if (isScrolling && browser != null)
         {
-            int scrollAmount = (int)(200 * Time.deltaTime);
+            int scrollAmount = (int)(400 * Time.deltaTime);
+            //StartCoroutine(LogJSResult("scrollResult", $"document.scrollingElement.scrollBy(0, scrollDirection == ScrollDirection.Up ? -scrollAmount : scrollAmount);"));
             browser.ScrollBy(0, scrollDirection == ScrollDirection.Up ? -scrollAmount : scrollAmount);
         }
     }
@@ -38,6 +40,8 @@ public class BrowserScroller : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         isScrolling = false;
         Debug.Log("Scrolling stopped.");
     }
+
+
 
 
 }

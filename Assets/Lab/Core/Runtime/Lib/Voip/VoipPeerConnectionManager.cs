@@ -76,7 +76,7 @@ namespace Ubiq.Voip
         {
             // Update ice server list and emit event
             var iceServersString = room["ice-servers"];
-
+            Debug.Log($"Ice servers updated: {iceServersString}");
             // We're only interested if ice servers has changed
             if (iceServersString != null
                 && iceServersString != prevIceServersString)

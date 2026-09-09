@@ -56,6 +56,7 @@ MonoBehaviour:
       quality: 0
       loadRigZipFromGlb: 1
       reserved: 0000000000000000000000000000000000000000000000000000000000000000
+      subMeshVertexPreference: 0
   _validateCache: 1
   _activeView: 2
   _activeManifestation: 2
@@ -136,6 +137,7 @@ MonoBehaviour:
       quality: 0
       loadRigZipFromGlb: 1
       reserved: 0000000000000000000000000000000000000000000000000000000000000000
+      subMeshVertexPreference: 0
   _validateCache: 1
   _activeView: 2
   _activeManifestation: 2
@@ -436,7 +438,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6899223575991022060, guid: b0d64f917d2447e4f85037ad6283d5bf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7552204851892433321, guid: b0d64f917d2447e4f85037ad6283d5bf, type: 3}
       propertyPath: m_Enabled

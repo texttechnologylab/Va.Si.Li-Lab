@@ -50,7 +50,7 @@ PlayerSettings:
   m_ActiveColorSpace: 1
   unsupportedMSAAFallback: 0
   m_SpriteBatchMaxVertexCount: 65535
-  m_SpriteBatchVertexThreshold: 1674
+  m_SpriteBatchVertexThreshold: 300
   m_MTRendering: 1
   mipStripping: 0
   numberOfMipsStripped: 0
@@ -261,12 +261,12 @@ PlayerSettings:
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
-  AndroidBundleVersionCode: 31
+  AndroidBundleVersionCode: 160
   AndroidMinSdkVersion: 32
-  AndroidTargetSdkVersion: 32
+  AndroidTargetSdkVersion: 34
   AndroidPreferredInstallLocation: 0
   aotOptions: 
-  stripEngineCode: 1
+  stripEngineCode: 0
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
   ForceInternetPermission: 1
@@ -524,7 +524,7 @@ PlayerSettings:
   - m_BuildTarget: XboxOnePlayer
     m_GraphicsJobMode: 0
   - m_BuildTarget: AndroidPlayer
-    m_GraphicsJobMode: 1
+    m_GraphicsJobMode: 0
   - m_BuildTarget: MacStandaloneSupport
     m_GraphicsJobMode: 1
   m_BuildTargetGraphicsAPIs:
@@ -563,7 +563,9 @@ PlayerSettings:
   m_BuildTargetGroupHDRCubemapEncodingQuality: []
   m_BuildTargetGroupLightmapSettings: []
   m_BuildTargetGroupLoadStoreDebugModeSettings: []
-  m_BuildTargetNormalMapEncoding: []
+  m_BuildTargetNormalMapEncoding:
+  - m_BuildTarget: Android
+    m_Encoding: 1
   m_BuildTargetDefaultTextureCompressionFormat:
   - serializedVersion: 3
     m_BuildTarget: Android
@@ -834,7 +836,7 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: USE_INPUT_SYSTEM_POSE_CONTROL;PROBUILDER_EXPERIMENTAL_FEATURES;OVRAVATAR_LOG_ENABLE_CONDITIONAL;UBIQ_SKIPCHECK_WEBRTCCOMPATIBILITY;ISDK_OPENXR_HAND;UBIQ_SILENCEWARNING_XRIVERSION;OVRAVATAR_LOG_FORCE_ENABLE;UNITY_POST_PROCESSING_STACK_V2;USE_STICK_CONTROL_THUMBSTICKS
+    Android: USE_INPUT_SYSTEM_POSE_CONTROL;PROBUILDER_EXPERIMENTAL_FEATURES;OVRAVATAR_LOG_ENABLE_CONDITIONAL;UBIQ_SKIPCHECK_WEBRTCCOMPATIBILITY;ISDK_OPENXR_HAND;UBIQ_SILENCEWARNING_XRIVERSION;OVRAVATAR_LOG_FORCE_ENABLE;UNITY_POST_PROCESSING_STACK_V2;OVR_DISABLE_HAND_PINCH_BUTTON_MAPPING;UBIQ_DISABLE_WEBRTCCOMPATIBILITYCHECK;ENABLE_RUNTIME_OPTIMIZER
     EmbeddedLinux: PROBUILDER_EXPERIMENTAL_FEATURES;UNITY_POST_PROCESSING_STACK_V2
     GameCoreScarlett: UNITY_POST_PROCESSING_STACK_V2
     GameCoreXboxOne: PROBUILDER_EXPERIMENTAL_FEATURES;UNITY_POST_PROCESSING_STACK_V2
@@ -847,7 +849,7 @@ PlayerSettings:
     QNX: UNITY_POST_PROCESSING_STACK_V2
     ReservedCFE: UNITY_POST_PROCESSING_STACK_V2
     Stadia: PROBUILDER_EXPERIMENTAL_FEATURES
-    Standalone: OVRAVATAR_LOG_ENABLE_CONDITIONAL;USE_INPUT_SYSTEM_POSE_CONTROL;PROBUILDER_EXPERIMENTAL_FEATURES;UBIQ_SKIPCHECK_WEBRTCCOMPATIBILITY;ISDK_OPENXR_HAND;UBIQ_SILENCEWARNING_XRIVERSION;UNITY_POST_PROCESSING_STACK_V2;USE_STICK_CONTROL_THUMBSTICKS
+    Standalone: OVRAVATAR_LOG_ENABLE_CONDITIONAL;USE_INPUT_SYSTEM_POSE_CONTROL;PROBUILDER_EXPERIMENTAL_FEATURES;UBIQ_SKIPCHECK_WEBRTCCOMPATIBILITY;ISDK_OPENXR_HAND;UBIQ_SILENCEWARNING_XRIVERSION;UNITY_POST_PROCESSING_STACK_V2;OVR_DISABLE_HAND_PINCH_BUTTON_MAPPING
     VisionOS: UNITY_POST_PROCESSING_STACK_V2
     WebGL: PROBUILDER_EXPERIMENTAL_FEATURES;UNITY_POST_PROCESSING_STACK_V2
     Windows Store Apps: USE_INPUT_SYSTEM_POSE_CONTROL;PROBUILDER_EXPERIMENTAL_FEATURES;USE_STICK_CONTROL_THUMBSTICKS
