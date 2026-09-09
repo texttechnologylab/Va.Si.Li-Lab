@@ -39,7 +39,7 @@ EditorBuildSettings:
     path: Assets/Lab/Core/Runtime/Local/Scenes/VRStudie.unity
     guid: 2b95ced25bac4e84bb04038c149c8fd8
   m_configObjects:
-    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 473ba7ca385448746a82f9a78ec69b04, type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: e5d9c8f67f1518c429bb8eca89e53dc9, type: 2}
-    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 930343fcbf66e2d4cba10cfe8640789e, type: 2}
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 2acd84852d7486c4485f42afca1ff615, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 437576fdb8b8c5e4788846bc7406cc10, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 750160056f084b444b65382d8f094343, type: 2}
   m_UseUCBPForAssetBundles: 0

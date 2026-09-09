@@ -7,6 +7,10 @@ using Dummiesman;
 public class ObjectLoader : MonoBehaviour
 {
 
+    [AgentTool(
+        "load_3d_object",
+        "Load a 3D object into the scene from a given .obj file path (objpath parameter). The object will also have a material applied from the given .mtl file path if not null."
+    )]
     public static GameObject LoadObject(string objpath, string mtlpath)
     {
 
@@ -29,6 +33,10 @@ public class ObjectLoader : MonoBehaviour
         return null;
     }
 
+    [AgentTool(
+        "reorientate_3d_object",
+        "Reorientates a given 3D object (obj parameter) in the scene. The parameters up and front are vectors describing the desired up axis and front axis of the object respectively. The scale parameter is used to change the size of the object."
+    )]
     public static GameObject Reorientate_Obj(GameObject obj, Vector3 up, Vector3 front, float scale)
     {
         obj.transform.localScale = new Vector3(scale, scale, scale);
@@ -53,7 +61,7 @@ public class ObjectLoader : MonoBehaviour
         obj.transform.localPosition = new Vector3(render_position_med.x, render_position_med.y, render_position_med.z);
 
 
-        GameObject oriented_obj = new GameObject(obj.name+"_center");
+        GameObject oriented_obj = new GameObject(obj.name + "_center");
         obj.transform.SetParent(oriented_obj.transform, false);
         return oriented_obj;
  
