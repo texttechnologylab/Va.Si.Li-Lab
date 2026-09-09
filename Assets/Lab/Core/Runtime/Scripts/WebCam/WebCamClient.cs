@@ -113,8 +113,10 @@ namespace VaSiLi.WebCam
         public Sprite ackCheckSprite;
         public Sprite ackWarnSprite;
         public Sprite ackSpinnerSprite;
-        [Tooltip("How long (seconds) to wait for an ack before marking a batch failed.")]
-        public float ackTimeoutSeconds = 5f;
+        [Tooltip("How long (seconds) to wait for an ack before marking a batch failed. Must exceed " +
+                 "the retransmission window (last retry at 10s) or batches get reported failed while " +
+                 "a retry is still outstanding; values below that floor are raised automatically.")]
+        public float ackTimeoutSeconds = 20f;
         public Color ackGreen = new Color(0.30f, 0.78f, 0.31f);
         public Color ackGrey = new Color(0.62f, 0.62f, 0.62f);
         public Color ackNeutralGrey = new Color(0.20f, 0.20f, 0.20f);
@@ -186,9 +188,49 @@ namespace VaSiLi.WebCam
         bool _chatReady;
         bool _chatOpen;
         int _unreadCount;
-        string[] _pendingAnswerOptions;
-        string[] _lastAnswerOptions;
         readonly AckTracker _ackTracker = new AckTracker();
+
+        // ---------- Answer-option delivery (see AnswerOptionsPayload for the wire format) ----------
+
+        /// <summary>Identifies this process lifetime; lets the receiver reset its de-duplication
+        /// state when we restart instead of discarding everything we send as "stale".</summary>
+        readonly string _answerEpoch = Guid.NewGuid().ToString("N").Substring(0, 8);
+
+        /// <summary>Content revision. Only advances for a genuinely new batch — retries, the
+        /// heartbeat and push-on-join all re-deliver the current revision.</summary>
+        int _answerSeq;
+
+        /// <summary>The batch the participant should currently be seeing. Retries, the heartbeat
+        /// and push-on-join re-send THIS, reusing its revision and msgId rather than minting new
+        /// ones, so the ack pill counts questions asked rather than packets sent.</summary>
+        AnswerBatch _currentBatch;
+
+        /// <summary>Receiver side: highest revision rendered, and the sender epoch it belongs to.</summary>
+        int _lastAnswerSeq = -1;
+        string _lastAnswerEpoch;
+
+        // Retransmission schedule for an unacknowledged batch, in seconds from first send, plus
+        // a slow re-announce so state converges even if every retry was lost. Mirrors
+        // RETRY_DELAYS_MS / HEARTBEAT_MS in the web frontend.
+        static readonly float[] AnswerRetryDelaysSeconds = { 2f, 5f, 10f };
+        const float AnswerHeartbeatSeconds = 15f;
+        /// <summary>Ack budget floor: the last retry fires at 10 s, so anything shorter would
+        /// report failure while a retransmission is still in flight. See Update().</summary>
+        const float AnswerAckMinBudgetSeconds = 20f;
+        float _answerHeartbeatDue;
+
+        sealed class AnswerBatch
+        {
+            public int Seq;
+            public string[] Data;
+            public string MsgId;
+            public bool Tracked;
+            public bool Acked;
+            public string SuppressedBy;   // null when the batch shows concrete options
+            public string[] Lines;
+            public float FirstSentAt;     // Time.realtimeSinceStartup, -1 until first transmission
+            public int RetriesDone;
+        }
         bool _gazeOverlayOn;
         readonly List<string> _pendingLogLines = new List<string>();
         bool _buttonsWired;
@@ -223,7 +265,14 @@ namespace VaSiLi.WebCam
         void Update()
         {
             // Drives the ack timeout — the Unity-idiomatic replacement for setTimeout (no threads).
-            _ackTracker.Tick((long)(ackTimeoutSeconds * 1000));
+            //
+            // Floored to the retransmission window rather than trusting the serialized value:
+            // ackTimeoutSeconds is a public field, so scenes and prefabs saved before the retry
+            // schedule existed still carry the old 5 s and would report a batch failed while its
+            // 10 s retry was still outstanding. Raising the default alone would not reach them.
+            _ackTracker.Tick((long)(Mathf.Max(ackTimeoutSeconds, AnswerAckMinBudgetSeconds) * 1000f));
+            // Drives answer-option retransmission and the slow re-announce, same pattern.
+            TickAnswerOptionDelivery();
         }
 
 
@@ -348,6 +397,16 @@ namespace VaSiLi.WebCam
         {
             Debug.Log("[TextRoom] Attaching textroom handle");
             _textHandle = await _session.AttachAsync<TextRoomHandle>("vasili-textroom");
+            // A restore tears down the PeerConnection and renegotiates, so we are NOT joined to
+            // the room during that window even though the old value said we were. Clearing it
+            // here (rather than only at the start of the join sequence) closes the gap between
+            // the handle being restored and Ready firing again, during which sends would
+            // otherwise be attempted against a dead channel and silently dropped.
+            _textHandle.Restored += (_, __) =>
+            {
+                Debug.Log("[TextRoom] Handle restored — chat marked not-ready until rejoined");
+                _chatReady = false;
+            };
             _chat = new JanusTextRoomClient(this, _textHandle, BuildRtcConfiguration());
             _chat.ConnectionStateChanged += s => Debug.Log("[TextRoom] PC: " + s);
             _chat.MessageReceived        += OnChatMessage;
@@ -355,39 +414,81 @@ namespace VaSiLi.WebCam
             _chat.ParticipantJoined      += (_, p) =>
             {
                 AppendChatLine($"<i>{p.Display ?? p.Username} joined</i>");
-                // Push-on-join: re-send the current answer categories as a fresh tracked batch
-                // (new msgId → fresh ack) so a participant who joined or reloaded gets the
-                // current options and the interviewer gets fresh confirmation. silentLocal: the
-                // interviewer already saw the batch echoed on the original send; a rejoin re-pushes
-                // for the participant but shouldn't add a duplicate notice to the interviewer's chat.
-                if (_lastAnswerOptions != null && _lastAnswerOptions.Length > 0)
-                    SendAnswerOptions(_lastAnswerOptions, silentLocal: true);
+                // Push-on-join: re-deliver the current batch so a participant who joined or
+                // reloaded sees the current options. This re-sends the SAME revision and msgId
+                // rather than composing a new batch — the participant's revision guard makes it
+                // a no-op if they already have it, and the ack pill doesn't gain a duplicate
+                // entry for what is the same question.
+                DeliverCurrentBatch("participant-joined");
                 // Catch a (re)joining participant up on the current recording state so their REC
                 // indicator is correct even if they reloaded mid-recording.
                 BroadcastRecordingState();
             };
             _chat.ParticipantLeft        += (_, p) => AppendChatLine($"<i>{p.Display ?? p.Username} left</i>");
-            _chat.Ready += async (_, __) =>
+            _chat.Ready += (_, __) => _ = RunChatJoinSequenceAsync();
+
+            Debug.Log("[TextRoom] Starting SDP setup (SetupAsync)");
+            await _chat.SetupAsync();
+            Debug.Log("[TextRoom] SetupAsync complete — waiting for data channel to open");
+            WireChatInput();
+        }
+
+        /// <summary>
+        /// Join the textroom once the data channel is open, retrying the REQUESTS rather than
+        /// the connection.
+        ///
+        /// This runs after Ready, so the PeerConnection, DTLS and SCTP association are already
+        /// established — a lost create/join response therefore only costs one round trip to
+        /// recover, not a full renegotiation. The previous version bounded the whole sequence
+        /// with a single 15 s CancellationTokenSource and, on expiry, logged an error and gave
+        /// up: chat stayed dead for the rest of the session with no path back except a full
+        /// Janus session reconnect.
+        ///
+        /// Each attempt uses a FRESH username, because a previous attempt may have succeeded
+        /// server-side with only its response lost — rejoining under the same name would then be
+        /// rejected as already taken.
+        /// </summary>
+        async Task RunChatJoinSequenceAsync()
+        {
+            const int maxAttempts = 5;
+            const int perAttemptSeconds = 8;
+
+            // A (re)join means the previous session state is gone: stop reporting ready until we
+            // actually are, so nothing writes to a channel that isn't joined yet.
+            _chatReady = false;
+
+            for (int attempt = 1; attempt <= maxAttempts; attempt++)
             {
-                Debug.Log("[TextRoom] Ready fired — starting join sequence");
-                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+                if (_chat == null) return;
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(perAttemptSeconds));
+                var username = string.IsNullOrEmpty(chatUsername)
+                    ? DisplayName + UnityEngine.Random.Range(1000, 9999)
+                    : chatUsername + "-" + UnityEngine.Random.Range(1000, 9999);
                 try
                 {
-                    await _chat.EnsureRoomAsync(Room, "VaSiLi room " + Room, cts.Token);
-                    Debug.Log("[TextRoom] EnsureRoom done");
-                    var username = string.IsNullOrEmpty(chatUsername)
-                        ? DisplayName + UnityEngine.Random.Range(1000, 9999)
-                        : chatUsername;
-                    await _chat.JoinAsync(Room, username, DisplayName, cts.Token);
-                    Debug.Log("[TextRoom] JoinAsync done — chat is ready");
+                    // Join first. The room usually already exists (the web interviewer creates
+                    // it), so this is one round trip in the common case; creating up front would
+                    // always cost two. Fall back to create-then-join only if the join fails.
+                    try
+                    {
+                        await _chat.JoinAsync(Room, username, DisplayName, cts.Token);
+                    }
+                    catch (JanusException ex)
+                    {
+                        Debug.LogWarning($"[TextRoom] Join failed ({ex.Message}) — creating room and retrying");
+                        await _chat.EnsureRoomAsync(Room, "VaSiLi room " + Room, cts.Token);
+                        await _chat.JoinAsync(Room, username, DisplayName, cts.Token);
+                    }
+
+                    Debug.Log($"[TextRoom] Joined as {username} — chat is ready (attempt {attempt})");
                     _chatReady = true;
                     AppendChatLine("<i>Chat ready</i>");
 
-                    if (_pendingAnswerOptions != null)
-                    {
-                        SendAnswerOptions(_pendingAnswerOptions);
-                        _pendingAnswerOptions = null;
-                    }
+                    // Re-deliver whatever the participant should currently be seeing. Covers both
+                    // a batch composed while the channel was down and a peer who has been in the
+                    // room the whole time while we were the ones reconnecting.
+                    DeliverCurrentBatch("chat-ready");
+
                     // Re-announce recording state whenever our textroom channel (re)connects, and
                     // (re)start the heartbeat if we're already recording, so participants converge
                     // on the correct REC indicator after a reconnect.
@@ -395,18 +496,27 @@ namespace VaSiLi.WebCam
                     UpdateRecordingHeartbeat(_publisherHandle != null && (_publisherHandle.IsRecording ?? false));
                     if (enableRemoteLogs)
                         StartRemoteLogs();
+                    return;
                 }
                 catch (OperationCanceledException)
                 {
-                    Debug.LogError("[TextRoom] Join sequence timed out (15 s) — data channel may not be routing to Janus textroom plugin correctly");
+                    Debug.LogWarning($"[TextRoom] Join attempt {attempt}/{maxAttempts} timed out after {perAttemptSeconds}s");
                 }
-                catch (Exception ex) { Debug.LogError($"[TextRoom] Join failed: {ex.Message}\n{ex.StackTrace}"); }
-            };
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"[TextRoom] Join attempt {attempt}/{maxAttempts} failed: {ex.Message}");
+                }
 
-            Debug.Log("[TextRoom] Starting SDP setup (SetupAsync)");
-            await _chat.SetupAsync();
-            Debug.Log("[TextRoom] SetupAsync complete — waiting for data channel to open");
-            WireChatInput();
+                if (attempt < maxAttempts)
+                {
+                    var backoffMs = Math.Min(500 * (int)Math.Pow(2, attempt - 1), 5000);
+                    try { await Task.Delay(backoffMs); } catch { }
+                }
+            }
+
+            Debug.LogError($"[TextRoom] Join sequence failed after {maxAttempts} attempts — chat unavailable. " +
+                           "The data channel is open but the textroom plugin is not responding.");
+            AppendChatLine("<i>Chat konnte nicht verbunden werden.</i>");
         }
 
         void WireChatInput()
@@ -450,19 +560,13 @@ namespace VaSiLi.WebCam
                     switch (probe?.kind)
                     {
                         case "answer_options":
-                            var ao = JsonConvert.DeserializeObject<AnswerOptionsPayload>(e.Text);
-                            if (answerOptionsSource != null && ao?.data != null)
-                                answerOptionsSource.DisplayOptions(ao.data);
-                            // Interviewee acknowledges the batch right after rendering, so the
-                            // interviewer's pill can confirm receipt. Skip if no msgId (older sender).
-                            if (!string.IsNullOrEmpty(ao?.msgId))
-                                _ = SendAckAsync(ao.msgId);
+                            HandleAnswerOptionsPayload(JsonConvert.DeserializeObject<AnswerOptionsPayload>(e.Text));
                             return;
 
                         case "ack":
                             // Interviewer side: correlate the interviewee's ack to a tracked batch.
                             var ack = JsonConvert.DeserializeObject<AckPayload>(e.Text);
-                            if (ack != null) _ackTracker.Ack(ack.ackOf);
+                            if (ack != null) HandleAnswerAck(ack.ackOf);
                             return;
 
                         case "gaze_overlay":
@@ -839,41 +943,116 @@ namespace VaSiLi.WebCam
             answerOptionsSource.OnAnswerOptionsReceived.AddListener(SendAnswerOptions);
         }
 
-        public void SendAnswerOptions(string[] options) => SendAnswerOptions(options, silentLocal: false);
-
-        /// <param name="silentLocal">When true, skip echoing the batch into the interviewer's
-        /// own chat. Used by the push-on-join re-send so a rejoining participant gets the current
-        /// options without spamming the interviewer with a duplicate notice for each join.</param>
-        void SendAnswerOptions(string[] options, bool silentLocal)
+        /// <summary>
+        /// Compose and start delivering a new answer-option batch. Advances the content
+        /// revision, so this is for genuinely NEW options only — re-delivering the current ones
+        /// (push-on-join, retry, heartbeat) goes through <see cref="DeliverCurrentBatch"/>.
+        ///
+        /// There is no "silent" variant any more: the local chat notice is appended on a batch's
+        /// FIRST transmission only, so re-delivery can never duplicate it. That used to need an
+        /// explicit silentLocal flag at every re-send site.
+        /// </summary>
+        public void SendAnswerOptions(string[] options)
         {
             if (options == null || options.Length == 0) return;
-            // Remember the latest batch so we can re-send (with a fresh msgId) to participants
-            // who join or reload after the original send. See push-on-join below.
-            _lastAnswerOptions = options;
-            if (_chat == null || !_chatReady) { _pendingAnswerOptions = options; return; }
 
-            // Apply the SAME filter the interviewee uses (AnswerOptionFilter), so we only treat
-            // this batch as "displayed" when concrete options would actually appear on their
-            // screen. If the filter strips everything (free-answer case), we still send so their
-            // panel updates, but we don't track an ack or echo anything as displayed — matching
-            // the website's getDisplayableOptions / hasConcrete behaviour.
+            // Apply the SAME filter the interviewee uses (AnswerOptionFilter), so the echo shows
+            // exactly what will appear on their screen. When the filter suppresses everything we
+            // still send — their panel has to switch to the free-answer state — but we label the
+            // echo as suppressed and name the rule, so "deliberately hidden" can never be
+            // mistaken for "never arrived". That ambiguity is what made the real transport
+            // problem so hard to diagnose on the web side.
             var displayable = AnswerOptionFilter.Filter(options);
             bool hasConcrete = displayable != null && displayable.Count > 0;
+            string suppressedBy = hasConcrete ? null : AnswerOptionFilter.DescribeSuppression(options);
 
-            // Register the batch with the ack tracker BEFORE sending so its msgId rides along in
-            // the payload; the interviewee echoes it back in its ack, correlating the green
-            // confirmation to the exact batch. Only track/echo batches that show concrete options.
-            string msgId = null;
-            if (hasConcrete)
+            _currentBatch = new AnswerBatch
             {
-                var meta = new Dictionary<string, object> { { "count", displayable.Count } };
-                msgId = _ackTracker.Track(meta);
-                if (!silentLocal)
-                    AppendAnswerOptionsNotice(msgId, AnswerOptionLines(displayable));
+                Seq          = ++_answerSeq,
+                Data         = options,
+                SuppressedBy = suppressedBy,
+                Lines        = hasConcrete
+                                 ? AnswerOptionLines(displayable)
+                                 : new[] { "Freie Antwort — " + suppressedBy },
+                FirstSentAt  = -1f,
+            };
+
+            DeliverCurrentBatch("initial");
+        }
+
+        /// <summary>
+        /// Transmit the current batch. Safe to call repeatedly: the receiver drops any revision
+        /// it has already rendered, so retries, the heartbeat and push-on-join are all the same
+        /// operation. Returns false when the channel isn't up yet — the batch stays current and
+        /// the heartbeat (or the next join) will deliver it.
+        /// </summary>
+        bool DeliverCurrentBatch(string why)
+        {
+            var batch = _currentBatch;
+            if (batch == null) return false;
+            if (_chat == null || !_chatReady)
+            {
+                Debug.Log($"[AnswerOptions] channel not ready — deferring seq={batch.Seq} ({why})");
+                return false;
             }
 
-            var payload = JsonConvert.SerializeObject(new AnswerOptionsPayload { msgId = msgId, data = options });
+            // Register with the ack tracker on the FIRST real transmission rather than when the
+            // batch was composed. Otherwise the ack timeout would burn down while the data
+            // channel was still connecting and report a failure for something never sent.
+            if (!batch.Tracked)
+            {
+                batch.Tracked = true;
+                batch.FirstSentAt = Time.realtimeSinceStartup;
+                var meta = new Dictionary<string, object> { { "count", batch.Lines?.Length ?? 0 } };
+                batch.MsgId = _ackTracker.Track(meta);
+                AppendAnswerOptionsNotice(batch.MsgId, batch.Lines);
+            }
+
+            var payload = JsonConvert.SerializeObject(new AnswerOptionsPayload
+            {
+                msgId = batch.MsgId,
+                epoch = _answerEpoch,
+                seq   = batch.Seq,
+                data  = batch.Data,
+            });
+            Debug.Log($"[AnswerOptions] sending seq={batch.Seq} msgId={batch.MsgId} reason={why} " +
+                      $"suppressedBy={batch.SuppressedBy ?? "(none)"}");
             _ = SendStructuredAsync(payload);
+            return true;
+        }
+
+        /// <summary>
+        /// Drives retransmission and the slow re-announce. Called once per frame — the
+        /// Unity-idiomatic replacement for setTimeout, same pattern as AckTracker.Tick.
+        ///
+        /// Answer options are a STATE ("which options apply right now"), not an event, so an
+        /// unacknowledged batch is retried on a short schedule and the current one is
+        /// re-announced slowly forever. Duplicates cost one small message and are dropped by
+        /// the receiver's revision guard.
+        /// </summary>
+        void TickAnswerOptionDelivery()
+        {
+            var batch = _currentBatch;
+            if (batch == null) return;
+            float now = Time.realtimeSinceStartup;
+
+            if (batch.Tracked && !batch.Acked && batch.RetriesDone < AnswerRetryDelaysSeconds.Length)
+            {
+                float due = batch.FirstSentAt + AnswerRetryDelaysSeconds[batch.RetriesDone];
+                if (now >= due)
+                {
+                    batch.RetriesDone++;
+                    Debug.LogWarning($"[AnswerOptions] no ack for seq={batch.Seq} — retransmitting " +
+                                     $"(attempt {batch.RetriesDone}/{AnswerRetryDelaysSeconds.Length})");
+                    DeliverCurrentBatch("retry");
+                }
+            }
+
+            if (now >= _answerHeartbeatDue)
+            {
+                _answerHeartbeatDue = now + AnswerHeartbeatSeconds;
+                DeliverCurrentBatch("heartbeat");
+            }
         }
 
         /// <summary>Build the lines echoed into the interviewer's chat for a displayed batch.
@@ -906,6 +1085,60 @@ namespace VaSiLi.WebCam
             var firstLine = AnswerOptionFilter.FilterText(text).Trim();
             var m = System.Text.RegularExpressions.Regex.Match(firstLine, @"^(\d+)\s*[-–—:.]?\s*(.*)$");
             return m.Success ? (m.Groups[1].Value, m.Groups[2].Value.Trim()) : (firstLine, "");
+        }
+
+        /// <summary>
+        /// Render an incoming answer-option batch, dropping duplicates.
+        ///
+        /// Duplicates are expected and cheap by design: the sender retransmits an
+        /// unacknowledged batch and re-announces the current one on a slow heartbeat, so a
+        /// delivery lost while our channel was down still converges. Re-rendering each of those
+        /// would rebuild the TextMeshPro meshes for nothing.
+        ///
+        /// We ack duplicates too — otherwise a lost ACK (rather than a lost batch) would leave
+        /// the sender's pill stuck on "not confirmed" for options plainly on screen, and would
+        /// keep its retry schedule running.
+        /// </summary>
+        void HandleAnswerOptionsPayload(AnswerOptionsPayload ao)
+        {
+            if (ao?.data == null) return;
+
+            // A changed epoch means the sender restarted and its revision counter went back to
+            // zero. Without resetting here, every batch it sends from now on would look stale.
+            var epoch = string.IsNullOrEmpty(ao.epoch) ? null : ao.epoch;
+            if (epoch != _lastAnswerEpoch)
+            {
+                Debug.Log($"[AnswerOptions] sender epoch changed {_lastAnswerEpoch ?? "(none)"} -> " +
+                          $"{epoch ?? "(none)"} — resetting de-duplication");
+                _lastAnswerEpoch = epoch;
+                _lastAnswerSeq = -1;
+            }
+
+            // seq < 0 means the sender doesn't stamp revisions (older build): render every time,
+            // which is the pre-existing behaviour and still correct, just not de-duplicated.
+            if (ao.seq >= 0 && ao.seq <= _lastAnswerSeq)
+            {
+                Debug.Log($"[AnswerOptions] duplicate seq={ao.seq} — already rendered, acking only");
+                if (!string.IsNullOrEmpty(ao.msgId)) _ = SendAckAsync(ao.msgId);
+                return;
+            }
+            if (ao.seq >= 0) _lastAnswerSeq = ao.seq;
+
+            Debug.Log($"[AnswerOptions] rendering seq={ao.seq} epoch={epoch ?? "(none)"} msgId={ao.msgId}");
+            if (answerOptionsSource != null)
+                answerOptionsSource.DisplayOptions(ao.data);
+
+            // Acknowledge after rendering so the sender's pill confirms actual display.
+            if (!string.IsNullOrEmpty(ao.msgId)) _ = SendAckAsync(ao.msgId);
+        }
+
+        /// <summary>Interviewer side: an interviewee confirmed receipt, so stop retransmitting.</summary>
+        void HandleAnswerAck(string ackOf)
+        {
+            if (string.IsNullOrEmpty(ackOf)) return;
+            if (_currentBatch != null && _currentBatch.MsgId == ackOf)
+                _currentBatch.Acked = true;
+            _ackTracker.Ack(ackOf);
         }
 
         /// <summary>Interviewee → interviewer confirmation that a batch was received and rendered.</summary>
@@ -968,7 +1201,26 @@ namespace VaSiLi.WebCam
         // ---------- Payload types ----------
 
         [Serializable] class KindProbe        { public string kind; }
-        [Serializable] class AnswerOptionsPayload { public string kind = "answer_options"; public string msgId; public string[] data; }
+
+        /// <summary>
+        /// Answer-option batch on the wire. Field-for-field compatible with the web
+        /// frontend's payload (js/answer-options.js) — change both or neither.
+        ///
+        /// <c>epoch</c> identifies the SENDER'S process/page lifetime and <c>seq</c> is a
+        /// CONTENT revision, not a packet counter. Retries, the heartbeat and push-on-join
+        /// re-sends all carry the revision of the batch they are re-delivering, so the
+        /// receiver can drop a duplicate without re-rendering while a first delivery still
+        /// gets through. Without the epoch, a sender restart would reset seq to zero and the
+        /// receiver would discard every later batch as "stale".
+        /// </summary>
+        [Serializable] class AnswerOptionsPayload
+        {
+            public string kind = "answer_options";
+            public string msgId;
+            public string epoch;
+            public int seq = -1;   // -1 = absent (older sender); receiver then skips de-duplication
+            public string[] data;
+        }
         [Serializable] class AckPayload           { public string kind = "ack"; public string ackOf; public string status = "received"; }
         [Serializable] class GazeOverlayPayload   { public string kind = "gaze_overlay";   public bool show; public string textTopLeft; public string textBottomRight; }
         [Serializable] class FollowupPayload       { public string kind = "followup_survey"; public string url; }

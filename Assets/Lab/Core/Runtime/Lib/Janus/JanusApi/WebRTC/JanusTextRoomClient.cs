@@ -61,6 +61,10 @@ namespace VaSiLi.Janus.WebRTC
         bool _disposed;
         bool _readyFired;
 
+        // Serializes handle restores and lets a superseded one bail out. See OnHandleRestored.
+        readonly SemaphoreSlim _restoreLock = new SemaphoreSlim(1, 1);
+        int _restoreGen;
+
         public JanusTextRoomClient(MonoBehaviour runner, TextRoomHandle handle, RTCConfiguration config)
         {
             _runner = runner != null ? runner : throw new ArgumentNullException(nameof(runner));
@@ -329,28 +333,43 @@ namespace VaSiLi.Janus.WebRTC
             return tcs.Task;
         }
 
+        /// <summary>
+        /// Rebuild the PeerConnection after the underlying Janus handle was restored.
+        ///
+        /// Serialized and generation-guarded: two Restored events in quick succession would
+        /// otherwise run concurrently and interleave their multi-await SDP sequences on
+        /// <see cref="PeerConnection"/>, with the loser leaving a half-built connection behind.
+        /// A superseded restore aborts as soon as it notices a newer one started.
+        ///
+        /// Deliberately does NOT rejoin the room. Firing Ready (which SetupAsync triggers once
+        /// the channel opens) is the signal; the OWNER decides the username, display name and
+        /// retry policy. Rejoining here as well produced two joins per restore under two
+        /// different usernames, with the second one failing as "already in room".
+        /// </summary>
         async void OnHandleRestored(object sender, EventArgs args)
         {
             if (_disposed) return;
+            int myGen = Interlocked.Increment(ref _restoreGen);
+            await _restoreLock.WaitAsync().ConfigureAwait(false);
             try
             {
+                if (_disposed || myGen != Volatile.Read(ref _restoreGen))
+                {
+                    Debug.Log($"[JanusTextRoom] Restore gen {myGen} superseded — skipping");
+                    return;
+                }
                 ClosePeerConnection();
                 CreatePeerConnection();
                 _setupDone = false;
                 await SetupAsync().ConfigureAwait(false);
-                if (Room.HasValue && !string.IsNullOrEmpty(Username))
-                {
-                    // Rejoin under a fresh username: our previous textroom participant may still
-                    // linger server-side until it times out, and rejoining with the same username
-                    // would be rejected as already taken.
-                    var baseName = string.IsNullOrEmpty(Display) ? Username : Display;
-                    var freshUsername = baseName + "-" + JanusProtocol.NewTransactionId(6);
-                    await JoinAsync(Room.Value, freshUsername, Display).ConfigureAwait(false);
-                }
             }
             catch (Exception ex)
             {
                 Debug.LogError($"[JanusTextRoom] Restore failed: {ex.Message}");
+            }
+            finally
+            {
+                _restoreLock.Release();
             }
         }
 
@@ -376,6 +395,7 @@ namespace VaSiLi.Janus.WebRTC
             ClosePeerConnection();
             foreach (var kv in _pending) kv.Value.TrySetCanceled();
             _pending.Clear();
+            _restoreLock.Dispose();
         }
     }
 }
