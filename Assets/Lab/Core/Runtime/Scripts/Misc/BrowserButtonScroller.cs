@@ -6,6 +6,8 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 /// <summary>
 /// Enables scrolling a Browser window using Meta Quest controller buttons (A/B for vertical, X/Y for horizontal).
 /// Optionally scrolls at the position the controller is pointing at.
+/// Controller-only on purpose: with hand tracking the pinch is used to click/drag the page,
+/// which already scrolls it, so mapping the pinch here as well would conflict.
 /// </summary>
 public class BrowserButtonScroller : MonoBehaviour
 {

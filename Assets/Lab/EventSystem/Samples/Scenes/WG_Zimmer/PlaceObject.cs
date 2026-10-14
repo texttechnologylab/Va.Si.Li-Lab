@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using VaSiLi.Helper;
 
 public class PlaceObject : MonoBehaviour
 {
@@ -29,17 +31,19 @@ public class PlaceObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey(KeyCode.J)){//update price and UI
+        bool clicked = Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
+
+        if(LabInput.KeyHeld(Key.J)){//update price and UI
             currPrice = price1;
             obj.text = "Item: Bed";
         }
 
-        if(Input.GetKey(KeyCode.K)){
+        if(LabInput.KeyHeld(Key.K)){
             currPrice = price2;
             obj.text = "Item: Wardrobe";
         }
 
-        if(Input.GetKey(KeyCode.L)){
+        if(LabInput.KeyHeld(Key.L)){
             currPrice = price3;
             obj.text = "Item: Rug";
         }
@@ -55,7 +59,7 @@ public class PlaceObject : MonoBehaviour
                 ghost.SetActive(true);
                 if(Physics.Raycast(transform.position,transform.TransformDirection(Vector3.forward),out hit, Mathf.Infinity)){
                     ghost.transform.position = hit.point;
-                    if(Input.GetMouseButtonDown(0)){
+                    if(clicked){
                         totalBlock -= currPrice;
                         Instantiate(placed,ghost.transform.position,ghost.transform.rotation);
                     }
@@ -68,7 +72,7 @@ public class PlaceObject : MonoBehaviour
                 ghost1.SetActive(true);
                 if(Physics.Raycast(transform.position,transform.TransformDirection(Vector3.forward),out hit, Mathf.Infinity)){
                     ghost1.transform.position = hit.point;
-                    if(Input.GetMouseButtonDown(0)){
+                    if(clicked){
                         totalBlock -= currPrice;
                         Instantiate(placed1,ghost1.transform.position,ghost1.transform.rotation);
                     }
@@ -81,7 +85,7 @@ public class PlaceObject : MonoBehaviour
                 ghost2.SetActive(true);
                 if(Physics.Raycast(transform.position,transform.TransformDirection(Vector3.forward),out hit, Mathf.Infinity)){
                     ghost2.transform.position = hit.point;
-                    if(Input.GetMouseButtonDown(0)){
+                    if(clicked){
                         totalBlock -= currPrice;
                         Instantiate(placed2,ghost2.transform.position,ghost2.transform.rotation);
                     }

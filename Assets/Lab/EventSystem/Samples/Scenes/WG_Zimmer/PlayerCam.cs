@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerCam : MonoBehaviour
 {
@@ -22,8 +23,10 @@ public class PlayerCam : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime *sensX;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime *sensY;
+        // Input System delta is in pixels; * 0.1 matches the old "Mouse X/Y" axis scale so sensX/sensY stay the same
+        Vector2 delta = Mouse.current != null ? Mouse.current.delta.ReadValue() * 0.1f : Vector2.zero;
+        float mouseX = delta.x * Time.deltaTime *sensX;
+        float mouseY = delta.y * Time.deltaTime *sensY;
 
         yRotation += mouseX;
 

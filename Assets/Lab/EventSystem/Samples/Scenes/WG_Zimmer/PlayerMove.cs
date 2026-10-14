@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -25,13 +26,16 @@ public class PlayerMove : MonoBehaviour
     {
         rb_body = GetComponent<Rigidbody>();
         rb_body.freezeRotation = true;
-        
+
     }
 
     // Update is called once per frame
     private void PlayerInput(){
-        horivontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        // WASD / arrow keys, same as the old "Horizontal"/"Vertical" raw axes
+        var kb = Keyboard.current;
+        if (kb == null) { horivontalInput = verticalInput = 0f; return; }
+        horivontalInput = (kb.dKey.isPressed || kb.rightArrowKey.isPressed ? 1f : 0f) - (kb.aKey.isPressed || kb.leftArrowKey.isPressed ? 1f : 0f);
+        verticalInput = (kb.wKey.isPressed || kb.upArrowKey.isPressed ? 1f : 0f) - (kb.sKey.isPressed || kb.downArrowKey.isPressed ? 1f : 0f);
     }
     void Update()
     {

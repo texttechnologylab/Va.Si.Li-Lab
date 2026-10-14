@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3210565870517887389}
   - component: {fileID: 8825201024197172695}
   - component: {fileID: 808893853696407199}
-  - component: {fileID: 3140954689336350758}
   - component: {fileID: 4946113482908618948}
   m_Layer: 0
   m_Name: Menu
@@ -43,10 +42,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25712975901018395}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -84,18 +83,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.65, y: 0.56, z: 0.03}
   m_Center: {x: -0.00053936243, y: 0.0003761575, z: -0.00000024036274}
---- !u!114 &3140954689336350758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 25712975901018395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 253d2c20858f4ac4eb3a607033123d7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4946113482908618948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1219,7 +1206,6 @@ GameObject:
   - component: {fileID: 9178668725519494783}
   - component: {fileID: 1627756307505814300}
   - component: {fileID: 4551627397424222412}
-  - component: {fileID: 4378092362511087281}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -1310,18 +1296,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &4378092362511087281
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6002958873061737901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02cbd4f5d5609ca4595310fdfa657e63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6276437581868164837
 GameObject:
   m_ObjectHideFlags: 0

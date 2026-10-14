@@ -6,6 +6,8 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 /// <summary>
 /// Enables scrolling a Browser window using the Meta Quest right joystick (SecondaryThumbstick).
 /// Optionally scrolls at the position the controller is pointing at.
+/// Controller-only convenience: with hand tracking the thumbstick reads zero, and the browser
+/// is scrolled by pinch-dragging on the page instead (handled by the TLab browser input listener).
 /// </summary>
 public class BrowserJoystickScroller : MonoBehaviour
 {

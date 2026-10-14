@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using VaSiLi.Helper;
 
 
@@ -9,8 +10,6 @@ namespace Ubiq.XR
     /// <summary>
     /// Uses the object under the cursor.
     /// </summary>
-    /// 
-    [Obsolete("Needs to be converted to new input system", false)]
     public class DistanceObjectDesktopUser : MonoBehaviour
     {
         public IDistanceUseable used;
@@ -45,8 +44,9 @@ namespace Ubiq.XR
 
         private void TestDistanceUse()
         {
-            // TODO: Convert to new input system
-            /*if (Input.GetMouseButton(0))
+            // Disabled until DesktopHand is available again (see DistanceUse/DistanceLink below).
+            // Already uses the new Input System, so it can simply be uncommented.
+            /*if (Mouse.current != null && Mouse.current.leftButton.isPressed)
             {
                 if (used == null)
                 {
@@ -73,7 +73,7 @@ namespace Ubiq.XR
                     }
                 }
             }
-            else if (Input.GetMouseButtonUp(0) && used != null)
+            else if (Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame && used != null)
             {
                 IDistanceUseable target_used = PerformRaycast();
                 if (target_used != null) { 
@@ -95,9 +95,15 @@ namespace Ubiq.XR
         {
             var mainCamera = FindCamera();
 
+            if (Mouse.current == null)
+            {
+                hit_position = Vector3.zero;
+                return null;
+            }
+
+            Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             RaycastHit hit = new RaycastHit();
-            if (!Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition).origin,
-                                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, 100,
+            if (!Physics.Raycast(ray.origin, ray.direction, out hit, 100,
                                  Physics.DefaultRaycastLayers)
             )
             {

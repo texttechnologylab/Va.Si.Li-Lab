@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Oculus.Interaction;
+using VaSiLi.Helper;
 
 namespace VaSiLi.Interaction
 {
@@ -102,7 +103,7 @@ namespace VaSiLi.Interaction
         [SerializeField]
         private bool _useButtonConfirm = false;
 
-        [Tooltip("Controller button to use for confirmation.")]
+        [Tooltip("Controller button to use for confirmation. One/Three also map to the right/left index pinch with hand tracking.")]
         [SerializeField]
         private OVRInput.Button _confirmButton = OVRInput.Button.One;
 
@@ -515,7 +516,8 @@ namespace VaSiLi.Interaction
             }
 
             // Allow cancellation
-            if (OVRInput.GetDown(OVRInput.Button.Two))
+            // B on controllers, left-hand menu gesture with hand tracking, Escape on desktop
+            if (LabInput.BackDown())
             {
                 CancelCalibration();
             }

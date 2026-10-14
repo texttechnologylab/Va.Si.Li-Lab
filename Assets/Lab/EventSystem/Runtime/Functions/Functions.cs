@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using VaSiLi.Helper;
 
 public class Funktions : MonoBehaviour
 {
@@ -39,9 +40,10 @@ public class Funktions : MonoBehaviour
 
     void Update()
     {
-        zooming = Keyboard.current != null && Keyboard.current.spaceKey.isPressed;
+        zooming = LabInput.KeyHeld(Key.Space);
 
-        zoomGamepad = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger);
+        // Left grip on controllers, left index pinch with hand tracking
+        zoomGamepad = LabInput.SecondaryHeld();
 
         bool isZoom = zooming || zoomGamepad;
 

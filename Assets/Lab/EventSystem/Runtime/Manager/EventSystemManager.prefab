@@ -799,6 +799,7 @@ MonoBehaviour:
   eventSystemFactory: {fileID: 5091363715332617179, guid: 75ed918850513bf4795c3ad0e5e955df, type: 3}
   addPanel: {fileID: 4558658542052630372}
   itemPanel: {fileID: 5009436844675845496, guid: 9018b6e3892a7504ab24ba23f77f1bb2, type: 3}
+  selecter: {fileID: 0}
   currentEventSystemFactories: []
   templates: {fileID: 2729147845794439771, guid: e7640ec29b6557147b2b4bae9caa62bf, type: 3}
 --- !u!1 &3776234107303186169
@@ -1352,7 +1353,6 @@ GameObject:
   - component: {fileID: 1482276911171359610}
   - component: {fileID: 6499526474939746822}
   - component: {fileID: 2289656528858236154}
-  - component: {fileID: 6798098552503404651}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -1447,18 +1447,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &6798098552503404651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8340424128869929270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02cbd4f5d5609ca4595310fdfa657e63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8846768040408540046
 GameObject:
   m_ObjectHideFlags: 0

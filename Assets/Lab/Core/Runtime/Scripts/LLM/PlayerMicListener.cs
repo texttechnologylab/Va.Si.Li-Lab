@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using VaSiLi.Helper;
 using VaSiLi.MetaAvatar;
 
 namespace VaSiLi.Llm {
@@ -15,16 +16,14 @@ namespace VaSiLi.Llm {
         }
         
         private void Update() {
-            bool vDown = Keyboard.current != null && Keyboard.current.vKey.wasPressedThisFrame;
-            bool vUp   = Keyboard.current != null && Keyboard.current.vKey.wasReleasedThisFrame;
-            
-            if (!_currentlyTalking && (OVRInput.GetDown(OVRInput.Button.One) || vDown)) {
+            // Push-to-talk: A button, right index pinch with hand tracking, or V on desktop
+            if (!_currentlyTalking && LabInput.PrimaryDown(Key.V)) {
                 _currentlyTalking = true;
                 Debug.Log("Now recording.");
                 _clip = Microphone.Start(Microphone.devices[0], true, 10, 44100);
             }
 
-            if (_currentlyTalking && (OVRInput.GetUp(OVRInput.Button.One) || vUp)) {
+            if (_currentlyTalking && LabInput.PrimaryUp(Key.V)) {
                 Microphone.End(Microphone.devices[0]);
                 Debug.Log("Stop.");
 

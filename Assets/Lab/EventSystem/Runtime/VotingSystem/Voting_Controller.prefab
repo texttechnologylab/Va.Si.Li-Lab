@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2869511744287539011}
-  - component: {fileID: 7767168154363099326}
   m_Layer: 0
   m_Name: Voting_Controller
   m_TagString: Untagged
@@ -32,18 +31,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7767168154363099326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7335338520564508765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8e73fcf627dd4aadb4b26a94daf17f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  yesNoVotePrefab: {fileID: 5448447537286004330, guid: dbdfab3f348964c58b805173ec99bc89, type: 3}
-  singleChoiceVotePrefab: {fileID: 4494222929097389, guid: 997314835b8f044f1826ba2645addc25, type: 3}
-  togglePrefab: {fileID: 8798113935458384146, guid: 754e05c7f7f3f427085224b8e1a24ec6, type: 3}
