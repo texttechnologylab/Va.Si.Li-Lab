@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using VaSiLi.MetaAvatar;
 
-namespace Lab.Core.Runtime.Scripts.LLM {
+namespace VaSiLi.Llm {
     public class PlayerMicListener : MonoBehaviour {
         public AgentManager manager;
     

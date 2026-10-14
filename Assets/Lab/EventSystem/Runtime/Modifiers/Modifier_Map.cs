@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Lab.Core.Runtime.Scripts.LLM;
+using VaSiLi.Llm;
 using UnityEngine;
 using UnityEngine.UI;
 

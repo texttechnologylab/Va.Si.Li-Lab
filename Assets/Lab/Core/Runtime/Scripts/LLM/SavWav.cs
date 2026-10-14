@@ -38,7 +38,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-namespace Lab.Core.Runtime.Scripts.LLM {
+namespace VaSiLi.Llm {
 	public static class SavWav
 	{
 		private const uint HeaderSize = 44;

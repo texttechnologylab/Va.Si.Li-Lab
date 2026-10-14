@@ -7,7 +7,7 @@ using VaSiLi.Networking;
 using UnityEngine.SceneManagement;
 using Vector3 = UnityEngine.Vector3;
 
-namespace Lab.Core.Runtime.Scripts.LLM
+namespace VaSiLi.Llm
 {
     public class AgentManager : MonoBehaviour
     {

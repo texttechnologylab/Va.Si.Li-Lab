@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Lab.Core.Runtime.Scripts.LLM {
+namespace VaSiLi.Llm {
     [Serializable]
     public class ToolCallResult {
         public string id;

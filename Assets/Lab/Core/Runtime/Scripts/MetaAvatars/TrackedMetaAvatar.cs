@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using Lab.Core.Runtime.Scripts.LLM;
+using VaSiLi.Llm;
 using UnityEngine;
 using UnityEngine.Events;
 using Ubiq.Messaging;

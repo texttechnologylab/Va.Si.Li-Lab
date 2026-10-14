@@ -1,4 +1,4 @@
-namespace Lab.Core.Runtime.Scripts.LLM {
+namespace VaSiLi.Llm {
     public interface IAgentContextInfo {
         string GetContextInfo();
     }

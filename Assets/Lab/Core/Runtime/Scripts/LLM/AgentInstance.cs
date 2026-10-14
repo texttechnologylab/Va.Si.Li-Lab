@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using VaSiLi.Networking;
 using Application = UnityEngine.Application;
 
-namespace Lab.Core.Runtime.Scripts.LLM
+namespace VaSiLi.Llm
 {
     [RequireComponent(typeof(AudioSource))]
     public class AgentInstance : MonoBehaviour

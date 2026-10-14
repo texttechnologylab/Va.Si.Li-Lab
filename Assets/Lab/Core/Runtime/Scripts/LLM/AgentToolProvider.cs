@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using VaSiLi.Networking;
 
-namespace Lab.Core.Runtime.Scripts.LLM
+namespace VaSiLi.Llm
 {
     public class AgentToolProvider : MonoBehaviour
     {

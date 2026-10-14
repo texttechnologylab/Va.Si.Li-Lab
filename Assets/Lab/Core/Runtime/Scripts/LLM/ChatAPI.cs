@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using VaSiLi.Networking;
 
-namespace Lab.Core.Runtime.Scripts.LLM
+namespace VaSiLi.Llm
 {
     /**
      * This component allows audio communication with an LLM in any scene. Place an empty game object and attach this

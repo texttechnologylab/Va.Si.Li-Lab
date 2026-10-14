@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Lab.Core.Runtime.Scripts.LLM {
+namespace VaSiLi.Llm {
     public class ToolWhitelistUI : MonoBehaviour {
         public Button plus, minus;
         public GameObject toolSelector;
