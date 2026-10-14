@@ -2,7 +2,6 @@ using Oculus.Interaction;
 using Oculus.Platform.Models;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 /// <summary>
 /// This trigger actives a target enters a specific area

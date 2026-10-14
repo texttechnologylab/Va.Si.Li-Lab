@@ -40,7 +40,7 @@ namespace VaSiLi.Llm
         private Coroutine _currentSpeaking;
         private string _tempPath;
 
-        private string _chatUrl = "http://vragent.lehre.texttechnologylab.org/";
+        private static string _chatUrl => VasiliEndpoints.Current.agent + "/";
 
         private ChatAPI _chatAPI;
         

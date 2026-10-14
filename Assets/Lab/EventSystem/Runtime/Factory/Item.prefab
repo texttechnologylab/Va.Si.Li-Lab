@@ -122,7 +122,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3580654151900609423}
-        m_TargetAssemblyTypeName: ItemReferencer, Assembly-CSharp
+        m_TargetAssemblyTypeName: ItemReferencer, Vasili.EventSystem
         m_MethodName: deleteEvent
         m_Mode: 1
         m_Arguments:
@@ -521,7 +521,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3580654151900609423}
-        m_TargetAssemblyTypeName: ItemReferencer, Assembly-CSharp
+        m_TargetAssemblyTypeName: ItemReferencer, Vasili.EventSystem
         m_MethodName: changeGroupClick
         m_Mode: 1
         m_Arguments:

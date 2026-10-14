@@ -8,8 +8,8 @@ using static System.Environment;
 
 public class ShapeNetInterface
 {
-    public const string WS = "http://shapenet.texttechnologylab.org/";
-    public const string GET_OBJECT_ID = WS + "get?id=";
+    public static string WS => VaSiLi.Networking.VasiliEndpoints.Current.shapeNet + "/";
+    public static string GET_OBJECT_ID => WS + "get?id=";
 
     public static string CACHE_DIR = Path.Combine(Application.persistentDataPath, "vasililab");
 

@@ -1,7 +1,10 @@
 {
     "name": "Vasili.Editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:ec241a70e311cf04e8c409f43827e378",
+        "GUID:ab979a98ba0be4546bceb48f770b11c8"
+    ],
     "includePlatforms": [
         "Editor"
     ],

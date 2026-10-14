@@ -2225,7 +2225,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playbackSelf: 0
   playbackResult: 0
-  _baseUrl: http://gpu.audio.vasililab.texttechnologylab.org
 --- !u!1 &6991199175982349618
 GameObject:
   m_ObjectHideFlags: 0

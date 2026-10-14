@@ -27,9 +27,7 @@ public class ConnectionStatusMonitor : MonoBehaviour
     [Tooltip("How often to check the status (in seconds).")]
     private float updateInterval = 5f;
 
-    [SerializeField]
-    [Tooltip("API endpoint to check.")]
-    private string apiUrl = "http://api.vasililab.texttechnologylab.org/logging/status";
+    private static string apiUrl => VasiliEndpoints.Current.api + "/logging/status";
 
     [Header("Status Symbols")]
     [SerializeField] private string symbolOk = "✔️";

@@ -2673,6 +2673,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -4834,6 +4835,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2934046453172814937
 MonoBehaviour:
@@ -4893,6 +4895,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -9260,6 +9263,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -9538,6 +9542,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &1816760655109622295
 BoxCollider:
@@ -14755,7 +14760,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1631265205490962972}
   m_HandleRect: {fileID: 1631265204614381997}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 11
   m_OnValueChanged:
@@ -17594,7 +17599,6 @@ MonoBehaviour:
   _useClosestPointAsGrabSource: 0
   _releaseDistance: 0
   _resetGrabOnGrabsUpdated: 1
-  _physicsGrabbable: {fileID: 0}
 --- !u!114 &7430929548708141180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17613,7 +17617,6 @@ MonoBehaviour:
   _data: {fileID: 0}
   _pointableElement: {fileID: 2164895703825446894}
   _rigidbody: {fileID: 1631265206356205819}
-  _physicsGrabbable: {fileID: 0}
   _resetGrabOnGrabsUpdated: 1
   _scoringModifier:
     _positionRotationWeight: 0.8
@@ -19112,6 +19115,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -26873,6 +26877,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -31006,6 +31011,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 2412086711043703001}
   _kinematicWhileSelected: 1
   _throwWhenUnselected: 1
+  _forceKinematicDisabled: 0
 --- !u!1 &3605672307451290347
 GameObject:
   m_ObjectHideFlags: 0
@@ -33829,6 +33835,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &4135749862177121137
 BoxCollider:
@@ -33955,6 +33962,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -43624,7 +43632,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4801071463525973780
 RectTransform:
   m_ObjectHideFlags: 0
@@ -48129,31 +48137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RoleSound: {fileID: 1861190260019550}
   audioSources:
-  - {fileID: 8300000, guid: dd2384a5d09a94d4c83be95b64102c3a, type: 3}
-  - {fileID: 8300000, guid: 3cd5f2d779c2dfd4ca0df99be49e5885, type: 3}
-  - {fileID: 8300000, guid: 8d9bf59a91329d64482fc7b877bc3e0b, type: 3}
-  - {fileID: 8300000, guid: 79a669fbc092c6d48afb266bcd9c8281, type: 3}
-  - {fileID: 8300000, guid: 5f0890026e69bc048b8ff8b7278dfdc9, type: 3}
-  - {fileID: 8300000, guid: fa5244c17b106f6439860e8661c58e66, type: 3}
-  - {fileID: 8300000, guid: d346e8e9196164949af863438ad210cc, type: 3}
-  - {fileID: 8300000, guid: 894b56cfb9f25e640a79e45ed3c1d804, type: 3}
-  - {fileID: 8300000, guid: 035ae1814dd309c4b8fbf5e79cdf1881, type: 3}
-  - {fileID: 8300000, guid: 6785582a443919b4cba78a976943cd5f, type: 3}
-  - {fileID: 8300000, guid: d61f54d97200b534e956690d4d988a21, type: 3}
-  - {fileID: 8300000, guid: 6250701bf97ca744490049d7191234f4, type: 3}
-  - {fileID: 8300000, guid: 209343ecb2516054fb0e9fd99da60e12, type: 3}
-  - {fileID: 8300000, guid: 016d3e2e066832047a9553741545ac77, type: 3}
-  - {fileID: 8300000, guid: ec61f4812f81816488228e2687ac3058, type: 3}
-  - {fileID: 8300000, guid: 00c9f068d28488b47b6cfb2e096d62bd, type: 3}
-  - {fileID: 8300000, guid: 32c762fc03d4b2d4ba8b7993030cd226, type: 3}
-  - {fileID: 8300000, guid: 6efac9379b6f4104c9b2df011e4ba9b1, type: 3}
-  - {fileID: 8300000, guid: 71378e04f9ce92147a27e56d8805621a, type: 3}
-  - {fileID: 8300000, guid: 7abab0103067b994f8b7995fb871ef43, type: 3}
-  - {fileID: 8300000, guid: 470795bcdd46ad643a973f714dff74fc, type: 3}
-  - {fileID: 8300000, guid: 9ba502ca3ce02d844bd417dae4967260, type: 3}
-  - {fileID: 8300000, guid: 58d3500159594864795a7409096e64b2, type: 3}
-  - {fileID: 8300000, guid: 646ec500f81c6f14b95b291bdf62b46a, type: 3}
-  - {fileID: 8300000, guid: dec591fe8cb13f847882ccf2544b21b8, type: 3}
+  - {fileID: 0}
 --- !u!1 &5443831313104287924
 GameObject:
   m_ObjectHideFlags: 0
@@ -50203,6 +50187,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &6144302998798292836
 MonoBehaviour:
@@ -50262,6 +50247,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -50401,6 +50387,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -52916,7 +52903,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playbackSelf: 0
   playbackResult: 0
-  _baseUrl: http://gpu.audio.vasililab.texttechnologylab.org
 --- !u!1 &6113585442789630113
 GameObject:
   m_ObjectHideFlags: 0
@@ -57560,18 +57546,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RoleSound: {fileID: 245565682519912701}
   audioSources:
-  - {fileID: 8300000, guid: dd2384a5d09a94d4c83be95b64102c3a, type: 3}
-  - {fileID: 8300000, guid: 3cd5f2d779c2dfd4ca0df99be49e5885, type: 3}
-  - {fileID: 8300000, guid: 8d9bf59a91329d64482fc7b877bc3e0b, type: 3}
-  - {fileID: 8300000, guid: 79a669fbc092c6d48afb266bcd9c8281, type: 3}
-  - {fileID: 8300000, guid: 5f0890026e69bc048b8ff8b7278dfdc9, type: 3}
-  - {fileID: 8300000, guid: fa5244c17b106f6439860e8661c58e66, type: 3}
-  - {fileID: 8300000, guid: d346e8e9196164949af863438ad210cc, type: 3}
-  - {fileID: 8300000, guid: 894b56cfb9f25e640a79e45ed3c1d804, type: 3}
-  - {fileID: 8300000, guid: 035ae1814dd309c4b8fbf5e79cdf1881, type: 3}
-  - {fileID: 8300000, guid: 6785582a443919b4cba78a976943cd5f, type: 3}
-  - {fileID: 8300000, guid: d61f54d97200b534e956690d4d988a21, type: 3}
-  - {fileID: 8300000, guid: 6250701bf97ca744490049d7191234f4, type: 3}
+  - {fileID: 0}
 --- !u!1 &6669760373937687660
 GameObject:
   m_ObjectHideFlags: 0
@@ -58405,6 +58380,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -71862,6 +71838,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

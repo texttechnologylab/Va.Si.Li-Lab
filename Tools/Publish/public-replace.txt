@@ -1,0 +1,5 @@
+regex:(?i)(credential\w*\s*=\s*")[^"]+"==>\1"
+regex:(?im)^(\s*credential: )\S+$==>\1
+regex:(?m)^(\s*AndroidKeystoreName: ).*$==>\1''
+regex:(?m)^(\s*ovr(Mobile)?AppID: ).*$==>\1
+regex:(?i)(key(store|alias)Pass\s*=\s*")[^"]+"==>\1"

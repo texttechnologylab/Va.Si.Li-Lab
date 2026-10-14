@@ -10,7 +10,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using System.Threading.Tasks;
 using UnityEngine.UI;
-using NUnit.Framework;
 /// <summary>
 /// This script handles the EventSystem Inventory
 /// </summary>

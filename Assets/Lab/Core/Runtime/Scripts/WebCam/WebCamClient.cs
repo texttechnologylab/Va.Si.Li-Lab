@@ -13,6 +13,7 @@ using VaSiLi.Janus;
 using VaSiLi.Janus.TextRoom;
 using VaSiLi.Janus.VideoRoom;
 using VaSiLi.Janus.WebRTC;
+using VaSiLi.Networking;
 
 namespace VaSiLi.WebCam
 {
@@ -23,36 +24,15 @@ namespace VaSiLi.WebCam
     /// </summary>
     public class WebCamClient : MonoBehaviour
     {
+        // Janus server and STUN/TURN servers come from VasiliEndpoints
+        private static string ServerUrl => VasiliEndpoints.Current.janus;
+
         [Header("Janus")]
-        public string ServerUrl = "wss://janus.faces.texttechnologylab.org";
         public string SubProtocol = "janus-protocol";
         public long Room = 1234;
         public string DisplayName = "test-user";
         [Tooltip("Base recording directory on the Janus server. Room ID is appended automatically. Leave empty to use Janus default.")]
         public string RecordingPath = "/mnt/recordings/";
-
-        [Header("ICE")]
-        [Tooltip("List of STUN/TURN servers used for WebRTC. Leave username/credential empty for STUN servers.")]
-        public List<IceServerConfig> IceServers = new List<IceServerConfig>
-        {
-            new IceServerConfig
-            {
-                urls       = new List<string> { "turn:turn.vasililab.texttechnologylab.org:3478" },
-                username   = "testuser",
-                credential = ""
-            }
-        };
-
-        [Serializable]
-        public class IceServerConfig
-        {
-            [Tooltip("One or more URLs for this server, e.g. \"stun:stun.l.google.com:19302\" or \"turn:host:3478\".")]
-            public List<string> urls = new List<string>();
-            [Tooltip("Username for TURN authentication. Leave empty for STUN.")]
-            public string username = "";
-            [Tooltip("Credential/password for TURN authentication. Leave empty for STUN.")]
-            public string credential = "";
-        }
 
         [Header("Capture")]
         public Camera captureCamera;
@@ -1231,7 +1211,7 @@ namespace VaSiLi.WebCam
         RTCConfiguration BuildRtcConfiguration()
         {
             var servers = new List<RTCIceServer>();
-            foreach (var cfg in IceServers)
+            foreach (var cfg in VasiliEndpoints.Current.iceServers)
             {
                 if (cfg == null)
                     continue;

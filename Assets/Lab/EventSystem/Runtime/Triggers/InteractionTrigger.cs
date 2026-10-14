@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Oculus.Interaction.Input;
 using Ubiq.XR;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 

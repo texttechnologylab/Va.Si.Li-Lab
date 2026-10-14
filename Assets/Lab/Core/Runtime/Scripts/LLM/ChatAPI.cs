@@ -21,10 +21,10 @@ namespace VaSiLi.Llm
     public class ChatAPI : MonoBehaviour, IAgentContextInfo
     {
         /** Server address for STT and TTS. */
-        private const string whisperxUrl = "http://botagent.lehre.texttechnologylab.org";
+        private static string whisperxUrl => VasiliEndpoints.Current.speechSynthesis;
 
         /** Server address for LLM chatting. */
-        private const string agentUrl = "http://vragent.lehre.texttechnologylab.org";
+        private static string agentUrl => VasiliEndpoints.Current.agent;
 
         public List<string> deleteAudioFiles = new();
 

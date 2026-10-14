@@ -107,7 +107,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c865b24e5478f3a44940d68fbc554c0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  server: {fileID: 11400000, guid: 8190d1caea586df4a9f654635d368eae, type: 2}
   client: {fileID: 8464618586410479142}
   voipPeer: {fileID: 4454358343223064516}
   player: {fileID: 0}
@@ -200,7 +199,6 @@ MonoBehaviour:
   minVolume: 0.11
   maxVolume: 0.02
   stoppedSpeakingDelay: 75
-  baseUrl: http://gpu.audio.vasililab.texttechnologylab.org
 --- !u!114 &4433043366255148094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2101,6 +2099,7 @@ GameObject:
   - component: {fileID: 3176903023480274287}
   - component: {fileID: 955046115457504034}
   - component: {fileID: 4572518306519072613}
+  - component: {fileID: 7419275604938125561}
   m_Layer: 0
   m_Name: Social Network Scene
   m_TagString: Untagged
@@ -2162,8 +2161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d61f55a1b9a02064ebf167b08e5b22b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  servers:
-  - {fileID: 11400000, guid: 0c382475b4b85b74382e57bbf28c83b4, type: 2}
+  servers: []
   timeoutBehaviour: 2
 --- !u!114 &8464618587302163545
 MonoBehaviour:
@@ -2319,7 +2317,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playbackSelf: 0
   playbackResult: 0
-  _baseUrl: http://gpu.audio.vasililab.texttechnologylab.org
 --- !u!114 &4572518306519072613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2686,7 +2683,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomClient: {fileID: 8464618586410479142}
-  apiRoute: {fileID: 11400000, guid: 8190d1caea586df4a9f654635d368eae, type: 2}
 --- !u!114 &5905404317811269386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2838,3 +2834,15 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7419275604938125561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6475394069468491851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9c5529493e4394a5cffa470a71986f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

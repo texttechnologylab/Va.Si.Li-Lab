@@ -518,7 +518,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8693910183983192904}
-        m_TargetAssemblyTypeName: ItemPanel, Assembly-CSharp
+        m_TargetAssemblyTypeName: ItemPanel, Vasili.EventSystem
         m_MethodName: deleteEventSystemFactory
         m_Mode: 6
         m_Arguments:
@@ -651,7 +651,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8693910183983192904}
-        m_TargetAssemblyTypeName: ItemPanel, Assembly-CSharp
+        m_TargetAssemblyTypeName: ItemPanel, Vasili.EventSystem
         m_MethodName: modifyEventSystem
         m_Mode: 1
         m_Arguments:

@@ -2535,7 +2535,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617178}
-        m_TargetAssemblyTypeName: EventSystemFactory, Assembly-CSharp
+        m_TargetAssemblyTypeName: EventSystemFactory, Vasili.EventSystem
         m_MethodName: cancelEventSystemCreation
         m_Mode: 1
         m_Arguments:
@@ -2745,7 +2745,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: createTimer
         m_Mode: 1
         m_Arguments:
@@ -2757,7 +2757,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -3127,7 +3127,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToAddArea
         m_Mode: 1
         m_Arguments:
@@ -3339,7 +3339,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: subtractTime
         m_Mode: 5
         m_Arguments:
@@ -3472,7 +3472,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: addTime
         m_Mode: 5
         m_Arguments:
@@ -3746,7 +3746,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: selectFlagMarker
         m_Mode: 1
         m_Arguments:
@@ -3958,7 +3958,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: selectShapeNetBrowser
         m_Mode: 1
         m_Arguments:
@@ -4091,7 +4091,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: subtractTime
         m_Mode: 5
         m_Arguments:
@@ -4224,7 +4224,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: addTime
         m_Mode: 5
         m_Arguments:
@@ -4321,7 +4321,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: toggleAreaActivatedOnlyOnce
         m_Mode: 1
         m_Arguments:
@@ -5657,7 +5657,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToEventSelection
         m_Mode: 1
         m_Arguments:
@@ -5944,7 +5944,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToObjectManipulation
         m_Mode: 1
         m_Arguments:
@@ -7259,7 +7259,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: createFeedback
         m_Mode: 1
         m_Arguments:
@@ -7271,7 +7271,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -7764,7 +7764,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: setPlayerCriteria
         m_Mode: 5
         m_Arguments:
@@ -8301,7 +8301,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: createObjectMoving
         m_Mode: 1
         m_Arguments:
@@ -8313,7 +8313,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -10817,7 +10817,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToFeeback
         m_Mode: 1
         m_Arguments:
@@ -13619,7 +13619,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -13631,7 +13631,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: createEnvironment
         m_Mode: 1
         m_Arguments:
@@ -18406,7 +18406,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToObjectManipulation
         m_Mode: 1
         m_Arguments:
@@ -18956,7 +18956,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToEnvironmentPanelWindow
         m_Mode: 1
         m_Arguments:
@@ -19500,7 +19500,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToEventSelection
         m_Mode: 1
         m_Arguments:
@@ -22672,7 +22672,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: subtractTime
         m_Mode: 5
         m_Arguments:
@@ -24031,7 +24031,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -24043,7 +24043,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617178}
-        m_TargetAssemblyTypeName: EventSystemFactory, Assembly-CSharp
+        m_TargetAssemblyTypeName: EventSystemFactory, Vasili.EventSystem
         m_MethodName: renameTemplate
         m_Mode: 1
         m_Arguments:
@@ -24542,7 +24542,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -24554,7 +24554,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617178}
-        m_TargetAssemblyTypeName: EventSystemFactory, Assembly-CSharp
+        m_TargetAssemblyTypeName: EventSystemFactory, Vasili.EventSystem
         m_MethodName: createFollowingEventSystem
         m_Mode: 1
         m_Arguments:
@@ -24566,7 +24566,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: updateEventList
         m_Mode: 1
         m_Arguments:
@@ -25562,7 +25562,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -25574,7 +25574,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: createInteraction
         m_Mode: 1
         m_Arguments:
@@ -26639,7 +26639,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: addTime
         m_Mode: 5
         m_Arguments:
@@ -27373,7 +27373,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToTemplateCreator
         m_Mode: 1
         m_Arguments:
@@ -28770,7 +28770,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -29058,7 +29058,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToObjectDestruction
         m_Mode: 1
         m_Arguments:
@@ -29578,7 +29578,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToTriggerSelection
         m_Mode: 1
         m_Arguments:
@@ -30023,7 +30023,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToEventSelection
         m_Mode: 1
         m_Arguments:
@@ -31342,7 +31342,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToObjectSpawn
         m_Mode: 1
         m_Arguments:
@@ -34022,7 +34022,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToEventSelection
         m_Mode: 1
         m_Arguments:
@@ -34477,7 +34477,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMoreFeedbackSettings
         m_Mode: 1
         m_Arguments:
@@ -35476,7 +35476,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -36360,7 +36360,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: updateEventList
         m_Mode: 1
         m_Arguments:
@@ -36372,7 +36372,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToEventSelection
         m_Mode: 1
         m_Arguments:
@@ -36644,7 +36644,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: subtractTime
         m_Mode: 5
         m_Arguments:
@@ -37374,7 +37374,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: createObjectDestruction
         m_Mode: 1
         m_Arguments:
@@ -37386,7 +37386,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -38064,7 +38064,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: addTime
         m_Mode: 5
         m_Arguments:
@@ -38276,7 +38276,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToObjectManipulation
         m_Mode: 1
         m_Arguments:
@@ -39304,7 +39304,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: toggleInteractionTriggerActivatedOnlyOnce
         m_Mode: 1
         m_Arguments:
@@ -39910,7 +39910,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: subtractTime
         m_Mode: 5
         m_Arguments:
@@ -40043,7 +40043,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -40055,7 +40055,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: createAreaTrigger
         m_Mode: 1
         m_Arguments:
@@ -41368,7 +41368,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: setPlayerCriteria
         m_Mode: 5
         m_Arguments:
@@ -41971,7 +41971,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: addTime
         m_Mode: 5
         m_Arguments:
@@ -42570,7 +42570,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -43746,7 +43746,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToTriggerSelection
         m_Mode: 1
         m_Arguments:
@@ -43879,7 +43879,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617178}
-        m_TargetAssemblyTypeName: EventSystemFactory, Assembly-CSharp
+        m_TargetAssemblyTypeName: EventSystemFactory, Vasili.EventSystem
         m_MethodName: createEventSystem
         m_Mode: 1
         m_Arguments:
@@ -44248,7 +44248,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToInteraction
         m_Mode: 1
         m_Arguments:
@@ -44382,7 +44382,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToTimer
         m_Mode: 1
         m_Arguments:
@@ -44936,7 +44936,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: subtractTime
         m_Mode: 5
         m_Arguments:
@@ -45483,7 +45483,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617178}
-        m_TargetAssemblyTypeName: EventSystemFactory, Assembly-CSharp
+        m_TargetAssemblyTypeName: EventSystemFactory, Vasili.EventSystem
         m_MethodName: toggleRepeatable
         m_Mode: 1
         m_Arguments:
@@ -45695,7 +45695,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToObjectManipulation
         m_Mode: 1
         m_Arguments:
@@ -46066,7 +46066,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: addTime
         m_Mode: 5
         m_Arguments:
@@ -47141,7 +47141,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -47153,7 +47153,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: createPlayerTeleportation
         m_Mode: 1
         m_Arguments:
@@ -49509,7 +49509,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToObjectMoving
         m_Mode: 1
         m_Arguments:
@@ -51085,7 +51085,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToEnvironment
         m_Mode: 1
         m_Arguments:
@@ -51548,7 +51548,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: createObjectSpawn
         m_Mode: 1
         m_Arguments:
@@ -51560,7 +51560,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -53730,7 +53730,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: addTime
         m_Mode: 5
         m_Arguments:
@@ -54203,7 +54203,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -54749,7 +54749,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToTriggerSelection
         m_Mode: 1
         m_Arguments:
@@ -55266,7 +55266,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToEventSelection
         m_Mode: 1
         m_Arguments:
@@ -59116,7 +59116,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617178}
-        m_TargetAssemblyTypeName: EventSystemFactory, Assembly-CSharp
+        m_TargetAssemblyTypeName: EventSystemFactory, Vasili.EventSystem
         m_MethodName: toggleDecouple
         m_Mode: 1
         m_Arguments:
@@ -59569,7 +59569,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToEnvironment
         m_Mode: 1
         m_Arguments:
@@ -66164,7 +66164,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToFeeback
         m_Mode: 1
         m_Arguments:
@@ -66804,7 +66804,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: subtractTime
         m_Mode: 5
         m_Arguments:
@@ -67249,7 +67249,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -67261,7 +67261,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617178}
-        m_TargetAssemblyTypeName: EventSystemFactory, Assembly-CSharp
+        m_TargetAssemblyTypeName: EventSystemFactory, Vasili.EventSystem
         m_MethodName: finishTemplate
         m_Mode: 1
         m_Arguments:
@@ -67407,7 +67407,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToVotingSystem
         m_Mode: 1
         m_Arguments:
@@ -70074,7 +70074,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: createVotingWindow
         m_Mode: 1
         m_Arguments:
@@ -70086,7 +70086,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:
@@ -70861,7 +70861,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: togglePreview
         m_Mode: 1
         m_Arguments:
@@ -70995,7 +70995,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToTriggerSelection
         m_Mode: 1
         m_Arguments:
@@ -74892,7 +74892,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5091363715332617124}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToPlayerTeleportation
         m_Mode: 1
         m_Arguments:

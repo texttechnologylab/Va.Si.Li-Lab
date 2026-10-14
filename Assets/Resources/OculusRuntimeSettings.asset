@@ -22,3 +22,4 @@ MonoBehaviour:
   bodyTrackingJointSet: 1
   allowVisibilityMesh: 1
   QuestVisibilityMeshOverriden: 0
+  fovSimulationEnabled: 0

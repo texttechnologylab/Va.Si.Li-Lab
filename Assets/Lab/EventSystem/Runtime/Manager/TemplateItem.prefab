@@ -363,7 +363,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5416584025209913047}
-        m_TargetAssemblyTypeName: TemplateItem, Assembly-CSharp
+        m_TargetAssemblyTypeName: TemplateItem, Vasili.EventSystem
         m_MethodName: createEventSystemFromJSON
         m_Mode: 1
         m_Arguments:
@@ -375,7 +375,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 8275872605207196810, guid: e4fb0b9925e1c714ab351b98a8d071a3, type: 3}
-        m_TargetAssemblyTypeName: EventSystemManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: EventSystemManager, Vasili.EventSystem
         m_MethodName: switchToEventSystemSelection
         m_Mode: 1
         m_Arguments:
@@ -508,7 +508,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5416584025209913047}
-        m_TargetAssemblyTypeName: TemplateItem, Assembly-CSharp
+        m_TargetAssemblyTypeName: TemplateItem, Vasili.EventSystem
         m_MethodName: deletetemplate
         m_Mode: 1
         m_Arguments:

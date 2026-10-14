@@ -1060,7 +1060,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: FactoryMenuHandler, Assembly-CSharp
+        m_TargetAssemblyTypeName: FactoryMenuHandler, Vasili.EventSystem
         m_MethodName: switchToMain
         m_Mode: 1
         m_Arguments:

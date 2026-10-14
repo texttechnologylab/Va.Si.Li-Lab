@@ -40,7 +40,7 @@ public class EventSystemManager : MonoBehaviour
 	/// <returns></returns>
 	IEnumerator getRegularTemplates()
 	{
-		string uri = "http://85.215.149.47:4567/defaultTemplates";
+		string uri = VaSiLi.Networking.VasiliEndpoints.Current.eventTemplates + "/defaultTemplates";
 		// TESTING VALUES!!
 		string jsonFromRequest = null;
 
@@ -169,7 +169,7 @@ public class EventSystemManager : MonoBehaviour
 	public IEnumerator getDefaultEventSystems()
 	{
 		List<string> eventSystemJSONs = new List<string>();
-		string uri = "http://85.215.149.47:4567/defaultTemplates";
+		string uri = VaSiLi.Networking.VasiliEndpoints.Current.eventTemplates + "/defaultTemplates";
 		string jsonFromRequest = null;
 
 		using (UnityWebRequest request = UnityWebRequest.Get(uri))
@@ -244,7 +244,7 @@ public class EventSystemManager : MonoBehaviour
 			}
 		}
 
-		string uri = "http://85.215.149.47:4567/defaultTemplates";
+		string uri = VaSiLi.Networking.VasiliEndpoints.Current.eventTemplates + "/defaultTemplates";
 		using UnityWebRequest request = new UnityWebRequest(uri, "POST");
 		request.SetRequestHeader("Content-Type", "application/json");
 		JsonArrayWrapper jsonArray = new JsonArrayWrapper{data = jsons.ToArray()};

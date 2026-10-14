@@ -12,7 +12,7 @@ namespace VaSiLi.Llm
     {
         private Dictionary<string, ToolBinding> _availableAgentTools = null;
 
-        private string _chatUrl = "http://vragent.lehre.texttechnologylab.org/";
+        private static string _chatUrl => VasiliEndpoints.Current.agent + "/";
 
         void Start()
         {

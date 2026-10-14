@@ -35,7 +35,7 @@ namespace VaSiLi.SceneManagement
 
 		private async void InitAvailableShapeNetObjects()
 		{
-			string request = "http://shapenet.texttechnologylab.org/loadedobjects";
+			string request = ShapeNetInterface.WS + "loadedobjects";
 			var response = await Networking.JsonRequest.GetRequest(request);
 			var content = await response.Content.ReadAsStringAsync();
 
@@ -106,7 +106,7 @@ namespace VaSiLi.SceneManagement
 		{
 			//dataset: 3dw = shapenet code, wss = shapenet sem
 			//format: json, csv
-			return $"http://shapenet.texttechnologylab.org/search?search={search}";
+			return $"{ShapeNetInterface.WS}search?search={search}";
 		}
 
 		private string GetShapeNetRequest(string search, string dataset = "wss", string format = "json", int rows = 100, bool indent = true)

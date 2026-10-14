@@ -22,7 +22,7 @@ namespace VaSiLi.Misc
         public int stoppedSpeakingDelay = 75;
         private bool isSpeaking = false;
         private int stoppedSpeaking = 0;
-        public string baseUrl = "http://gpu.audio.vasililab.texttechnologylab.org";
+        private static string baseUrl => VasiliEndpoints.Current.speech;
 
         [Serializable]
         private struct AudioData

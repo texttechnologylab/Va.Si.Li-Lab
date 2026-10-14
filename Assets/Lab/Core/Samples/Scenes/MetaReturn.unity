@@ -289,7 +289,6 @@ MonoBehaviour:
   minVolume: 0.11
   maxVolume: 0.02
   stoppedSpeakingDelay: 75
-  baseUrl: http://gpu.audio.vasililab.texttechnologylab.org
 --- !u!224 &699497707 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2899492223598924638, guid: ababd7aff2d429c4180b2627dd8869b0, type: 3}
@@ -419,10 +418,6 @@ PrefabInstance:
       propertyPath: rootPanelSwitcher
       value: 
       objectReference: {fileID: 1191837687}
-    - target: {fileID: 8464618586410479142, guid: efb60564adc6e034c91e121003104e18, type: 3}
-      propertyPath: 'servers.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 0c382475b4b85b74382e57bbf28c83b4, type: 2}
     m_RemovedComponents:
     - {fileID: 7305421683955603765, guid: efb60564adc6e034c91e121003104e18, type: 3}
     m_RemovedGameObjects: []

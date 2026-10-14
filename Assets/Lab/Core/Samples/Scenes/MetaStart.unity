@@ -870,7 +870,7 @@ Transform:
   - {fileID: 949060090}
   m_Father: {fileID: 340007056}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &579572943
+--- !u!114 &594000640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1018,6 +1018,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1142,10 +1143,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1389673130}
-    - target: {fileID: 2428733609139358608, guid: efb60564adc6e034c91e121003104e18, type: 3}
-      propertyPath: servers
-      value: 
-      objectReference: {fileID: 11400000, guid: 8190d1caea586df4a9f654635d368eae, type: 2}
     - target: {fileID: 2428733609139358608, guid: efb60564adc6e034c91e121003104e18, type: 3}
       propertyPath: leftHand
       value: 
@@ -1386,6 +1383,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1537,6 +1535,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &949060093
 MeshFilter:
@@ -1572,14 +1571,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1117330974}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 1
   m_Color: {r: 0.9622642, g: 0.86004007, b: 0.75800997, a: 1}
   m_Intensity: 0.45
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 1
     m_Resolution: -1
@@ -1727,7 +1726,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1774649240}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 95463867, guid: ababd7aff2d429c4180b2627dd8869b0, type: 3}
       propertyPath: m_Layer
@@ -3499,7 +3498,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3605672307323377828, guid: ababd7aff2d429c4180b2627dd8869b0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.482
+      value: -0.151
       objectReference: {fileID: 0}
     - target: {fileID: 3605672307323377828, guid: ababd7aff2d429c4180b2627dd8869b0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5633,11 +5632,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1631265206356205767, guid: ababd7aff2d429c4180b2627dd8869b0, type: 3}
   m_PrefabInstance: {fileID: 1420969065}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1420969067 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3605672307323377828, guid: ababd7aff2d429c4180b2627dd8869b0, type: 3}
-  m_PrefabInstance: {fileID: 1420969065}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1704105886 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5278286381992737641, guid: 59af5d613202618478d64daed8ace5c2, type: 3}
@@ -5726,9 +5720,7 @@ MonoBehaviour:
   _data: {fileID: 0}
   _selector: {fileID: 782954800}
   _rigidbody: {fileID: 514590951}
-  _grabCenter: {fileID: 514590954}
   _grabTarget: {fileID: 0}
-  _velocityCalculator: {fileID: 0}
 --- !u!114 &1783744988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6025,6 +6017,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1947833369
 MeshFilter:
@@ -6213,9 +6206,6 @@ PrefabInstance:
     - {fileID: 8333067931595676076, guid: 59af5d613202618478d64daed8ace5c2, type: 3}
     - {fileID: 1491954038123585595, guid: 59af5d613202618478d64daed8ace5c2, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 992771452337928995, guid: 59af5d613202618478d64daed8ace5c2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1420969067}
     - targetCorrespondingSourceObject: {fileID: 6630012321224472820, guid: 59af5d613202618478d64daed8ace5c2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1783744986}
@@ -6392,6 +6382,7 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1420969065}
   - {fileID: 2362590106912410082}
   - {fileID: 793766969}
   - {fileID: 242932359}

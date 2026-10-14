@@ -318,7 +318,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8275872605207196810, guid: e4fb0b9925e1c714ab351b98a8d071a3, type: 3}
-        m_TargetAssemblyTypeName: EventSystemManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: EventSystemManager, Vasili.EventSystem
         m_MethodName: createNewEventSystemFactory
         m_Mode: 1
         m_Arguments:

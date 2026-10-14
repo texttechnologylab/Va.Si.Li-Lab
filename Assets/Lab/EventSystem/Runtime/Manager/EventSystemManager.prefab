@@ -556,7 +556,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8275872605207196810}
-        m_TargetAssemblyTypeName: EventSystemManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: EventSystemManager, Vasili.EventSystem
         m_MethodName: startEventSystems
         m_Mode: 1
         m_Arguments:
@@ -1161,7 +1161,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8275872605207196810}
-        m_TargetAssemblyTypeName: EventSystemManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: EventSystemManager, Vasili.EventSystem
         m_MethodName: createDefaultEventSystems
         m_Mode: 1
         m_Arguments:
