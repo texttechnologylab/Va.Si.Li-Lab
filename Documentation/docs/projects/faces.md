@@ -15,6 +15,9 @@ whether conducting interviews in VR can retain that context, and whether the
 resulting data holds up: is a VR-mediated interview *feasible*, do respondents
 *accept* it, and is the *data quality* comparable to established modes?
 
+The studies conducted in FACES are listed on the
+[FACES website](https://texttechnologylab.github.io/FACES/studies/).
+
 ## InterView
 
 The platform built to answer that question is **InterView**. A participant wears
