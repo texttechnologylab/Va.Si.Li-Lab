@@ -23,6 +23,13 @@ Import these in *Window > Package Manager* (package > *Samples* > *Import*), oth
 | Meta Avatars SDK | Sample Scenes |
 | Ubiq | Demo (XRI) |
 
+The Meta Avatars sample doesn't compile against Platform SDK 207 (`'CAPI' does not exist in the namespace 'Oculus.Platform'`).
+In `Assets/Samples/Meta Avatars SDK/40.0.1/Sample Scenes/Scripts/Utility/AvatarEditorUtils.cs` replace the `new Request<…>(Oculus.Platform.CAPI.ovr_Avatar_LaunchAvatarEditor((IntPtr)options))` line with:
+
+```csharp
+var result = Oculus.Platform.Avatar.LaunchAvatarEditor(options);
+```
+
 Also import *TextMesh Pro Essential Resources* when Unity asks.
 
 Then create your server config via *Tools > Va.Si.Li > Create Endpoints Config*.
