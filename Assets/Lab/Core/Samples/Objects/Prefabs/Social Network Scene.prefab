@@ -102,12 +102,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 312528976127297744}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c865b24e5478f3a44940d68fbc554c0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  server: {fileID: 11400000, guid: 8190d1caea586df4a9f654635d368eae, type: 2}
   client: {fileID: 8464618586410479142}
   voipPeer: {fileID: 4454358343223064516}
   player: {fileID: 0}
@@ -138,6 +137,7 @@ GameObject:
   - component: {fileID: 4454358343223064516}
   - component: {fileID: 2670915992716547225}
   - component: {fileID: 2784430733366360059}
+  - component: {fileID: 4433043366255148094}
   m_Layer: 0
   m_Name: Voip Manager
   m_TagString: Untagged
@@ -199,7 +199,21 @@ MonoBehaviour:
   minVolume: 0.11
   maxVolume: 0.02
   stoppedSpeakingDelay: 75
-  baseUrl: http://gpu.audio.vasililab.texttechnologylab.org
+--- !u!114 &4433043366255148094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957078693821354899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33717fbdc39fb50468f684f160a14049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Clip: {fileID: 0}
+  client: {fileID: 8464618586410479142}
+  avatarManager: {fileID: 7474766533603757802}
 --- !u!1 &1412858166668226645
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,6 +616,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -623,6 +639,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -1145,10 +1162,12 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 57c86ed0772314e46817e87d97ffffcc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1166,6 +1185,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -1257,6 +1277,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1278,6 +1300,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -1439,10 +1462,12 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 57c86ed0772314e46817e87d97ffffcc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1460,6 +1485,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -1904,7 +1930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78043eb8bdd2f6b44a1cfd44c3b8fa5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avatarCatalogue: {fileID: 11400000, guid: d7954fc960d65d94ca8d09e0f026597e, type: 2}
+  avatarCatalogue: {fileID: 11400000, guid: 79934d4a9d6cbc44a98f481b55aef421, type: 2}
   avatarPrefab: {fileID: 8861760200755905291, guid: 71daf3095d63df048a2b0d3fc24fabf0, type: 3}
 --- !u!1 &6194011976576870578
 GameObject:
@@ -2073,6 +2099,7 @@ GameObject:
   - component: {fileID: 3176903023480274287}
   - component: {fileID: 955046115457504034}
   - component: {fileID: 4572518306519072613}
+  - component: {fileID: 7419275604938125561}
   m_Layer: 0
   m_Name: Social Network Scene
   m_TagString: Untagged
@@ -2134,8 +2161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d61f55a1b9a02064ebf167b08e5b22b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  servers:
-  - {fileID: 11400000, guid: d4e1f2a1ab0e3e2468c8ea06469fa2a1, type: 2}
+  servers: []
   timeoutBehaviour: 2
 --- !u!114 &8464618587302163545
 MonoBehaviour:
@@ -2291,7 +2317,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playbackSelf: 0
   playbackResult: 0
-  _baseUrl: http://gpu.audio.vasililab.texttechnologylab.org
 --- !u!114 &4572518306519072613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2658,7 +2683,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomClient: {fileID: 8464618586410479142}
-  apiRoute: {fileID: 11400000, guid: 8190d1caea586df4a9f654635d368eae, type: 2}
 --- !u!114 &5905404317811269386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2810,3 +2834,15 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7419275604938125561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6475394069468491851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9c5529493e4394a5cffa470a71986f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

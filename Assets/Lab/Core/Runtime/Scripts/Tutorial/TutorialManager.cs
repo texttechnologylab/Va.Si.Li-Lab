@@ -100,7 +100,7 @@ namespace VaSiLi.Tutorial
 
         private async void FetchTexts()
         {
-            var response = await VaSiLi.Networking.JsonRequest.GetRequest("http://api.vasililab.texttechnologylab.org/infos");
+            var response = await VaSiLi.Networking.JsonRequest.GetRequest(VaSiLi.Networking.VasiliEndpoints.Current.api + "/infos");
             var content = await response.Content.ReadAsStringAsync();
 
             JToken result = JToken.Parse(content);
