@@ -68,8 +68,8 @@ public class GaussianBlur : MonoBehaviour
 
 	private void Update()
 	{
-		if (Input.GetKeyDown (KeyCode.D))
-			m_displayGUI = !m_displayGUI;
+		// if (Input.GetKeyDown (KeyCode.D))
+		// 	m_displayGUI = !m_displayGUI;
 	}
 
 	private void OnGUI()

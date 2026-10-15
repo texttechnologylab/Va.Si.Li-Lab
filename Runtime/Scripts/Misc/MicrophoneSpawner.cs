@@ -1,4 +1,4 @@
-#if !UNITY_STANDALONE_WIN && !UNITY_EDITOR && !UNITY_WEBGL
+#if !UNITY_WEBGL
 using Ubiq.Voip.Implementations.Dotnet;
 #endif
 using UnityEngine;
@@ -7,7 +7,7 @@ namespace VaSiLi.Misc
 {
     public class MicrophoneSpawner : MonoBehaviour
     {
-        #if !UNITY_STANDALONE_WIN && !UNITY_EDITOR && !UNITY_WEBGL
+        #if !UNITY_WEBGL
         private IVoipSource source;
         // Start is called before the first frame update
         void Start()

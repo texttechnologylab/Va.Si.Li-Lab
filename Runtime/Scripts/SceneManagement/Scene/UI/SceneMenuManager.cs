@@ -15,6 +15,8 @@ namespace VaSiLi.SceneManagement
     {
         public float roomRefreshInterval = 2.0f;
         public SocialMenu mainMenu;
+        public ConnectionStatusMonitor connectionStatusMonitor;
+        public GameObject noServersAvailableUI;
         List<IRoom> availableRooms = new List<IRoom>();
         public GameObject controlTemplate;
         public Transform controlsRoot;
@@ -110,6 +112,18 @@ namespace VaSiLi.SceneManagement
                     SceneManager.UpdateScenes().ContinueWith((scene) => { });
                 }
                 nextRoomRefreshTime = Time.realtimeSinceStartup + roomRefreshInterval;
+                if (connectionStatusMonitor != null)
+                {
+                    var status = connectionStatusMonitor.GetRoomStatus();
+                    if (status == ConnectionStatusMonitor.ConnectionStatus.Ok || status == ConnectionStatusMonitor.ConnectionStatus.Pending)
+                    {
+                        noServersAvailableUI.SetActive(false);
+                    }
+                    else
+                    {
+                        noServersAvailableUI.SetActive(true);
+                    }
+                }
             }
 
         }

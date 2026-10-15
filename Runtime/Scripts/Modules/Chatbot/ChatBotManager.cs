@@ -1,4 +1,5 @@
 using UnityEngine;
+using VaSiLi.Networking;
 using UnityEngine.Events;
 using System;
 using System.Collections;
@@ -22,7 +23,6 @@ namespace VaSiLi.Modules.Chatbot
         //TODO: public GameObject loadingIndicator;
         public UnityAction<Util.AudioReturn?> audioReturned = delegate {};
         public static string baseUrl = "http://localhost:5000";
-        public string _baseUrl = "http://gpu.audio.vasililab.texttechnologylab.org";
         private static string chatBot = "longform";
         private bool recording;
         private AudioSource audioSource;
@@ -35,7 +35,7 @@ namespace VaSiLi.Modules.Chatbot
 
         void Start()
         {
-            baseUrl = _baseUrl;
+            baseUrl = VasiliEndpoints.Current.speech;
             context = NetworkScene.Register(this);
             audioSource = GetComponent<AudioSource>();
             StartCoroutine(PlayAudioClips());
