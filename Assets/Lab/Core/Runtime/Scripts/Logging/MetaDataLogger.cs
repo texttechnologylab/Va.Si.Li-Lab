@@ -22,17 +22,12 @@ namespace VaSiLi.Logging
 {
     /// <summary>
     /// Class to aid in logging various messages to the api
-    /// All messages are first queued to be sent and then handled asynchronisly 
-    /// http://audio.vasililab.texttechnologylab.org/
+    /// All messages are first queued to be sent and then handled asynchronisly
     /// </summary>
     public class MetaDataLogger : MonoBehaviour
     {
-        /// <summary>
-        /// A list of default servers to connect to on start-up. The network must only have one RoomServer or
-        /// undefined behaviour will result.
-        /// </summary>
-        [SerializeField]
-        private ApiRouteDefinition server;
+        /// <summary>Database API the logs are sent to, see <see cref="VasiliEndpoints"/>.</summary>
+        private static string server => VasiliEndpoints.Current.api;
 
         public RoomClient client;
         public VoipPeerConnectionManager voipPeer;
@@ -86,7 +81,7 @@ namespace VaSiLi.Logging
         private bool shouldTrack = true;
         void Start()
         {
-            Debug.Log(server.ToString());
+            Debug.Log(server);
             client.OnJoinedRoom.AddListener(JoinedRoom);
             // TODO: Support WebGL
             NetworkSpawnManager.Find(this).OnSpawned.AddListener(OnObjectSpawn);
@@ -172,7 +167,8 @@ namespace VaSiLi.Logging
         void ChangedRole(ApiRole? role)
         {
             if (RoleManager.CurrentRole?.mode != Mode.Player)
-                shouldTrack = false;
+            //FIXME:
+                shouldTrack = true;
             else
             {
                 PlayerRoleLogin message = new PlayerRoleLogin()
@@ -182,7 +178,7 @@ namespace VaSiLi.Logging
                     role = RoleManager.CurrentRole?.id,
                     messageId = messageCount,
                 };
-                var result = JsonRequest.PostRequest(server.ToString() + "/logging" + "/playerRoleLogIn", message).ContinueWith(a =>
+                var result = JsonRequest.PostRequest(server + "/logging" + "/playerRoleLogIn", message).ContinueWith(a =>
                 {
                     if (a.Result.StatusCode != System.Net.HttpStatusCode.Created)
                     {
@@ -209,7 +205,7 @@ namespace VaSiLi.Logging
                 levelStatus = status.ToString(),
             };
 
-            var result = JsonRequest.PostRequest(server.ToString() + "/logging" + "/levelChange", message).ContinueWith(a =>
+            var result = JsonRequest.PostRequest(server + "/logging" + "/levelChange", message).ContinueWith(a =>
             {
                 if (a.Result.StatusCode != System.Net.HttpStatusCode.Created)
                 {
@@ -320,7 +316,7 @@ namespace VaSiLi.Logging
                 messageId = messageCount,
             };
             Debug.Log(currentRoom.Name);
-            var result = JsonRequest.PostRequest(server.ToString() + "/logging" + "/playerLogIn", message).ContinueWith(a =>
+            var result = JsonRequest.PostRequest(server + "/logging" + "/playerLogIn", message).ContinueWith(a =>
             {
                 if (a.Result.StatusCode != System.Net.HttpStatusCode.Created)
                 {
@@ -438,26 +434,26 @@ namespace VaSiLi.Logging
                 // TODO: TransmitMessages should return status code to more easily judge what to do with the message that didn't go through
                 while (playerMessages.Count > 0)
                 {
-                    _ = TransmitMessage(server.ToString() + "/logging" + "/player", playerMessages.Dequeue(), tmpPlayerMessages);
+                    _ = TransmitMessage(server + "/logging" + "/player", playerMessages.Dequeue(), tmpPlayerMessages);
                 }
                 while (objectMessages.Count > 0)
                 {
-                    _ = TransmitMessage(server.ToString() + "/logging" + "/object", objectMessages.Dequeue(), tmpObjectMessages);
+                    _ = TransmitMessage(server + "/logging" + "/object", objectMessages.Dequeue(), tmpObjectMessages);
                 }
                 while (buttonMessages.Count > 0)
                 {
-                    _ = TransmitMessage(server.ToString() + "/logging" + "/special", buttonMessages.Dequeue(), tmpButtonMessages);
+                    _ = TransmitMessage(server + "/logging" + "/special", buttonMessages.Dequeue(), tmpButtonMessages);
                 }
                 while (spawnMessages.Count > 0)
                 {
-                    _ = TransmitMessage(server.ToString() + "/logging" + "/special", spawnMessages.Dequeue(), tmpSpawnMessages);
+                    _ = TransmitMessage(server + "/logging" + "/special", spawnMessages.Dequeue(), tmpSpawnMessages);
                 }
                 while (miscMessages.Count > 0)
                 {
                     MiscLogMessage msg = miscMessages.Dequeue();
                     msg.playerId = playerId;
                     //Debug.Log("!!!Misc:" + JsonConvert.SerializeObject(msg));
-                    _ = TransmitMessage(server.ToString() + "/logging" + "/logMisc", msg, tmpMiscMessages);
+                    _ = TransmitMessage(server + "/logging" + "/logMisc", msg, tmpMiscMessages);
                 }
                 //TODO: Disabled for now since logging can cause infinite loops
                 /*while (logMessages.Count > 0)

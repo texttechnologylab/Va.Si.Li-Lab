@@ -8,12 +8,16 @@ on:
       upm-branch:
         required: true
         type: string
+      tag-prefix:
+        required: false
+        type: string
+        default: upm
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout release
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.ref }}
       - name: Remove everything except for our project
@@ -46,6 +50,6 @@ jobs:
       - name: Commit
         run: git commit -m "Add upm package for ${GITHUB_REF#refs/*/}"
       - name: Tag
-        run: git tag -a upm-${GITHUB_REF#refs/*/} -m ""
+        run: git tag -a ${{ inputs.tag-prefix }}-${GITHUB_REF#refs/*/} -m ""
       - name: Push
         run: git push --follow-tags --set-upstream origin ${{ inputs.upm-branch }}

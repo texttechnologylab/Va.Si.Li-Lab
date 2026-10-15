@@ -22,11 +22,29 @@ namespace VaSiLi.MetaAvatar
 
         private PagePanel pagePanel;
         private NetworkScene networkScene;
+        private ulong[] avatarIds = new ulong[] { 25114505871472498, 25076688645296872, 31996848129930621, 25729338716652792, 27541906932101271, 26336333412710360 };
+
+        // Shuffled indices for randomized display order
+        private List<int> shuffledIndices;
 
         private void Awake()
         {
             pagePanel = GetComponent<PagePanel>();
             maxPages = (catalogue.Count + entriesPerPage - 1) / entriesPerPage;
+            
+            // Build and shuffle index list for random order each session
+            shuffledIndices = new List<int>(catalogue.Count);
+            for (int i = 0; i < catalogue.Count; i++)
+                shuffledIndices.Add(i);
+            
+            // Fisher-Yates shuffle
+            for (int i = shuffledIndices.Count - 1; i > 0; i--)
+            {
+                int j = Random.Range(0, i + 1);
+                int temp = shuffledIndices[i];
+                shuffledIndices[i] = shuffledIndices[j];
+                shuffledIndices[j] = temp;
+            }
         }
 
         private void OnEnable()
@@ -68,7 +86,7 @@ namespace VaSiLi.MetaAvatar
                     controls.Add(InstantiateControl());
                 }
 
-                controls[controlI].Bind(SetTexture, catalogue.Get(optionI));
+                controls[controlI].Bind(SetTexture, catalogue.Get(shuffledIndices[optionI]));
             }
 
             while (controls.Count > controlI)
@@ -100,7 +118,7 @@ namespace VaSiLi.MetaAvatar
             var avatar = networkScene.GetComponentInChildren<AvatarManager>().LocalAvatar;
             string textureIdx = catalogue.Get(texture);
             int textureIdxInt = int.Parse(textureIdx);
-            if(textureIdxInt == catalogue.Count - 1)
+            if (textureIdxInt == catalogue.Count - 1)
             {
                 //TODO!!
                 //AvatarEditorDeeplink.LaunchAvatarEditor();
@@ -112,7 +130,8 @@ namespace VaSiLi.MetaAvatar
             {
                 //I hate this one ....
                 LocalSampleAvatarEntity mAvatar = (LocalSampleAvatarEntity)((MetaAvatar)avatar).GetActiveAvatarScript();
-                mAvatar.UpdateTexture(textureIdxInt);
+                mAvatar.UpdateTexture(avatarIds[textureIdxInt % avatarIds.Length]);
+                //mAvatar.LoadRemoteUserCdnAvatar();
             }
             else
             {

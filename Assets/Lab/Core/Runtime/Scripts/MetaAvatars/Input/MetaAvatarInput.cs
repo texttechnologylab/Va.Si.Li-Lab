@@ -14,7 +14,7 @@ namespace VaSiLi.MetaAvatar
         [SerializeField] private MMVRLowerBody lowerBodySource;*/
         [Tooltip("The transform to use as an offset for the neck from the head.")]
         [SerializeField] private Transform avatar;
-        [Tooltip("The transform to use as world pose for the left hand in case no left hand input is found. This may happen in case of tracking failure for controllers or hands.")]
+        [Tooltip("The transform of the HMD. Used to normalize the avatar rotation.")]
         [SerializeField] private Transform head;
         [Tooltip("The transform containing the latest leftHand pose. Will be frequently overwritten.")]
         [SerializeField] private Transform leftHand;
@@ -89,8 +89,9 @@ namespace VaSiLi.MetaAvatar
 
         private Pose Head()
         {
-            return new Pose(head.position, head.rotation);
+            return new Pose(head.localPosition, head.localRotation);
         }
+
         private Pose LeftHand()
         {
             return new Pose(leftHand.position, leftHand.rotation);

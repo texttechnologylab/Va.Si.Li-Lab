@@ -62,7 +62,7 @@ namespace VaSiLi.SceneManagement
             }
             // Sets the name of the user to the name of the role
             _manager.SetDisplayName(role.id);
-            #if !UNITY_WEBGL
+#if !UNITY_WEBGL
             // FIXME: WebGL support
             if (role.mode != Mode.Player)
             {
@@ -76,7 +76,8 @@ namespace VaSiLi.SceneManagement
                 }
                 // Find the microphone source
                 var microphoneGo = GameObject.Find("Microphone Dotnet Voip Source");
-                if (microphoneGo != null) {
+                if (microphoneGo != null)
+                {
                     var microphoneSource = microphoneGo.GetComponent<MicrophoneVoipSource>();
                     if (microphoneSource != null)
                     {
@@ -90,7 +91,8 @@ namespace VaSiLi.SceneManagement
             else
             {
                 var microphoneGo = GameObject.Find("Microphone Dotnet Voip Source");
-                if (microphoneGo != null) {
+                if (microphoneGo != null)
+                {
                     var microphoneSource = microphoneGo.GetComponent<NullVoipSource>();
                     if (microphoneSource != null)
                     {
@@ -108,18 +110,7 @@ namespace VaSiLi.SceneManagement
                     //_avatarManager.UpdateLocalAvatar();
                 }
             }
-            #endif
-            // Find appropriate spawn and teleport player
-            var go = GameObject.Find(role.spawnPosition);
-            if (go == null)
-                go = GameObject.Find("DefaultSpawn");
-                
-            if (go != null)
-            {
-                var trans = go.GetComponent<Transform>();
-                _player.transform.position = trans.position;
-                _menu.Request();
-            }
+#endif
             // Set the current role in the RoleManager
             RoleManager.CurrentRole = role;
             // Init the start panel

@@ -19,6 +19,7 @@ nav:
       - Adding Scenes: ./getting_started/adding_scenes.md
       - Meta Avatars: ./getting_started/meta_avatar.md
       - Player Controller: ./getting_started/player_controller.md
+      - InterView VR Client: ./getting_started/interview_client.md
 
 
   - Other Functions:
@@ -42,8 +43,7 @@ nav:
   - Server Structure:
       - General: ./server/server_structure.md
       - Ubiq Server: ./server/ubiq_server.md
-      - Python Data Logger: ./server/python_data_logger.md
-      - Java Service: ./server/java_service.md
+      - Database API: ./server/python_data_logger.md
       - MongoDB: ./server/mongodb.md
 
   - For Students:
@@ -52,7 +52,7 @@ nav:
   - Projects:
       - Digitell: ./projects/digitell.md
       - ViCom: ./projects/vicom.md
-      - New Data Spaces: ./projects/faces.md
+      - New Data Spaces (FACES): ./projects/faces.md
 
   - Publications: publications.md
 
@@ -141,6 +141,7 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
 
+  - admonition
   - attr_list
   - md_in_html
 

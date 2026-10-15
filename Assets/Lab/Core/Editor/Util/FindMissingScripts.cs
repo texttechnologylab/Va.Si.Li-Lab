@@ -1,54 +1,47 @@
-using UnityEngine;
 using UnityEditor;
-#if UNITY_EDITOR
-public class FindMissingScriptsRecursively : EditorWindow {
-static int go_count = 0, components_count = 0, missing_count = 0;
- 
-    [MenuItem("Window/FindMissingScriptsRecursively")]
-    public static void ShowWindow()
+using UnityEditor.SceneManagement;
+using UnityEngine;
+
+/// <summary>
+/// Finds (and optionally removes) components whose script no longer exists,
+/// across every prefab and scene in the Lab and LabPrivate folders.
+/// </summary>
+public static class FindMissingScripts
+{
+    // Only our own content; Samples and ThirdParty are left untouched
+    private static readonly string[] Folders = { "Assets/Lab", "Assets/LabPrivate" };
+
+    [MenuItem("Tools/Va.Si.Li/Missing Scripts/Report")]
+    private static void Report() => Run(remove: false);
+
+    [MenuItem("Tools/Va.Si.Li/Missing Scripts/Remove")]
+    private static void Remove()
     {
-        EditorWindow.GetWindow(typeof(FindMissingScriptsRecursively));
+        if (!EditorUtility.DisplayDialog("Remove missing scripts",
+                "Removes every missing script component from all prefabs and scenes in Assets/Lab and Assets/LabPrivate and saves them.",
+                "Remove", "Cancel"))
+            return;
+        if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+            return;
+        Run(remove: true);
     }
- 
-    public void OnGUI()
+
+    private static void Run(bool remove)
     {
-        if (GUILayout.Button("Find Missing Scripts in selected GameObjects"))
+        int total = AssetBatch.Run(Folders, remove, (go, assetPath) =>
         {
-            FindInSelected();
-        }
+            int count = GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(go);
+            if (count == 0)
+                return 0;
+
+            Debug.Log($"[MissingScripts] {count} on '{AssetBatch.GetPath(go)}' in {assetPath}");
+
+            // Components that come from a nested prefab can only be removed in that prefab itself
+            if (remove && !PrefabUtility.IsPartOfPrefabInstance(go))
+                GameObjectUtility.RemoveMonoBehavioursWithMissingScript(go);
+            return count;
+        });
+
+        Debug.Log($"[MissingScripts] {(remove ? "Removed" : "Found")} {total} missing script(s).");
     }
-    private static void FindInSelected()
-    {
-        GameObject[] go = Selection.gameObjects;
-        go_count = 0;
-		components_count = 0;
-		missing_count = 0;
-        foreach (GameObject g in go)
-        {
-   			FindInGO(g);
-        }
-        Debug.Log(string.Format("Searched {0} GameObjects, {1} components, found {2} missing", go_count, components_count, missing_count));
-    }
- 
-    private static void FindInGO(GameObject g)
-    {
-        go_count++;
-        Component[] components = g.GetComponents<Component>();
-        for (int i = 0; i < components.Length; i++)
-        {
-        components_count++;
-        if (components[i] == null)
-            {
-            missing_count++;
-            Debug.Log(g.name + " has an empty script attached in position: " + i, g);
-            }
-        }
-        // Now recurse through each child GO (if there are any):
-        foreach (Transform childT in g.transform)
-            {
-            //Debug.Log("Searching " + childT.name  + " " );
-            FindInGO(childT.gameObject);
-            }
-	}
 }
-#endif

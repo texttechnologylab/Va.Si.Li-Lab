@@ -1,0 +1,7 @@
+regex:^Assets/Lab/(Core/)?Runtime/Local(/|\.meta$)
+regex:^Assets/Lab/Core/Runtime/Scenes(/|\.meta$)
+regex:\.(keystore|jks)(\.meta)?$
+regex:^Assets/Resources/Movies(/|\.meta$)
+regex:^Assets/StreamingAssets/SampleAssets(/|\.meta$)
+regex:^Assets/Resources/logs\.txt(\.meta)?$
+regex:^Assets/Lab/Core/Editor/Util/PreloadSigning\.cs(\.meta)?$

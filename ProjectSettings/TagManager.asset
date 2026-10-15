@@ -9,6 +9,36 @@ TagManager:
   - NonTPCollide
   - LeftEye
   - RightEye
+  - QDSUIBackplateGradient
+  - QDSUIToggleButton
+  - QDSUIToggleSwitch
+  - QDSUITooltip
+  - QDSUISharedThemeColor
+  - QDSUIAccentColor
+  - QDSUIBorderlessButton
+  - QDSUISecondaryButton
+  - QDSUIToggleBorderlessButton
+  - QDSUIIcon
+  - QDSUITextSecondaryColor
+  - MapMarker
+  - affected
+  - QDSUISection
+  - QDSUIPrimaryButton
+  - QDSUITextSecondaryInvertedColor
+  - QDSUITextInvertedColor
+  - QDSUIDestructiveButton
+  - QDSUIBackplate
+  - RoomLight
+  - Locomotion
+  - LocoButton
+  - LocoText
+  - PassThroughButton
+  - PassThrough
+  - QDSUILineDrawing
+  - QDSUITextInputField
+  - SamplesInfoPanel
+  - QDSUIToggleCheckboxRadio
+  - QDSUIToggleThumbnail
   layers:
   - Default
   - TransparentFX
@@ -20,8 +50,8 @@ TagManager:
   - whatIsGround
   - GraspedObject
   - Player
-  - 
-  - 
+  - IgnoreMirror
+  - Mirror
   - 
   - 
   - 

@@ -38,7 +38,7 @@ namespace VaSiLi.Misc
         public List<PlatformConfig> platformConfigs;
 
         public LayerMask layers;
-        private Camera mirrorCamera;
+        public Camera mirrorCamera;
         private RawImage image;
         private RenderTexture renderTexture;
         private Vector3[] cornersTmp = new Vector3[4];
@@ -51,7 +51,10 @@ namespace VaSiLi.Misc
         private void Awake()
         {
             image = GetComponent<RawImage>();
-            mirrorCamera = new GameObject("Mirror Camera").AddComponent<Camera>();
+            if (!mirrorCamera)
+            {
+                mirrorCamera = new GameObject("Mirror Camera").AddComponent<Camera>();
+            }
             mirrorCamera.transform.parent = transform;
             mirrorCamera.enabled = false;
             mirrorCamera.clearFlags = CameraClearFlags.Color;
@@ -84,7 +87,7 @@ namespace VaSiLi.Misc
 
         private void Render(Config config)
         {
-            switch(config.renderMode)
+            switch (config.renderMode)
             {
                 case RenderMode.None: break;
                 case RenderMode.AvatarOnly: RenderAvatar(config); break;
@@ -94,7 +97,8 @@ namespace VaSiLi.Misc
 
         private bool TryGetAvatarManager(out AvatarManager avatarManager)
         {
-            try {
+            try
+            {
                 avatarManager = NetworkScene.Find(this)
                     .GetComponentInChildren<AvatarManager>();
             }
@@ -126,7 +130,7 @@ namespace VaSiLi.Misc
             for (int i = 0; i < avatarRenderersTmp.Count; i++)
             {
                 avatarRenderCommandBufferTmp.DrawRenderer(
-                    avatarRenderersTmp[i],avatarRenderersTmp[i].material);
+                    avatarRenderersTmp[i], avatarRenderersTmp[i].material);
             }
 
             mirrorCamera.RemoveAllCommandBuffers();
@@ -156,18 +160,18 @@ namespace VaSiLi.Misc
             var mirror = transform;
             var observerToMirror = (mirror.position - observer.position).normalized;
 
-            var mirrorForward = Vector3.Dot(mirror.forward,observerToMirror) < 0
+            var mirrorForward = Vector3.Dot(mirror.forward, observerToMirror) < 0
                 ? mirror.forward
                 : -mirror.forward;
 
             // Point camera s.t. its forward direction is the reflected
             // direction after hitting the mirror plane
             var mirrorCameraForward = observerToMirror -
-                2 * Vector3.Dot(observerToMirror,mirrorForward) * mirrorForward;
+                2 * Vector3.Dot(observerToMirror, mirrorForward) * mirrorForward;
             if (mirrorCameraForward.sqrMagnitude > 0)
             {
                 mirrorCamera.transform.rotation =
-                    Quaternion.LookRotation(mirrorCameraForward,mirror.up);
+                    Quaternion.LookRotation(mirrorCameraForward, mirror.up);
             }
 
             // Position camera same distance from mirror as observer
@@ -182,8 +186,8 @@ namespace VaSiLi.Misc
             var h = worldHeight;
             var d = observerToMirror.magnitude;
             mirrorCamera.stereoTargetEye = StereoTargetEyeMask.None;
-            mirrorCamera.aspect = w/h;
-            mirrorCamera.fieldOfView = 2 * Mathf.Atan2(h,2*d) * Mathf.Rad2Deg;
+            mirrorCamera.aspect = w / h;
+            mirrorCamera.fieldOfView = 2 * Mathf.Atan2(h, 2 * d) * Mathf.Rad2Deg;
             mirrorCamera.nearClipPlane = d * 0.5f;
 
             // Check resolution of texture
@@ -196,13 +200,13 @@ namespace VaSiLi.Misc
 
             var texWidth = Mathf.RoundToInt(image.rectTransform.rect.width * scale);
             var texHeight = Mathf.RoundToInt(image.rectTransform.rect.height * scale);
-            var rt = RequireTex(texWidth,texHeight);
+            var rt = RequireTex(texWidth, texHeight);
 
             if (rt)
             {
                 mirrorCamera.targetTexture = rt;
                 image.texture = rt;
-                
+
             }
 
             return rt;
@@ -232,7 +236,7 @@ namespace VaSiLi.Misc
 
             if (!renderTexture && width > 0 && height > 0)
             {
-                renderTexture = RenderTexture.GetTemporary(width,height,0);
+                renderTexture = RenderTexture.GetTemporary(width, height, 0);
             }
             if (renderTexture)
                 renderTexture.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.D16_UNorm;

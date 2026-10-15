@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using VaSiLi.Llm;
 using UnityEngine;
 using UnityEngine.Events;
 using Ubiq.Messaging;
@@ -20,7 +21,10 @@ namespace VaSiLi.MetaAvatar
 
         [Serializable]
         public class PoseUpdateEvent : UnityEvent<InputVar<Pose>> { }
+        [Serializable]
+        public class PosePoseUpdateEvent : UnityEvent<InputVar<Pose>, InputVar<Pose>> { }
         public PoseUpdateEvent OnAvatarUpdate;
+        public PosePoseUpdateEvent OnAvatarHeadUpdate;
         public PoseUpdateEvent OnHeadUpdate;
         public PoseUpdateEvent OnLeftHandUpdate;
         public PoseUpdateEvent OnRightHandUpdate;
@@ -47,6 +51,10 @@ namespace VaSiLi.MetaAvatar
         public NativeArray<byte> dataBuffer;
         public uint dataByteCount;
 
+        // Reusable buffers so Send()/ProcessMessage() don't allocate a byte[] per network tick.
+        private byte[] _sendScratch;
+        private byte[] _recvScratch;
+
         protected void Start()
         {
             //TODO: 
@@ -67,7 +75,8 @@ namespace VaSiLi.MetaAvatar
 
             AvatarLODManager.Instance.firstPersonAvatarLod = avatar.GetActiveAvatarScript().AvatarLOD;
             AvatarLODManager.Instance.enableDynamicStreaming = true;
-
+            
+            gameObject.AddComponent<PlayerMicListener>();
         }
 
 
@@ -100,20 +109,17 @@ namespace VaSiLi.MetaAvatar
                 rightGrip = ToNetwork(InputVar<float>.invalid)
             };
 
-            if (!IsInvalid(state[0].avatar))
-            {
-                // Make sure the avatar is in the same positon as the HMD
-                this.transform.position = state[0].avatar.position;
-                this.transform.rotation = state[0].avatar.rotation;
-            }
-
-            // The avatars themselves are solved via this.
-            dataByteCount = avatar.GetActiveAvatarScript().RecordStreamData_AutoBuffer(StreamLOD.Full, ref dataBuffer);
-
-            // Send it through network
+            // Record + send the avatar stream at UpdateRate, not every frame. The recorded
+            // buffer is only consumed by Send(), so recording on non-transmit frames is wasted
+            // work (and re-runs the SDK's per-frame record path). Caps avatar recording at
+            // UpdateRate once the app runs faster than it.
             if ((Time.time - lastTransmitTime) > (1f / avatar.UpdateRate))
             {
                 lastTransmitTime = Time.time;
+                // Medium LOD is cheaper to record (CPU) and produces smaller packets than Full,
+                // and is visually indistinguishable for a networked remote representation. Full
+                // detail isn't perceptible on another participant's avatar at interaction distance.
+                dataByteCount = avatar.GetActiveAvatarScript().RecordStreamData_AutoBuffer(StreamLOD.Medium, ref dataBuffer);
                 Send();
             }
 
@@ -157,9 +163,13 @@ namespace VaSiLi.MetaAvatar
             transformBytes.CopyTo(new Span<byte>(message.bytes, message.start, message.length));
             context.Send(message);
 
-            // Sending Meta Avatar stuff. 
+            // Sending Meta Avatar stuff. Copy the NativeArray into the pooled message via a
+            // reusable scratch buffer instead of allocating with ToArray() every transmit.
+            if (_sendScratch == null || _sendScratch.Length != dataBuffer.Length)
+                _sendScratch = new byte[dataBuffer.Length];
+            dataBuffer.CopyTo(_sendScratch);
             var message2 = ReferenceCountedSceneGraphMessage.Rent(dataBuffer.Length);
-            dataBuffer.ToArray().CopyTo(new Span<byte>(message2.bytes, message2.start, message2.length));
+            Array.Copy(_sendScratch, 0, message2.bytes, message2.start, message2.length);
             context.Send(message2);
         }
 
@@ -175,9 +185,34 @@ namespace VaSiLi.MetaAvatar
             }
             else if (message.length > 0)
             {
-                byte[] data = new ReadOnlySpan<byte>(message.bytes, message.start, message.length).ToArray();
-                ReceivePacketData(data, StreamLOD.Full);
+                // Reuse an exact-length buffer (avatar stream size is stable per LOD, so this
+                // reallocates only when the size actually changes) instead of ToArray() per packet.
+                if (_recvScratch == null || _recvScratch.Length != message.length)
+                    _recvScratch = new byte[message.length];
+                Array.Copy(message.bytes, message.start, _recvScratch, 0, message.length);
+                ReceivePacketData(_recvScratch, StreamLOD.Full);
             }
+        }
+        
+        public bool TryGetLocalHeadPose(out Pose pose)
+        {
+            pose = default;
+
+            if (!avatar.IsLocal)
+                return false;
+
+            if (avatar.input.TryGet(out IMetaOVRInput src))
+            {
+                pose = src.head;
+                return true;
+            }
+
+            return false;
+        }
+
+        public Pose GetLeftHandPose()
+        {
+            return state[0].leftHand;
         }
 
         // State has been set either remotely or locally so update listeners
@@ -185,6 +220,7 @@ namespace VaSiLi.MetaAvatar
         {
             OnAvatarUpdate.Invoke(FromNetwork(state[0].avatar));
             OnHeadUpdate.Invoke(FromNetwork(state[0].head));
+            OnAvatarHeadUpdate.Invoke(FromNetwork(state[0].head), FromNetwork(state[0].avatar));
             OnLeftHandUpdate.Invoke(FromNetwork(state[0].leftHand));
             OnRightHandUpdate.Invoke(FromNetwork(state[0].rightHand));
             OnLeftGripUpdate.Invoke(FromNetwork(state[0].leftGrip));

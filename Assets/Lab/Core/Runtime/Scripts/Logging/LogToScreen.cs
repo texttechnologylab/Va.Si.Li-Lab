@@ -35,6 +35,8 @@ namespace VaSiLi.Logging
 
         void OnGUI()
         {
+            if (!_enabled)
+                return;
             GUILayout.BeginArea(new Rect(Screen.width - 400, Screen.height - 200, 400, 200));
             GUILayout.Label("\n" + string.Join("\n", myLogQueue.ToArray()));
             GUILayout.EndArea();

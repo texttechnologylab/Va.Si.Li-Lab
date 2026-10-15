@@ -17,7 +17,6 @@ namespace VaSiLi.SceneManagement
         public static bool initalized;
         public static ApiScene[] scenes;
         public static ApiInfos[] infos;
-        public ApiRouteDefinition apiRoute;
         public static string APIURL;
         public static ApiScene? CurrentScene { set => SetScene(value); get => _currentScene; }
         private static ApiScene? _currentScene;
@@ -30,7 +29,7 @@ namespace VaSiLi.SceneManagement
 
         private void Awake()
         {
-            APIURL = apiRoute.ToString();
+            APIURL = VasiliEndpoints.Current.api;
         }
 
         /// <summary>
@@ -63,12 +62,12 @@ namespace VaSiLi.SceneManagement
         /// <returns></returns>
         public static async Task<ApiInfos[]> UpdateInfos()
         {
-            var response = await JsonRequest.GetRequest($"{APIURL}/info");
+            /*var response = await JsonRequest.GetRequest($"{APIURL}/info");
             var content = await response.Content.ReadAsStringAsync();
             var data = JsonUtility.FromJson<ApiHeader<ApiInfos>>(content);
             infos = data.result;
-            infosUpdated.Invoke(infos);
-            return infos;
+            infosUpdated.Invoke(infos);*/
+            return null;
         }
 
     }

@@ -68,14 +68,14 @@ namespace VaSiLi.SceneManagement
 
         void Update()
         {
-            if (Input.GetKey(KeyCode.H) && Input.GetKey(KeyCode.R))
+            /*if (Input.GetKey(KeyCode.H) && Input.GetKey(KeyCode.R))
             {
                 if (RoleManager.CurrentRole == null) {
                     RolePicker.PickRole(mainMenu.roomClient, hiddenRole);
                     GetComponent<PanelSwitcher>().SwitchPanel(startPanel);
                 }
                 screenLogger._enabled = true;
-            }
+            } */
         }
 
         void UpdateRoles(Dictionary<string, ApiRole> roles)
