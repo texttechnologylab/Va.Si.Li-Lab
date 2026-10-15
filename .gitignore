@@ -73,9 +73,7 @@ crashlytics-build.properties
 # VSCode folder
 .vscode/
 
-# Ignore auto-generated XR because these are per-end user settings
-/Assets/XR/
-/Assets/XR.meta
+# Assets/XR (XR loader and OpenXR settings) is tracked on purpose so everyone builds with the same settings
 
 Recordings/
 

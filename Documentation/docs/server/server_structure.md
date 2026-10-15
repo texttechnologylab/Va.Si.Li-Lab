@@ -7,7 +7,12 @@ depending on the scenario.
 |---|---|---|
 | [Ubiq Server](ubiq_server.md) | Room and session state - avatars, transforms, ownership | required |
 | [Database API](python_data_logger.md) | Scene definitions and the logging API, backed by [MongoDB](mongodb.md) | required |
-| Chatbot, Speech, VR Agent | Conversational agents, speech-to-text and text-to-speech | optional |
+| [VR Agent](https://texttechnologylab.github.io/Va.Si.Li-Lab-backend/services/vr_agent/) (`vr-agent/`) | LLM agents for the [Bots](../modules/bots.md) | optional |
+| [TTS/STT](https://texttechnologylab.github.io/Va.Si.Li-Lab-backend/services/tts_stt/) (`tts-stt/`) | Speech-to-text and text-to-speech for the agents | optional |
+| [Speech](https://texttechnologylab.github.io/Va.Si.Li-Lab-backend/services/speech/) (`speech2text/`) | Whisper speech-to-text for voice input | optional |
+| [Chatbot](https://texttechnologylab.github.io/Va.Si.Li-Lab-backend/services/chatbot/) (`chatbot/`) | Older voice chatbot host | optional |
+
+Which client setting points to which service is listed in [Endpoints Configuration](../modules/endpoints.md).
 
 All of them live in the
 [Va.Si.Li-Lab-backend](https://github.com/texttechnologylab/Va.Si.Li-Lab-backend)

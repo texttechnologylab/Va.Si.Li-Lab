@@ -25,7 +25,7 @@
     "com.unity.timeline": "1.8.13",
     "com.unity.ugui": "2.0.0",
     "com.unity.vectorgraphics": "3.0.0-preview.7",
-    "com.unity.webrtc": "3.0.0",
+    "com.unity.webrtc-ubiq-fork": "https://github.com/UCL-VR/unity-webrtc-ubiq-fork.git#v3.0.1-pre.7",
     "com.unity.xr.hands": "1.7.3",
     "com.unity.xr.interaction.toolkit": "3.3.2",
     "com.unity.xr.management": "4.6.1",
