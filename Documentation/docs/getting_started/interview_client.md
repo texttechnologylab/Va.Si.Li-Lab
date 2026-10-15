@@ -23,31 +23,34 @@ itself, its services and their deployment are documented separately:
 
 ## What the client connects to
 
-Four independent services. Each is configured in a different place, and each can
-fail without the others noticing.
+Four independent services, all configured in the [endpoints file](../modules/endpoints.md)
+(`Assets/Resources/VasiliEndpoints.asset`). Each can fail without the others noticing.
 
-| Service | Purpose | Configured in |
+| Service | Purpose | Endpoints field |
 |---|---|---|
-| Janus | Audio/video and the control data channel | `WebCamClient` |
-| Ubiq | VR room and avatar state | `RoomClient` connection definition |
-| Logging API | Tracking data and events | Va.Si.Li API asset |
-| Questionnaire | The survey instrument | `InterviewTokenManager` |
+| Janus | Audio/video and the control data channel | `janus`, `iceServers` |
+| Ubiq | VR room and avatar state | `ubiqServer` |
+| Logging API | Tracking data and events | `api` |
+| Questionnaire | The survey instrument | `questionnaire` |
 
 ## Configuration
 
-Open the FACES scene and configure the components below.
+The InterView sample scenes are in `Assets/Lab/Core/Samples/Scenes`: `InterViewStart` (token entry, holds the
+`InterviewTokenManager`), `InterView` (the interview room, holds the `WebCamClient`) and `InterViewReturn`. Add all
+three to the build profile, `InterViewStart` first, and check the components below.
 
 ### `WebCamClient`
 
 The Janus client. Publishes local audio and video, subscribes to the
 interviewer's feed, and hosts the textroom data channel that carries chat,
-answer options, gaze updates and the recording signal.
+answer options, gaze updates and the recording signal. Its server comes from
+`janus` in the endpoints: use `wss://janus.<your-domain>`, the TLS endpoint of your
+reverse proxy, not Janus's own port. `iceServers` must match the TURN server the
+backend uses.
 
 | Field | Value | Notes |
 |---|---|---|
-| `ServerUrl` | `wss://janus.<your-domain>` | Must be `wss://` - the TLS endpoint of your reverse proxy, not Janus's own port |
 | `SubProtocol` | `janus-protocol` | Leave unchanged |
-| `IceServers` | TURN URL, username, credential | Must match the TURN server the backend uses |
 | `RecordingPath` | `/mnt/recordings/` | Path **inside the Janus container**; the room ID is appended automatically |
 | `captureWidth` / `captureHeight` | `854` × `480` | |
 | `maxBitrate` / `minBitrate` | `1000000` / `250000` | |
@@ -59,14 +62,13 @@ Holds the participant token across scene loads and derives every identifier from
 it, so the headset and the interviewer's browser meet without a coordination
 step.
 
-| Field | Value |
-|---|---|
-| `BrowserBaseUrl` | Your questionnaire URL. The token is appended as `?token=…&room=…` |
+The questionnaire URL is `questionnaire` in the endpoints. The token is appended as `?token=…&room=…`. The follow-up
+questionnaire that the interviewer can send afterwards is `followupQuestionnaire`.
 
 ```
 token ──┬─→ RoomId         (Janus room ID)
         ├─→ UbiqRoomName   = "interview-{token}"
-        └─→ BrowserUrl     = {BrowserBaseUrl}?token={token}&room={token}
+        └─→ BrowserUrl     = {questionnaire}?token={token}&room={token}
 ```
 
 The room ID is the token parsed as an integer when it is all digits, and
@@ -80,15 +82,14 @@ otherwise a DJB2 hash (seed 5381, multiplier 33), absolute value, minimum 1.
 
 ### Ubiq connection
 
-Set the `RoomClient` connection definition to your Ubiq host and its published
-TCP port (**16485** in the default deployment).
+Set `ubiqServer` in the endpoints to a Ubiq connection definition with your Ubiq host
+and its published TCP port (**16485** in the default deployment).
 
 ### Logging API
 
-Set the Va.Si.Li API asset `host` to your API URL, and the API key to the same
-value the backend was deployed with.
+Set `api` in the endpoints to your Database API URL.
 
-!!! warning "A wrong API key loses the whole session, silently"
+!!! warning "A wrong API address loses the whole session, silently"
     Logging failures do not interrupt an interview. The session looks completely
     normal and records nothing. Verify that data is arriving **before** a
     participant sits down, not afterwards.
@@ -101,11 +102,11 @@ value the backend was deployed with.
 
 ## Pre-session checklist
 
-- [ ] `ServerUrl` reachable from the headset's network
+- [ ] `janus` reachable from the headset's network
 - [ ] TURN credentials current and matching the server
 - [ ] Ubiq host and port correct
-- [ ] API key matches the backend
-- [ ] `BrowserBaseUrl` points at the correct questionnaire
+- [ ] `api` points at the running Database API
+- [ ] `questionnaire` points at the correct questionnaire
 - [ ] A full test interview completed, with data confirmed in the database
 
 ## Troubleshooting

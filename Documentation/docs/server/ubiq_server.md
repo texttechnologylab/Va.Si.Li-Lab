@@ -43,8 +43,12 @@ docker run -d --restart unless-stopped -p 8009:8009 -p 8011:8011 ubiq
 
 ## Unity
 
-`SocialNetworkScene > RoomClient`
-### Docker Compose
+The client reads the server address from *Ubiq Server* (a Ubiq `ConnectionDefinition`) in
+`Assets/Resources/VasiliEndpoints.asset`. Create the file with *Tools > Va.Si.Li > Create Endpoints Config*. The
+`VasiliServerConnection` component on the `RoomClient` of the `Social Network Scene` prefab applies it at start-up. If
+the file is missing, the client falls back to `127.0.0.1:8009` and logs a warning.
+
+## Docker Compose
 
 The Ubiq server is also part of the combined
 [InterView deployment stack](https://texttechnologylab.github.io/InterView/services/ubiq/),

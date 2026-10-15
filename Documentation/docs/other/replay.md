@@ -1,22 +1,26 @@
 # Simulations & Experiments Playback
 
+!!! warning "Not available in the current version"
+    The `SimulationLoader` scene and the `Assets/Simulation_dev` folder described here are not part of the current
+    repository. A new replay tool is in preparation; until then this page documents the earlier one.
+
 Simulations and Experiments performed using this project can be replayed using the following steps:
 
 
 ## Add Scenes to Build Setting
 
-Scenes to be replayed and the Simulaton loader scene should be added to build setting.
+Scenes to be replayed and the SimulationLoader scene should be added to build setting.
 
-1. Open `SmulatonLoader` scene located in `Assets/Simulation_dev/Scenes`.  
+1. Open `SimulationLoader` scene located in `Assets/Simulation_dev/Scenes`.  
 2. From `File` tab choose `Build Settings...`.  
-3. Add `SimulatoinLoader` scene to build by clickng `Add Open Scenes`.  
-4. Make sure `SimulatioinLoader` scene is enabled using the toggle to its left side.  
+3. Add `SimulationLoader` scene to build by clicking `Add Open Scenes`.  
+4. Make sure `SimulationLoader` scene is enabled using the toggle to its left side.  
 5. Add and enable all scenes of the Simulations/Experiments to be replayed.  
 
 
 ## Start Playback
 
-To start playback open and play `SimulatonLoader` scene.  
+To start playback open and play `SimulationLoader` scene.  
 
 ### Local Playback
 
@@ -26,11 +30,11 @@ Choose the scene, date and players to be replayed then click on `Next`.
 
 ### Online Playback
 
-If no local data found, or if online data is preferred, using the `Load Online Data` toggle **(Disabled by default)** will connect to the server and retreive information about Simulations and its data.
+If no local data found, or if online data is preferred, using the `Load Online Data` toggle **(Disabled by default)** will connect to the server and retrieve information about Simulations and its data.
 
-By online Playback the followng options are available:
+By online Playback the following options are available:
 
-- Keeping the chosen playbacks data if local instances of it are found, or Saving the chosen playbacks if no local data of it found using the `Keep Json Copy` toggle. Loacl data will be yellow colored by the list of players to choose from. **(Enabled by default)**
+- Keeping the chosen playbacks data if local instances of it are found, or Saving the chosen playbacks if no local data of it found using the `Keep Json Copy` toggle. Local data will be yellow colored by the list of players to choose from. **(Enabled by default)**
 - Use online data instead of local data of the chosen playbacks, if any local data found, using the `Updated Info` toggle. This will Replace local data if `Keep Json Copy` toggle is enabled. **(Disabled by default)**
 - **Note**: 
     - Disabling `Keep Json Copy` will remove any local data, **of the chosen playbacks only**, saved previously.
@@ -41,9 +45,9 @@ After choosing players click on `Next`.
 
 ### Choosing Avatars
 
-After choosng players and clicking `Next`, a new page is loaded with the name of chosen Scene, *[Instructions](#keyboard)* on how to control playback with keyboard and the ability to choose different avatars for each player.  
+After choosing players and clicking `Next`, a new page is loaded with the name of chosen Scene, *[Instructions](#keyboard)* on how to control playback with keyboard and the ability to choose different avatars for each player.  
 
-Default avatars will be set according to the info retreived online or from local data. If none found, Avatar Nr. 0 will be set as default.
+Default avatars will be set according to the info retrieved online or from local data. If none found, Avatar Nr. 0 will be set as default.
 
 Click on `Load Scene` to Start playback after all required data have been loaded.
 
@@ -69,7 +73,7 @@ There are several ways to control the playback:
 
 - `C`: Activate/Disable 1. Person Camera.  
 
-**Note:** While in 1. Person Camera, no camera movements controls are available. This will imitate being in the prespective of the current player.
+**Note:** While in 1. Person Camera, no camera movements controls are available. This will imitate being in the perspective of the current player.
 
 #### Free Camera
 
@@ -78,7 +82,7 @@ There are several ways to control the playback:
 - `T,G`: Vertical Rotation.
 - `F,H`: Horizontal Rotation.
 - `Z,X`: Height Control.
-- `V,B`: Jump to nexy player's position.  
+- `V,B`: Jump to next player's position.  
 
 **Note:** Once activated, Camera will be positioned at a default location. Depending on the scene, this location might be far from players.
 using `V,B` will move Camera to the position of the next/previous player.
@@ -105,16 +109,16 @@ click on `Simulation(Clone)` object under `DontDestroyOnLoad`. Custom inspector 
 
 - `Face/Eye Weights`: With a value between 0 and 2 to control the intensity of the Face/Eye pose for **all** playbacks.
 - `Hand Pos. Senset.`: With a value between 0.4 and 1.5. When the difference in vertical hand position between the current frame and the previous one is bigger than this value, 
-the old value from the previos frame will be taken instead and ignore the current one, to avoid having hands in extrem positions. This can happen mostly when switching
+the old value from the previous frame will be taken instead and ignore the current one, to avoid having hands in extreme positions. This can happen mostly when switching
 between Finger tracking and Controller tracking.
-- `Voice Ind. Senset.`: With a value between 0.0001 and 1. Controls the sensetivity of the voice indicator above each player's avatar.
-Higher values will requier higher sounds to activate the indicator. By value 1 the voice indicator will mostly be disabled.
+- `Voice Ind. Senset.`: With a value between 0.0001 and 1. Controls the sensitivity of the voice indicator above each player's avatar.
+Higher values will require higher sounds to activate the indicator. By value 1 the voice indicator will mostly be disabled.
 
 #### Camera Control
 
 - `1. Person view` toggle to activate 1. Person Camera.
 - `Free Camera` toggle to activate Free Camera. This will show additional buttons underneath for movement control.
-- `Rotation & Zoom` Controls when Free Camera is disabled / `Movament, Rotation & Height` Controls When Free Camera
+- `Rotation & Zoom` Controls when Free Camera is disabled / `Movement, Rotation & Height` Controls When Free Camera
 is activated.
 
 #### Debug Mode
@@ -124,7 +128,7 @@ is activated.
 ### Time & Speed Slider
 
 - `Speed Slider`: With a value between 0.1 and 2, will control the speed of all playbacks' movements and sounds.
-- `Time Slider`: Once selected or changed value, playbacks' movements and sounds will be paused. Unpause through inspector or keypoard `P` to continue. 
+- `Time Slider`: Once selected or changed value, playbacks' movements and sounds will be paused. Unpause through inspector or keyboard `P` to continue. 
 
 
 ## Record Playback

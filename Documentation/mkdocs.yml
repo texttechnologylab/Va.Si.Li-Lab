@@ -22,23 +22,19 @@ nav:
       - InterView VR Client: ./getting_started/interview_client.md
 
 
+  - Modules:
+      - Endpoints Configuration: ./modules/endpoints.md
+      - Event System: ./modules/eventsystem.md
+      - Bots: ./modules/bots.md
+      - Logging: ./modules/logging.md
+
   - Other Functions:
       - Replay Experiment: ./other/replay.md
-      - Bots: ./other/bots.md
-      - Experiment Visualization Audio: ./other/experiment_visualizer_audio.md
+      - Experiment Visualization: ./other/experiment_visualization.md
 
 
   - Scenarios:
-      - ICIDS: ./scenarios/ICIDS.md
-      - PraktikumScenario1: ./scenarios/PraktikumScenario1.md
-      - PraktikumScenario2: ./scenarios/PraktikumScenario2.md
-      - PraktikumScenario3: ./scenarios/PraktikumScenario3.md
-      - DGS: ./scenarios/DGS.md
-      - Meetingpoint: ./scenarios/Meetingpoint.md
-      - OrganisationDistribution: ./scenarios/OrganisationDistribution.md
-      - OrganisationEducation: ./scenarios/OrganisationEducation.md
-      - SchoolDistribution: ./scenarios/SchoolDistribution.md
-      - SchoolHetero: ./scenarios/SchoolHetero.md
+      - Overview: ./scenarios/index.md
 
   - Server Structure:
       - General: ./server/server_structure.md
@@ -50,9 +46,12 @@ nav:
       - Documentation: ./students/documentation.md
 
   - Projects:
-      - Digitell: ./projects/digitell.md
+      - Overview: ./projects/index.md
+      - DigiTeLL: ./projects/digitell.md
       - ViCom: ./projects/vicom.md
       - New Data Spaces (FACES): ./projects/faces.md
+
+  - Systems: systems.md
 
   - Publications: publications.md
 
@@ -142,6 +141,7 @@ markdown_extensions:
   - pymdownx.superfences
 
   - admonition
+  - pymdownx.details
   - attr_list
   - md_in_html
 

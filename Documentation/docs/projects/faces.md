@@ -6,8 +6,11 @@
 
 ## FACES
 
+![FACES](../images/projects/FACES.png){loading=lazy width=320}
+
 [FACES](https://gepris.dfg.de/gepris/projekt/539621548?language=en) (Feasibility,
 acceptance, and data quality of new multimodal surveys) is part of this SPP.
+Project website: [texttechnologylab.github.io/FACES](https://texttechnologylab.github.io/FACES/).
 
 Conventional surveys record the answer and discard everything that produced it -
 the hesitation, the gaze, whether the question was understood at all. FACES asks
@@ -27,7 +30,10 @@ hand movement, facial expression and the answers themselves are all captured on 
 shared clock.
 
 InterView is built on Va.Si.Li-Lab and adds a WebRTC media layer, a browser-based
-interviewer console, and a token-driven session model.
+interviewer console, and a token-driven session model. Avatar emotions come from
+[ReEmote](../systems.md#reemote). Both are listed under
+[Systems using Va.Si.Li-Lab](../systems.md), their papers under
+[Publications](../publications.md#interview).
 
 !!! info "InterView has its own documentation"
     Architecture, the full deployment guide, and reference documentation for

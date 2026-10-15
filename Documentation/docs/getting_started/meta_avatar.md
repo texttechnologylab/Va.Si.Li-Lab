@@ -1,6 +1,6 @@
 # Meta Avatar
 
-Instead of the biq Avatars, we are using the [Meta Avatar](https://developer.oculus.com/documentation/unity/meta-avatars-overview/) system. 
+Instead of the Ubiq avatars, we are using the [Meta Avatar](https://developers.meta.com/horizon/documentation/unity/meta-avatars-overview/) system.
 The avatars have the following advantages:
 
 * Diverse cast of pre-built avatars + customization options
@@ -9,10 +9,13 @@ The avatars have the following advantages:
 * Visualisation of Facial Expressions
 
 ## Usage
-At the moment the meta avatars are still loaded via an extra private Git project.
-In the next version, these will be available as a standard module of the main project.
+The Meta Avatars SDK (`com.meta.xr.sdk.avatars`, 40.0.1) is installed from the Unity registry as a dependency of
+Va.Si.Li-Lab. Its *Sample Scenes* sample must be imported, because Va.Si.Li-Lab uses `SampleAvatarEntity` and the
+`AvatarSdkManagerStyle2Meta` prefab from it (in MetaStart, renamed to `AvatarSdkManagerMeta`, the name the avatar scripts look up), see [Setting Up](setting_up.md#import-the-required-samples).
+
+The avatar scripts of Va.Si.Li-Lab are in `Assets/Lab/Core/Runtime/Scripts/MetaAvatars`. The local avatar is driven by
+`MetaAvatarInput` on the [player](player_controller.md).
 
 ## References
-* [Meta Avatar Documentation](https://developer.oculus.com/documentation/unity/meta-avatars-overview/)
-* [Meta Avatar SDK](https://assetstore.unity.com/packages/tools/integration/meta-avatars-sdk-271958)
-* [Meta Avatar SDK Sample](https://assetstore.unity.com/packages/tools/integration/meta-avatars-sdk-sample-assets-272863)
+* [Meta Avatar Documentation](https://developers.meta.com/horizon/documentation/unity/meta-avatars-overview/)
+* [Meta Avatars SDK on the Unity registry](https://docs.unity3d.com/Manual/upm-ui.html) (*Package Manager > Unity Registry > Meta Avatars SDK*)
