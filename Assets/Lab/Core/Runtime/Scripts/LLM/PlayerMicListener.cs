@@ -17,7 +17,9 @@ namespace VaSiLi.Llm {
         
         private void Update() {
             // Push-to-talk: A button, right index pinch with hand tracking, or V on desktop
-            if (!_currentlyTalking && LabInput.PrimaryDown(Key.V)) {
+            // Only record when someone is listening and a microphone exists
+            if (!_currentlyTalking && LabInput.PrimaryDown(Key.V)
+                && Microphone.devices.Length > 0 && manager.GetActiveAgents().Count > 0) {
                 _currentlyTalking = true;
                 Debug.Log("Now recording.");
                 _clip = Microphone.Start(Microphone.devices[0], true, 10, 44100);

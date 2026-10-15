@@ -1678,7 +1678,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5276381352184560912, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_url
-      value: https://faces.befragung.neps-studie.de/1259000
+      value: https://texttechnologylab.github.io/Va.Si.Li-Lab/
       objectReference: {fileID: 0}
     - target: {fileID: 5276381352184560912, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_texSize.x
@@ -1758,7 +1758,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5877819601335358971, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_url
-      value: https://faces.befragung.neps-studie.de/1259000
+      value: https://texttechnologylab.github.io/Va.Si.Li-Lab/
       objectReference: {fileID: 0}
     - target: {fileID: 5877819601335358971, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_texSize.x

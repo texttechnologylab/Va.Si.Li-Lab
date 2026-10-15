@@ -32,4 +32,7 @@ var result = Oculus.Platform.Avatar.LaunchAvatarEditor(options);
 
 Also import *TextMesh Pro Essential Resources* when Unity asks.
 
-Then create your server config via *Tools > Va.Si.Li > Create Endpoints Config*.
+Then create your server config via *Tools > Va.Si.Li > Create Endpoints Config*. The servers come from
+[Va.Si.Li-Lab-backend](https://github.com/texttechnologylab/Va.Si.Li-Lab-backend).
+Required: `database-api` (endpoint `api`) and `Ubiq-server` (`ubiqServer`). Optional: `vr-agent` (`agent`) and
+`tts-stt` (`speechSynthesis`) for the LLM agents, `speech2text` and `chatbot` (`speech`) for voice input.
