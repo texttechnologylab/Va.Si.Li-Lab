@@ -62,7 +62,8 @@ Holds the participant token across scene loads and derives every identifier from
 it, so the headset and the interviewer's browser meet without a coordination
 step.
 
-The questionnaire URL is `questionnaire` in the endpoints. The token is appended as `?token=…&room=…`.
+The questionnaire URL is `questionnaire` in the endpoints. The token is appended as `?token=…&room=…`. The follow-up
+questionnaire that the interviewer can send afterwards is `followupQuestionnaire`.
 
 ```
 token ──┬─→ RoomId         (Janus room ID)

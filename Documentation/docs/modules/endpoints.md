@@ -23,6 +23,7 @@ logged at start-up.
 | `shapeNet` | `http://localhost:8004` | ShapeNet object search and download (`ShapeNetInterface`) | No ShapeNet objects |
 | `eventTemplates` | `http://localhost:4567` | [Event System](eventsystem.md) templates (`/defaultTemplates`) | No saved or default event systems |
 | `questionnaire` | *(empty)* | [InterView](../getting_started/interview_client.md): questionnaire page opened in the in-world browser (`InterviewTokenManager`) | Empty browser in InterView |
+| `followupQuestionnaire` | *(empty)* | InterView: follow-up questionnaire the interviewer sends to the interviewee (`WebCamClient` follow-up button; the interview token is appended) | The follow-up button logs a warning and sends nothing |
 | `janus` | `ws://localhost:8188` | WebRTC (Janus) for InterView and the webcam screen (`WebCamClient`) | No audio/video with the interviewer |
 | `iceServers` | *(empty)* | STUN/TURN servers for WebRTC. Leave `username`/`credential` empty for STUN | WebRTC only works on the same network |
 
