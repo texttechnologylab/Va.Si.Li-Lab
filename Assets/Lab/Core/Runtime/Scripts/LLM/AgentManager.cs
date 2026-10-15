@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using UnityEngine;
 using VaSiLi.Networking;
-using UnityEngine.SceneManagement;
 using Vector3 = UnityEngine.Vector3;
 
 namespace VaSiLi.Llm
@@ -19,6 +18,9 @@ namespace VaSiLi.Llm
 
         [SerializeField] private AgentInstance agentPrefab;
 
+        [Tooltip("Agents created when the scene starts. The tool-call instructions are appended to each persona.")]
+        [SerializeField] private List<AgentDefinition> agents = new();
+
         private Dictionary<string, AgentInstance> _agentInstances = new();
         private AgentToolProvider _toolProvider;
 
@@ -31,25 +33,13 @@ namespace VaSiLi.Llm
             LoadAgentBots();
         }
 
+        // Creates the agents configured for this scene
         private async void LoadAgentBots()
         {
-            switch (SceneManager.GetActiveScene().name)
+            foreach (AgentDefinition agent in agents)
             {
-                case "MetaStart":
-                    if (!_agentInstances.ContainsKey("agent_jauch"))
-                        await CreateAgent("agent_jauch",
-                            "You are the German TV host Günther Jauch. " + GenerateStandardPrompt(),
-                            new Vector3(3, 0, 0));
-                    if (!_agentInstances.ContainsKey("agent_barbara"))
-                        await CreateAgent("agent_barbara",
-                            "You are the German TV host Barbara Schöneberger. " + GenerateStandardPrompt(),
-                            new Vector3(-3, 0, 0));
-                    break;
-                case "EventSystemShowcase_2025":
-                    if (!_agentInstances.ContainsKey("agent_helper_bot"))
-                        await CreateAgent("agent_helper_bot",
-                            "You are a helpful VR assistant. " + GenerateStandardPrompt(), new Vector3(-2, 0, 0));
-                    break;
+                if (!_agentInstances.ContainsKey(agent.id))
+                    await CreateAgent(agent.id, agent.persona + " " + GenerateStandardPrompt(), agent.position);
             }
         }
 
@@ -98,6 +88,15 @@ namespace VaSiLi.Llm
 
             return activeAgents;
         }
+    }
+
+    /// <summary>An agent to create in a scene: its ID at the agent service, who it is and where it stands.</summary>
+    [Serializable]
+    public class AgentDefinition
+    {
+        public string id;
+        [TextArea(2, 6)] public string persona;
+        public Vector3 position;
     }
 
     [Serializable]

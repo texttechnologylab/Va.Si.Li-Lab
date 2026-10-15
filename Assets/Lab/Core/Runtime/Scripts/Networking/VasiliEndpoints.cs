@@ -34,6 +34,10 @@ namespace VaSiLi.Networking
         [Tooltip("EventSystem template server.")]
         public string eventTemplates = "http://localhost:4567";
 
+        [Header("InterView")]
+        [Tooltip("Questionnaire page opened in the in-world browser. The interview token is appended as ?token=...&room=...")]
+        public string questionnaire = "";
+
         [Header("WebRTC")]
         [Tooltip("Janus WebSocket endpoint.")]
         public string janus = "ws://localhost:8188";
