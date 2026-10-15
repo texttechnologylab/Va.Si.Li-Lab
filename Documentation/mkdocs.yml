@@ -61,6 +61,7 @@ nav:
 # Configuration
 theme:
   name: material
+  custom_dir: overrides
   logo: images/logo/cropped-favicon-2.png
   favicon: images/logo/cropped-favicon-2.png
 
@@ -118,6 +119,9 @@ extra:
       link: https://www.researchgate.net/lab/Text-Technology-Lab-TTLab-Alexander-Mehler
     - icon: fontawesome/brands/youtube
       link: https://www.youtube.com/channel/UCST6Bz8tydqR-VOnihevKtg
+
+extra_css:
+  - stylesheets/critters.css
 
 plugins:
   - git-revision-date-localized:

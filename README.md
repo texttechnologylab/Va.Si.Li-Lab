@@ -73,9 +73,8 @@ If you want to use the project, please cite:
 All publications with BibTeX: [Publications](https://texttechnologylab.github.io/Va.Si.Li-Lab/publications/)
 
 # Contributors
-Thank you to everyone who has contributed to Va.Si.Li-Lab! The list below is generated from the
-[GitHub contributors](https://github.com/texttechnologylab/Va.Si.Li-Lab/graphs/contributors) of this repository and
-needs no maintenance.
+Thank you to everyone who has contributed to Va.Si.Li-Lab! 
+[GitHub contributors](https://github.com/texttechnologylab/Va.Si.Li-Lab/graphs/contributors)
 
 <a href="https://github.com/texttechnologylab/Va.Si.Li-Lab/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=texttechnologylab/Va.Si.Li-Lab" alt="Contributors" />
