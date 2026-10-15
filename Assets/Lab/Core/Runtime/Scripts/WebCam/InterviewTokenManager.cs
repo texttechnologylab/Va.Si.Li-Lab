@@ -1,4 +1,5 @@
 using UnityEngine;
+using VaSiLi.Networking;
 
 namespace VaSiLi.WebCam
 {
@@ -14,8 +15,8 @@ namespace VaSiLi.WebCam
     {
         public static InterviewTokenManager Instance { get; private set; }
 
-        [Tooltip("Base URL of the questionnaire page. Token is appended as ?token={token}.")]
-        public string BrowserBaseUrl = "https://faces.befragung.neps-studie.de/1259000";
+        /// <summary>Base URL of the questionnaire page (from VasiliEndpoints). Token is appended as ?token={token}.</summary>
+        public string BrowserBaseUrl => VasiliEndpoints.Current.questionnaire;
 
         public string Token { get; private set; } = "";
 

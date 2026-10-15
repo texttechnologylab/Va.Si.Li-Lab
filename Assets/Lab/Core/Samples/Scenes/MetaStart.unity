@@ -514,63 +514,63 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3157928069488761441, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 3887819867191740197, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: m_Name
       value: AvatarSdkManagerMeta
       objectReference: {fileID: 0}
-    - target: {fileID: 3157928069488761443, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 3887819867191740199, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3157928069488761443, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 3887819867191740199, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3157928069488761443, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 3887819867191740199, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3157928069488761443, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 3887819867191740199, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3157928069488761443, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 3887819867191740199, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3157928069488761443, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 3887819867191740199, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3157928069488761443, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 3887819867191740199, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3157928069488761443, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 3887819867191740199, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3157928069488761443, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 3887819867191740199, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3157928069488761443, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 3887819867191740199, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5718891602505105298, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 5871265475931972310, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: _ovrCameraRig
       value: 
       objectReference: {fileID: 1389673126}
-    - target: {fileID: 7625653420356291568, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 8643738271062628020, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: _lodCamera
       value: 
       objectReference: {fileID: 1774649241}
-    - target: {fileID: 7625653420356291568, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 8643738271062628020, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: extraCameras.Array.size
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7625653420356291568, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - target: {fileID: 8643738271062628020, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       propertyPath: extraCameras.Array.data[0].camera
       value: 
       objectReference: {fileID: 134759252}
@@ -578,13 +578,13 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3402384486977808833, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 3535549875002012805, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
       insertIndex: -1
       addedObject: {fileID: 476995763}
-  m_SourcePrefab: {fileID: 100100000, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
 --- !u!1 &476995762 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 3402384486977808833, guid: 425e6ea49dcc520488b469a76c46798a, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3535549875002012805, guid: 8d8b50752af2ea347aab6ca42fb61c76, type: 3}
   m_PrefabInstance: {fileID: 476995761}
   m_PrefabAsset: {fileID: 0}
 --- !u!82 &476995763
@@ -789,6 +789,50 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1785709545576069308, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
+      propertyPath: agents.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785709545576069308, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
+      propertyPath: agents.Array.data[0].id
+      value: agent_jauch
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785709545576069308, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
+      propertyPath: agents.Array.data[0].persona
+      value: You are the German TV host Günther Jauch.
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785709545576069308, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
+      propertyPath: agents.Array.data[0].position.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785709545576069308, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
+      propertyPath: agents.Array.data[0].position.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785709545576069308, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
+      propertyPath: agents.Array.data[0].position.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785709545576069308, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
+      propertyPath: agents.Array.data[1].id
+      value: agent_barbara
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785709545576069308, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
+      propertyPath: agents.Array.data[1].persona
+      value: You are the German TV host Barbara Schöneberger.
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785709545576069308, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
+      propertyPath: agents.Array.data[1].position.x
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785709545576069308, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
+      propertyPath: agents.Array.data[1].position.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785709545576069308, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
+      propertyPath: agents.Array.data[1].position.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3703379071317071392, guid: 65f62b0d9ef5b3744a25d57a8fcf826b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.47385
