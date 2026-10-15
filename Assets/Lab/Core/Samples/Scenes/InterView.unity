@@ -442,7 +442,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   followupButton: {fileID: 642072361}
-  followupUrl: https://faces.befragung.neps-studie.de/1260000
   OnFollowupSurveyReceived:
     m_PersistentCalls:
       m_Calls:
@@ -3243,10 +3242,6 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3320519366546380288, guid: 8cf3bd23fb650174093f2262d06cebf2, type: 3}
-      propertyPath: m_url
-      value: https://faces.befragung.neps-studie.de/1308000
-      objectReference: {fileID: 0}
-    - target: {fileID: 3320519366546380288, guid: 8cf3bd23fb650174093f2262d06cebf2, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
@@ -3365,10 +3360,6 @@ PrefabInstance:
     - target: {fileID: 3945038847256428267, guid: 8cf3bd23fb650174093f2262d06cebf2, type: 3}
       propertyPath: m_fps
       value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3945038847256428267, guid: 8cf3bd23fb650174093f2262d06cebf2, type: 3}
-      propertyPath: m_url
-      value: https://faces.befragung.neps-studie.de/1259000
       objectReference: {fileID: 0}
     - target: {fileID: 3945038847256428267, guid: 8cf3bd23fb650174093f2262d06cebf2, type: 3}
       propertyPath: m_Enabled

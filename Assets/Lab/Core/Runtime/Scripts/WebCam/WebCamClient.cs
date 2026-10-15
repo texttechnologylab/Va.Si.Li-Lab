@@ -126,8 +126,8 @@ namespace VaSiLi.WebCam
         [Header("Follow-up Survey (Interviewer)")]
         [Tooltip("Button that sends the follow-up survey URL to the remote participant.")]
         public Button followupButton;
-        [Tooltip("URL sent to the interviewee when the follow-up button is pressed.")]
-        public string followupUrl = "";
+        /// <summary>URL sent to the interviewee when the follow-up button is pressed (from VasiliEndpoints).</summary>
+        public string followupUrl => VasiliEndpoints.Current.followupQuestionnaire;
         [Tooltip("Fired on this client when a followup_survey URL is received. Arg: url.")]
         public UnityEvent<string> OnFollowupSurveyReceived;
 

@@ -37,6 +37,8 @@ namespace VaSiLi.Networking
         [Header("InterView")]
         [Tooltip("Questionnaire page opened in the in-world browser. The interview token is appended as ?token=...&room=...")]
         public string questionnaire = "";
+        [Tooltip("Follow-up questionnaire the interviewer can send to the interviewee after the interview. Empty: the follow-up button does nothing.")]
+        public string followupQuestionnaire = "";
 
         [Header("WebRTC")]
         [Tooltip("Janus WebSocket endpoint.")]
