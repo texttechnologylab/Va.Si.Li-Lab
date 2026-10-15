@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 4968666933479321853}
   - component: {fileID: 1785709545576069308}
   - component: {fileID: 433843915693870811}
+  - component: {fileID: 7391846025517330412}
   m_Layer: 0
   m_Name: AgentManager
   m_TagString: Untagged
@@ -93,6 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Va.Si.Li::Lab.Core.Runtime.Scripts.LLM.AgentManager
   agentPrefab: {fileID: 507942388422441623, guid: 3f26950f1832e8046a496402e380a2ab, type: 3}
+  agents: []
 --- !u!114 &433843915693870811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,3 +140,16 @@ Transform:
   - {fileID: 4968666933479321853}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7391846025517330412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6011839907016475448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9916f781bc93285449284fdb718a92c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 1785709545576069308}

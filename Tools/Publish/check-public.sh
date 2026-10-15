@@ -44,7 +44,7 @@ grep -E $'\t''Assets/' "$tmp/resolved.tsv" | grep -vE $'\t'"($PUBLIC/|Assets/(La
 
 # --- 2. Infrastructure hosts and secrets in public files ---------------------------
 section "Hard-coded hosts / IPs in public code and assets (should come from config)"
-grep -rnoE '[a-z0-9.-]+\.texttechnologylab\.org|https?://([0-9]{1,3}\.){3}[0-9]{1,3}' \
+grep -rnoE '[a-z0-9.-]+\.(texttechnologylab\.org|neps-studie\.de)|https?://([0-9]{1,3}\.){3}[0-9]{1,3}' \
     --include=*.cs --include=*.prefab --include=*.unity --include=*.asset "$PUBLIC" \
     | grep -vE 'www.texttechnologylab.org|//127.0.0.1' | awk -F: '{print $1": "$NF}' | sort -u || true
 
